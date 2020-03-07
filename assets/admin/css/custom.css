@@ -1,0 +1,10 @@
+.error{
+    color: red;
+}
+.required{
+    color: red;
+    margin-left: 5px;
+}
+input[type="radio"] {
+    margin: 6px;
+}
