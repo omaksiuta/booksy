@@ -50,7 +50,7 @@ $(document).ready(function () {
         });
     }
 
-    if($("#ServiceForm").length){
+    /*if($("#ServiceForm").length){
         $("#ServiceForm").submit(function (e) {
             if ($("#ServiceForm").valid()) {
                 $("body").preloader({
@@ -61,7 +61,7 @@ $(document).ready(function () {
                 e.preventDefault();
             }
         });
-    }
+    }*/
 
     $('#RecordDelete').on('click', function () {
         var id = $("#record_id").val();
@@ -249,96 +249,49 @@ $("input[name='multiple_slotbooking_allow']").on('change', function () {
 });
 // Steppers                
 $(document).ready(function () {
-    var navListItems = $('div.setup-panel-2 div a'),
-            allWells = $('.setup-content-2'),
-            allNextBtn = $('.nextBtn-2'),
-            allPrevBtn = $('.prevBtn-2');
-
-    allWells.hide();
-
-    navListItems.click(function (e) {
-        if ($(".bootstrap-timepicker-widget").length) {
-            $(".bootstrap-timepicker-widget").hide();
-        }
-        e.preventDefault();
-        var $target = $($(this).attr('href')),
-                $item = $(this);
-
-        if (!$item.hasClass('disabled')) {
-            navListItems.removeClass('btn-amber').addClass('btn-blue-grey');
-            $item.addClass('btn-amber');
-            allWells.hide();
-            $target.show();
-            $target.find('input:eq(0)').focus();
-        }
-    });
-
-    allPrevBtn.click(function () {
-        var curStep = $(this).closest(".setup-content-2"),
-                curStepBtn = curStep.attr("id"),
-                prevStepSteps = $('div.setup-panel-2 div a[href="#' + curStepBtn + '"]').parent().prev().children("a");
-
-        prevStepSteps.removeAttr('disabled').trigger('click');
-    });
-
-    allNextBtn.click(function () {
-        var curStep = $(this).closest(".setup-content-2"),
-                curStepBtn = curStep.attr("id"),
-                nextStepSteps = $('div.setup-panel-2 div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
-                curInputs = curStep.find("input[type='time'], input[type='number'], input[type='text'],input[type='url'],input[type='email'],input[type='file'], textarea ,select"),
-                isValid = true;
-
-        var form = $("#ServiceForm");
-        form.validate({
-            ignore: [],
-            rules: {
-                name: {
-                    required: true
-                },
-                description: {
-                    required: true
-                },
-                category_id: {
-                    required: true
-                },
-                'days[]': {
-                    required: true
-                },
-                start_time: {
-                    required: true
-                },
-                end_time: {
-                    required: true
-                },
-                slot_time: {
-                    required: true
-                },
-                per_allow: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                location: {
-                    required: true
-                },
-                status: {
-                    required: true
-                }
+    var form = $("#ServiceForms");
+    form.validate({
+        ignore: [],
+        rules: {
+            name: {
+                required: true
             },
-            errorElement: 'div',
-            errorPlacement: function (error, element) {
-                element.parents(".form-group").append(error);
+            description: {
+                required: true
+            },
+            category_id: {
+                required: true
+            },
+            'days[]': {
+                required: true
+            },
+            start_time: {
+                required: true
+            },
+            end_time: {
+                required: true
+            },
+            slot_time: {
+                required: true
+            },
+            per_allow: {
+                required: true
+            },
+            city: {
+                required: true
+            },
+            location: {
+                required: true
+            },
+            status: {
+                required: true
             }
-        });
-        if (!curInputs.valid()) {
-            return false;
+        },
+        errorElement: 'div',
+        errorPlacement: function (error, element) {
+            element.parents(".form-group").append(error);
         }
-        if (isValid)
-            nextStepSteps.removeAttr('disabled').trigger('click');
     });
-
-    $('div.setup-panel-2 div a.btn-amber').trigger('click');
 });
 function calc_final_price(element) {
     var discount = parseFloat($("#discount").val());
