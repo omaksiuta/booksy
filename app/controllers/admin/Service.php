@@ -214,7 +214,7 @@ class Service extends MY_Controller {
 
             $service_images_hidden=$this->input->post('service_images_hidden');
             $data['title'] = trim($this->input->post('name', true));
-            $data['event_slug'] = convert_lang_string(trim($this->input->post('name', true)));
+            $data['slug'] = convert_lang_string(trim($this->input->post('name', true)));
             $data['description'] = trim($this->input->post('description', true));
             $data['days'] = implode(",", $this->input->post('days[]', true));
             $data['start_time'] = $this->input->post('start_time', true);
@@ -464,8 +464,8 @@ class Service extends MY_Controller {
 
     public function validate_image() {
         $allowedExts = array("image/gif", "image/jpeg", "image/jpg", "image/png");
-        if (isset($_FILES["event_category_image"]["type"]) && $_FILES["event_category_image"]["type"] != "") {
-            if (in_array($_FILES["event_category_image"]["type"], $allowedExts)) {
+        if (isset($_FILES["category_image"]["type"]) && $_FILES["category_image"]["type"] != "") {
+            if (in_array($_FILES["category_image"]["type"], $allowedExts)) {
                 return true;
             } else {
                 $this->form_validation->set_message('validate_image', 'Please select valid image.');
@@ -479,10 +479,10 @@ class Service extends MY_Controller {
 
     public function validate_image_edit() {
         $allowedExts = array("image/gif", "image/jpeg", "image/jpg", "image/png");
-        if (empty($_FILES["event_category_image"]["type"])) {
+        if (empty($_FILES["category_image"]["type"])) {
             return true;
         } else {
-            if (in_array($_FILES["event_category_image"]["type"], $allowedExts)) {
+            if (in_array($_FILES["category_image"]["type"], $allowedExts)) {
                 return true;
             } else {
                 $this->form_validation->set_message('validate_image_edit', 'Please select valid image.');
@@ -503,9 +503,9 @@ class Service extends MY_Controller {
         $id = (int) $this->input->post('id', true);
         $this->form_validation->set_rules('title', 'title', 'required|callback_check_service_category_title');
         if ($id > 0) {
-            $this->form_validation->set_rules('event_category_image', translate('event_category_image'), 'trim|callback_validate_image_edit');
+            $this->form_validation->set_rules('category_image', translate('category_image'), 'trim|callback_validate_image_edit');
         } else {
-            $this->form_validation->set_rules('event_category_image', translate('event_category_image'), 'trim|callback_validate_image');
+            $this->form_validation->set_rules('category_image', translate('category_image'), 'trim|callback_validate_image');
         }
         $this->form_validation->set_rules('status', 'Status', 'required');
 
@@ -526,12 +526,12 @@ class Service extends MY_Controller {
 
             $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/category';
 
-            if (isset($_FILES['event_category_image']["name"]) && $_FILES['event_category_image']["name"] != "") {
-                $tmp_name = $_FILES["event_category_image"]["tmp_name"];
-                $temp = explode(".", $_FILES["event_category_image"]["name"]);
+            if (isset($_FILES['category_image']["name"]) && $_FILES['category_image']["name"] != "") {
+                $tmp_name = $_FILES["category_image"]["tmp_name"];
+                $temp = explode(".", $_FILES["category_image"]["name"]);
                 $newfilename = (uniqid()) . '.' . end($temp);
                 move_uploaded_file($tmp_name, "$uploadPath/$newfilename");
-                $data['event_category_image'] = $newfilename;
+                $data['category_image'] = $newfilename;
 
                 $config['image_library'] = 'gd2';
                 $config['source_image'] = $uploadPath . "/" . $newfilename;

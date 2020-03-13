@@ -9,13 +9,13 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
 $title_e = (set_value("title")) ? set_value("title") : (!empty($category_data) ? $category_data['title'] : '');
 $status = (set_value("status")) ? set_value("status") : (!empty($category_data) ? $category_data['status'] : '');
 $type = (set_value("type")) ? set_value("type") : (!empty($category_data) ? $category_data['type'] : '');
-$event_category_image = (set_value("event_category_image")) ? set_value("event_category_image") : (!empty($category_data) ? $category_data['event_category_image'] : '');
+$category_image = (set_value("category_image")) ? set_value("category_image") : (!empty($category_data) ? $category_data['category_image'] : '');
 $id = !empty($category_data) ? $category_data['id'] : 0;
 
 
-if (isset($event_category_image) && $event_category_image != "") {
-    if (file_exists(FCPATH . 'assets/uploads/category/' . $event_category_image)) {
-        $image = base_url("assets/uploads/category/" . $event_category_image);
+if (isset($category_image) && $category_image != "") {
+    if (file_exists(FCPATH . 'assets/uploads/category/' . $category_image)) {
+        $image = base_url("assets/uploads/category/" . $category_image);
     } else {
         $image = base_url("assets/images/no-image.png");
     }
@@ -70,17 +70,17 @@ if (isset($event_category_image) && $event_category_image != "") {
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="title"><?php echo translate('event_category_image'); ?><small class="required">*</small></label>
+                                    <label for="title"><?php echo translate('category_image'); ?><small class="required">*</small></label>
                                     <div class="">
                                         <?php
-                                        echo form_input(array('type' => 'hidden', 'name' => 'hidden_category_image', 'id' => 'hidden_category_image', 'value' => $event_category_image));
+                                        echo form_input(array('type' => 'hidden', 'name' => 'hidden_category_image', 'id' => 'hidden_category_image', 'value' => $category_image));
                                         if ($id == 0) {
-                                            echo form_input(array('type' => 'file', 'required' => "true", 'id' => 'event_category_image', 'class' => 'form-control', 'name' => 'event_category_image', 'accept' => 'image/x-png,image/gif,image/jpeg,image/png'));
+                                            echo form_input(array('type' => 'file', 'required' => "true", 'id' => 'category_image', 'class' => 'form-control', 'name' => 'category_image', 'accept' => 'image/x-png,image/gif,image/jpeg,image/png'));
                                         } else {
-                                            echo form_input(array('type' => 'file', 'id' => 'event_category_image', 'class' => 'form-control', 'name' => 'event_category_image', 'accept' => 'image/x-png,image/gif,image/jpeg,image/png'));
+                                            echo form_input(array('type' => 'file', 'id' => 'category_image', 'class' => 'form-control', 'name' => 'category_image', 'accept' => 'image/x-png,image/gif,image/jpeg,image/png'));
                                         }
                                         ?><br/>
-                                        <?php echo form_error('event_category_image'); ?>
+                                        <?php echo form_error('category_image'); ?>
                                         <small>(Image size must be 40X40.)</small>
                                     </div>
                                     <div class="d-inline-block">
@@ -142,7 +142,7 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
         }
     }
 
-    $("#event_category_image").change(function () {
+    $("#category_image").change(function () {
         readURL(this);
     });
 </script>

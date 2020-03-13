@@ -2,13 +2,283 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae2a13dc-3fb3-436a-b0cd-09db9259288d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/views/admin/service/test.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/service/add_update_service.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/service/add_update_service.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/module/event-category.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/module/event.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/module/event_details.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/module/service.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/module/service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/cache/ci_sessionb7ak5gtg2scq4hi85mvhn4l998p5v6pg" beforeDir="false" afterPath="$PROJECT_DIR$/app/cache/ci_sessionb7ak5gtg2scq4hi85mvhn4l998p5v6pg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/Front.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/Front.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Service.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Service.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/api/V1.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/api/V1.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/language/english/basic_lang.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/language/english/basic_lang.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/language/gujarati/basic_lang.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/language/gujarati/basic_lang.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/customer/add_update_customer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/customer/add_update_customer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/service/add_update_service_category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/service/add_update_service_category.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/service/manage_service_category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/service/manage_service_category.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/contact-us.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/event/event-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/event/event-listing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/event/event_book.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/event/event_category.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/faqs.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/forgot_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/front-footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/front-header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/home.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/login.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/maintenance.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/no_script.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/page.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/appointment-success.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/appointment.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/change_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/event-booking.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/event-payment-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/get_event_slidepanel_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/get_service_slidepanel_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/message.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/payment_history.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/profile-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/profile.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/profile/service-payment-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/register-success.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/register.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/reset_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/search-result.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/service/days.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/service/service-category.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/service/service-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/service/service-listing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/translation_js.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy (2)/vendor_register.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/contact-us.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/event/event-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/event/event-listing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/event/event_book.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/event/event_category.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/faqs.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/forgot_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/front-footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/front-header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/home.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/login.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/maintenance.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/no_script.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/page.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/appointment-success.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/appointment.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/change_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/event-booking.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/event-payment-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/get_event_slidepanel_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/get_service_slidepanel_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/message.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/payment_history.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/profile-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/profile.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/profile/service-payment-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/register-success.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/register.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/reset_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/search-result.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/service/days.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/service/service-category.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/service/service-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/service/service-listing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/translation_js.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front - Copy/vendor_register.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/front/profile/profile-details.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/front/profile/profile-details.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/appointment/appointment-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/appointment/event-appointment-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/appointment/payment_history.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/appointment/payout_request.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/contact-us.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/coupon/coupon-add-update.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/coupon/coupon-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/currency/add-currency.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/currency/currency-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/customer/add-customer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/customer/customer-booking.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/customer/customer-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/dashboard.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/event/event-booking.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/event/event-category-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/event/event-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/event/event-payment.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/event/event_inquiry.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/event/manage-event-category.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/event/manage-event.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/event/view_event_booking_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/forgot_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/language/add_update_language.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/language/language_list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/language/language_translate.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/login.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/add-update-testimonial.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/city-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/content_add_update.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/content_list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/faq_add_update.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/faq_list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/location-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/manage-city.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/manage-location.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/manage-slider.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/manage-testimonial.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/master/slider-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/message.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/package/add-update-package.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/package/package-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/package/package-payment-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/profile/profile.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/profile/reset_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/profile/update_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/report/appointment_report.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/report/customer_report.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/report/event_booking.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/report/service_appointment.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/report/vendor_report.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/add_update_holiday.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/days.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/manage-service-category.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/manage-service.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/manage_holidays.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/service-category-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/service-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/service_addons_add_update.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/service_addons_list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/service_inquiry.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/vendor_appointment_payment.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/service/view_booking_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/currency-setting.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/manage-businesssetting.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/manage-displaysetting.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/manage-emailsetting.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/manage-payment-setting.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/manage-sitesetting.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/manage_integrateon_webpage.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/mandatory-update.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/setting/vendor-setting.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/sidebar.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/staff/add-staff.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/staff/staff-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/vendor/add-vendor.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/vendor/unverified_vendor.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/vendor/vendor-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/admin/vendor/vendor-payment-list.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/account_verification.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/application.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/booking_time_change.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/comman.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/contact_us.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/customer_register.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/event_booking_approve.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/event_booking_customer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/event_booking_vendor.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/forgot_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/membership_reminder.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/message.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/notifications.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/payout_request.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/registration_admin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/service_booking_approve.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/service_booking_customer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/service_booking_vendor.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/service_reminder.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/thank_you.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/email_template/vendor_profile_verification.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/embed/appointment-success.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/embed/days.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/embed/event-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/embed/events.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/embed/service-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/embed/services.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/embed/wrong.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/cli/error_404.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/cli/error_db.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/cli/error_exception.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/cli/error_general.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/cli/error_php.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/cli/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/html/error_404.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/html/error_db.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/html/error_exception.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/html/error_general.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/html/error_php.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/html/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/errors/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/contact-us.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/event/event-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/event/event-listing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/event/event_book.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/event/event_category.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/faqs.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/forgot_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/front-footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/front-header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/home.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/login.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/maintenance.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/no_script.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/page.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/appointment-success.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/appointment.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/change_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/event-booking.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/event-payment-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/get_event_slidepanel_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/get_service_slidepanel_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/message.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/payment_history.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/profile-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/profile.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/profile/service-payment-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/register-success.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/register.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/reset_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/search-result.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/service/days.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/service/service-category.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/service/service-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/service/service-listing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/translation_js.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/front/vendor_register.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/message.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/appointment.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/dashboard.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/forgot_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/login.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/payment_history.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/profile.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/reset_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/sidebar.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/update_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/staff/view_booking_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/contact-us.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/dashboard.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/footer.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/forgot_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/get_membership_details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/header.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/login.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/manage_integrateon_webpage.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/membership-details.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/membership-history.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/membership-purchase.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/payout_request.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/profile.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/reset_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/sidebar.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/update_password.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views_old_admin_panel/vendor/wallet.php" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,39 +293,21 @@
     </execution>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/environment.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/views/admin/service/add_update_service.php">
+        <entry file="file://$PROJECT_DIR$/app/controllers/api/V1.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="633" column="15" selection-start-line="633" selection-start-column="15" selection-end-line="633" selection-end-column="15" />
+            <state relative-caret-position="288">
+              <caret line="74" column="52" selection-start-line="74" selection-start-column="52" selection-end-line="74" selection-end-column="52" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/js/module/service.js">
+        <entry file="file://$PROJECT_DIR$/app/controllers/admin/Service.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2244">
-              <caret line="146" column="44" lean-forward="true" selection-start-line="146" selection-start-column="15" selection-end-line="146" selection-end-column="44" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/js/jquery.accordion-wizard.min.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="14" lean-forward="true" selection-start-line="16" selection-start-column="12" selection-end-line="18" selection-end-column="14" />
+            <state relative-caret-position="204">
+              <caret line="216" column="19" selection-start-line="216" selection-start-column="19" selection-end-line="216" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -66,7 +318,12 @@
     <findStrings>
       <find>seo_description</find>
       <find>get_location</find>
+      <find>event_category_image</find>
+      <find>event_slug</find>
     </findStrings>
+    <replaceStrings>
+      <replace>category_image</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -79,6 +336,8 @@
         <option value="$PROJECT_DIR$/assets/js/jquery.accordion-wizard.min.js" />
         <option value="$PROJECT_DIR$/assets/js/module/service.js" />
         <option value="$PROJECT_DIR$/app/views/admin/service/add_update_service.php" />
+        <option value="$PROJECT_DIR$/app/controllers/admin/Service.php" />
+        <option value="$PROJECT_DIR$/app/controllers/api/V1.php" />
       </list>
     </option>
   </component>
@@ -120,13 +379,22 @@
             <path>
               <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
               <item name="booksy" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
               <item name="booksy" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+              <item name="admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
+              <item name="booksy" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -168,17 +436,21 @@
       <workItem from="1583580684547" duration="478000" />
       <workItem from="1583587224831" duration="3285000" />
       <workItem from="1583724423880" duration="922000" />
+      <workItem from="1583732069956" duration="1209000" />
+      <workItem from="1583738491058" duration="594000" />
+      <workItem from="1583739652551" duration="337000" />
+      <workItem from="1584067319760" duration="5779000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6113000" />
+    <option name="totallyTimeSpent" value="14032000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2647504" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.27987897" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -212,24 +484,17 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/js/module/event.js" />
-    <entry file="file://$PROJECT_DIR$/environment.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/js/module/service.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2244">
-          <caret line="146" column="44" lean-forward="true" selection-start-line="146" selection-start-column="15" selection-end-line="146" selection-end-column="44" />
+        <state relative-caret-position="2482">
+          <caret line="146" column="44" selection-start-line="146" selection-start-column="15" selection-end-line="146" selection-end-column="44" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/js/jquery.accordion-wizard.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
-          <caret line="18" column="14" lean-forward="true" selection-start-line="16" selection-start-column="12" selection-end-line="18" selection-end-column="14" />
+          <caret line="18" column="14" selection-start-line="16" selection-start-column="12" selection-end-line="18" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -237,6 +502,41 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="257">
           <caret line="633" column="15" selection-start-line="633" selection-start-column="15" selection-end-line="633" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/environment.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/api/Auth.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="27" column="21" lean-forward="true" selection-start-line="24" selection-start-column="12" selection-end-line="27" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="136" column="115" selection-start-line="136" selection-start-column="8" selection-end-line="136" selection-end-column="115" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Service.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="216" column="19" selection-start-line="216" selection-start-column="19" selection-end-line="216" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/api/V1.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="74" column="52" selection-start-line="74" selection-start-column="52" selection-end-line="74" selection-end-column="52" />
         </state>
       </provider>
     </entry>

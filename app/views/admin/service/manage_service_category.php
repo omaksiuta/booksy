@@ -53,10 +53,10 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                                             $status_string = '<span class="badge badge-danger">' . translate('inactive') . '</span>';
                                         }
 
-                                        $event_category_image =$row['event_category_image'];
-                                        if (isset($event_category_image) && $event_category_image != "") {
-                                            if (file_exists(FCPATH . 'assets/uploads/category/' . $event_category_image)) {
-                                                $image = base_url("assets/uploads/category/" . $event_category_image);
+                                        $category_image =$row['category_image'];
+                                        if (isset($category_image) && $category_image != "") {
+                                            if (file_exists(FCPATH . 'assets/uploads/category/' . $category_image)) {
+                                                $image = base_url("assets/uploads/category/" . $category_image);
                                             } else {
                                                 $image = base_url("assets/images/no-image.png");
                                             }

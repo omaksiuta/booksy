@@ -167,7 +167,7 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                                         echo form_input(array('type' => 'hidden', 'name' => 'hidden_image', 'id' => 'hidden_image', 'value' => $profile_image));
                                         echo form_input(array('type' => 'file', 'onchange' => 'readURL(this)', 'class' => 'form-control', 'id' => 'profile_image', 'name' => 'profile_image', 'accept' => 'image/x-png,image/gif,image/jpeg,image/png'));
                                         ?>
-                                        <?php echo form_error('event_category_image'); ?>
+                                        <?php echo form_error('category_image'); ?>
                                     </div>
                                 </div>
                             </div>

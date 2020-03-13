@@ -15,7 +15,8 @@ class V1 extends RestController {
     {
         // Construct the parent class
         parent::__construct();
-        $this->auth();
+        $this->load->model('model_admin');
+        //$this->auth();
     }
 
 
@@ -46,9 +47,51 @@ class V1 extends RestController {
         }
     }
 
-    public function test_post()
+    public function service_category_get()
     {
-        $theCredential = $this->user_data;
-        $this->response($theCredential, 200); // OK (200) being the HTTP response code
+        $select_string="id as category_id,title,category_slug,category_image";
+        $app_service_category = $this->model_admin->getData("app_service_category",$select_string,'status="A"','','title ASC');
+
+        if(isset($app_service_category) && count($app_service_category)>0){
+            $this->response([
+                'data'=>$app_service_category,
+                'image_path'=>base_url('assets/upload/'),
+                'status' =>true,
+                'message' => 'success'
+            ], 200 );
+        }else{
+            $this->response([
+                'status' => false,
+                'message' => 'No record found'
+            ], 200 );
+        }
+
+
+    }
+
+    public function service_get()
+    {
+        $select_string="`id`, `category_id`, `staff`,`title`, `slug`, `description`, `total_seat`,  `days`, `start_time`,";
+        $select_string.="`end_time`, `padding_time`, `slot_time`, `monthly_allow`, `multiple_slotbooking_allow`, `multiple_slotbooking_limit`,";
+        $select_string.="`city`, `location`, `is_display_address`, `address`, `address_map_link`, `latitude`, `longitude`, `image`, `thumb_image`, `payment_type`, `price`,";
+        $select_string.="`discount`, `discounted_price`, `from_date`, `to_date`, `status`,`faq`";
+
+        $app_service= $this->model_admin->getData("app_services",$select_string,'status="A"','','title ASC');
+
+        if(isset($app_service) && count($app_service)>0){
+            $this->response([
+                'data'=>$app_service,
+                'image_path'=>base_url('assets/upload/'),
+                'status' =>true,
+                'message' => 'success'
+            ], 200 );
+        }else{
+            $this->response([
+                'status' => false,
+                'message' => 'No record found'
+            ], 200 );
+        }
+
+
     }
 }

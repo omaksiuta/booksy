@@ -183,7 +183,7 @@ class Front extends CI_Controller {
                 'jointype' => 'INNER'
             )
         );
-        $events_category = $this->model_front->getData("app_service_category", 'app_service_category.title,app_service_category.id,app_service_category.event_category_image', 'app_service_category.type="E" AND app_services.status="A"', $event_cat_join, '', 'app_service_category.title', '', 8);
+        $events_category = $this->model_front->getData("app_service_category", 'app_service_category.title,app_service_category.id,app_service_category.category_image', 'app_service_category.type="E" AND app_services.status="A"', $event_cat_join, '', 'app_service_category.title', '', 8);
 
 
         $data['total_service'] = $total_service;
@@ -2369,8 +2369,8 @@ class Front extends CI_Controller {
                         'condition' => 'app_service_category.id=app_services.category_id',
                         'jointype' => 'INNER'
                 ));
-                $event_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.event_category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='E' AND app_services.created_by='$admin_id'", $join);
-                $service_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.event_category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='S' AND app_services.created_by='$admin_id'", $join);
+                $event_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='E' AND app_services.created_by='$admin_id'", $join);
+                $service_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='S' AND app_services.created_by='$admin_id'", $join);
                 $category_data = $this->model_front->getData("app_service_category", "app_service_category.*", "app_services.status='A' AND app_services.created_by='$admin_id'", $cjoin, 'title', 'app_service_category.id');
                 /*
                  * list of top city

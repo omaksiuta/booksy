@@ -238,14 +238,14 @@ if (isset($rating_data) && !empty($rating_data)) {
                                     <?php
                                     if (isset($category_data) && !empty($category_data)) {
                                         foreach ($category_data as $eRow) {
-                                            if (isset($eRow['event_category_image']) && $eRow['event_category_image'] != "") {
-                                                if (file_exists(FCPATH . "assets/uploads/category/" . $eRow['event_category_image'])) {
-                                                    $event_category_image = base_url() . UPLOAD_PATH . "category/" . $eRow['event_category_image'];
+                                            if (isset($eRow['category_image']) && $eRow['category_image'] != "") {
+                                                if (file_exists(FCPATH . "assets/uploads/category/" . $eRow['category_image'])) {
+                                                    $category_image = base_url() . UPLOAD_PATH . "category/" . $eRow['category_image'];
                                                 } else {
-                                                    $event_category_image = base_url(img_path) . "/categories/default.png";
+                                                    $category_image = base_url(img_path) . "/categories/default.png";
                                                 }
                                             } else {
-                                                $event_category_image = base_url(img_path) . "/categories/default.png";
+                                                $category_image = base_url(img_path) . "/categories/default.png";
                                             }
 
                                             if ($eRow['type'] == 'S') {
@@ -256,7 +256,7 @@ if (isset($rating_data) && !empty($rating_data)) {
                                             ?>
                                             <div class="cate-img-name">
                                                 <a href="<?php echo $app_service_category_type; ?>">
-                                                    <img src="<?php echo $event_category_image; ?>" class="img-fluid" height="30" width="30"/>
+                                                    <img src="<?php echo $category_image; ?>" class="img-fluid" height="30" width="30"/>
                                                     <h6><?php echo $eRow['title'] ?></h6>
                                                 </a>
                                             </div>
