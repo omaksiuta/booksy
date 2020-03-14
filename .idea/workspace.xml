@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae2a13dc-3fb3-436a-b0cd-09db9259288d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/cache/ci_sessionsq9kdr9o866p4u0eivp1inc3hnetstgd" beforeDir="false" afterPath="$PROJECT_DIR$/app/cache/ci_sessionsq9kdr9o866p4u0eivp1inc3hnetstgd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/staff/Content.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/staff/Content.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/vendor/Content.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/vendor/Content.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/Content.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/Content.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,10 +19,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/controllers/vendor/Content.php">
+        <entry file="file://$PROJECT_DIR$/app/controllers/vendor/Dashboard.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="290" column="73" selection-start-line="290" selection-start-column="73" selection-end-line="290" selection-end-column="73" />
+            <state relative-caret-position="-2159">
+              <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -112,6 +110,7 @@
         <option value="$PROJECT_DIR$/app/views/admin/currency/manage_currency.php" />
         <option value="$PROJECT_DIR$/app/controllers/staff/Content.php" />
         <option value="$PROJECT_DIR$/app/controllers/vendor/Content.php" />
+        <option value="$PROJECT_DIR$/app/controllers/Content.php" />
       </list>
     </option>
   </component>
@@ -155,20 +154,6 @@
               <item name="booksy" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="booksy" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-              <item name="staff" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="booksy" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
@@ -220,12 +205,12 @@
       <workItem from="1583738491058" duration="594000" />
       <workItem from="1583739652551" duration="337000" />
       <workItem from="1584067319760" duration="5990000" />
-      <workItem from="1584165118310" duration="18211000" />
+      <workItem from="1584165118310" duration="18308000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32454000" />
+    <option name="totallyTimeSpent" value="32551000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -256,36 +241,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Coupon.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="866">
-          <caret line="86" column="23" selection-start-line="86" selection-start-column="23" selection-end-line="86" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/Front.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1154">
-          <caret line="3009" column="5" lean-forward="true" selection-start-line="3009" selection-start-column="5" selection-end-line="3009" selection-end-column="5" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#1;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#2;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#3;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#1;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#2;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#3;n#div#2;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#3;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#table#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/api/V1.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1014">
@@ -636,6 +591,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
           <caret line="290" column="73" selection-start-line="290" selection-start-column="73" selection-end-line="290" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/Content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="682" column="45" selection-start-line="682" selection-start-column="45" selection-end-line="682" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/vendor/Dashboard.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2159">
+          <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
         </state>
       </provider>
     </entry>

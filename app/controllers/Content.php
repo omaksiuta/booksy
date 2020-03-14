@@ -338,7 +338,7 @@ class Content extends CI_Controller {
             );
             if (isset($_FILES['profile_image']) && $_FILES['profile_image']['name'] != '') {
 
-                $uploadPath = uploads_path . '/profiles';
+                $uploadPath = uploads_path . '/';
                 $tmp_name = $_FILES["profile_image"]["tmp_name"];
                 $temp = explode(".", $_FILES["profile_image"]["name"]);
                 $newfilename = (uniqid()) . '.' . end($temp);
@@ -677,10 +677,10 @@ class Content extends CI_Controller {
                 $ext = explode('.', $_FILES['file']['name']);
                 $filename = $name . '.' . $ext[1];
 
-                $destination = FCPATH . '/assets/uploads/event/' . $filename; //change this directory
+                $destination = FCPATH . '/assets/uploads/' . $filename; //change this directory
                 $location = $_FILES["file"]["tmp_name"];
                 move_uploaded_file($location, $destination);
-                echo base_url('assets/uploads/event/') . $filename; //change this URL
+                echo base_url('assets/uploads/') . $filename; //change this URL
             } else {
                 echo $message = 'Ooops!  Your upload triggered the following error:  ' . $_FILES['file']['error'];
             }
