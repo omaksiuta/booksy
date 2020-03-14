@@ -55,7 +55,7 @@ class Sitesetting extends MY_Controller {
 
 
             if (isset($_FILES['fevicon_icon']) && $_FILES['fevicon_icon']['name'] != '') {
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/sitesetting';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $fevicon_tmp_name = $_FILES["fevicon_icon"]["tmp_name"];
                 $fevicon_temp = explode(".", $_FILES["fevicon_icon"]["name"]);
                 $fevicon_name = uniqid();
@@ -64,7 +64,7 @@ class Sitesetting extends MY_Controller {
                 $data['fevicon_icon'] = $new_fevicon_name;
             }
             if (isset($_FILES['company_logo']) && $_FILES['company_logo']['name'] != '') {
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/sitesetting';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $logo_tmp_name = $_FILES["company_logo"]["tmp_name"];
                 $logo_temp = explode(".", $_FILES["company_logo"]["name"]);
                 $logo_name = uniqid();
@@ -84,7 +84,7 @@ class Sitesetting extends MY_Controller {
                 }
             }
             if (isset($_FILES['banner_img']) && $_FILES['banner_img']['name'] != '') {
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/sitesetting';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $banner_tmp_name = $_FILES["banner_img"]["tmp_name"];
                 $banner_temp = explode(".", $_FILES["banner_img"]["name"]);
                 $nanner_name = uniqid();
@@ -104,7 +104,7 @@ class Sitesetting extends MY_Controller {
                 }
             }
             if (isset($_FILES['community_banner']) && $_FILES['community_banner']['name'] != '') {
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/sitesetting';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $banner_tmp_name = $_FILES["community_banner"]["tmp_name"];
                 $banner_temp = explode(".", $_FILES["community_banner"]["name"]);
                 $nanner_name = uniqid();

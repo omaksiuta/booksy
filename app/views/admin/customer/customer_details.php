@@ -36,8 +36,8 @@ $created_on = $customer_data['created_on'];
                 <div class="profile-header">
                     <div class="row align-items-center">
                         <div class="col-auto profile-image">
-                            <a target="_blank" href="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $profile_image); ?>">
-                                <img class="rounded-circle" alt="User Image" src="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $profile_image); ?>">
+                            <a target="_blank" href="<?php echo check_profile_image($profile_image); ?>">
+                                <img class="rounded-circle" alt="User Image" src="<?php echo check_profile_image($profile_image); ?>">
                             </a>
                         </div>
                         <div class="col ml-md-n2 profile-user-info">

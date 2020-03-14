@@ -278,7 +278,7 @@ class Content extends CI_Controller {
             );
             if (isset($_FILES['profile_image']) && $_FILES['profile_image']['name'] != '') {
 
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/profiles';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $tmp_name = $_FILES["profile_image"]["tmp_name"];
                 $temp = explode(".", $_FILES["profile_image"]["name"]);
                 $newfilename = (uniqid()) . '.' . end($temp);
@@ -286,7 +286,7 @@ class Content extends CI_Controller {
                 $update['profile_image'] = $newfilename;
             }
             if (isset($_FILES['profile_cover_image']) && $_FILES['profile_cover_image']['name'] != '') {
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/profiles';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $tmp_name = $_FILES["profile_cover_image"]["tmp_name"];
                 $temp = explode(".", $_FILES["profile_cover_image"]["name"]);
                 $newfilename = (uniqid()) . '.' . end($temp);

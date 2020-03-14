@@ -66,7 +66,7 @@ class Slider extends MY_Controller {
                 $_FILES['userFile']['error'] = $_FILES['image']['error'];
                 $_FILES['userFile']['size'] = $_FILES['image']['size'];
 
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/slider';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $config['upload_path'] = $uploadPath;
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
                 $temp = explode(".", $_FILES["userFile"]["name"]);
@@ -81,7 +81,7 @@ class Slider extends MY_Controller {
                     $data['image'] = $fileData['file_name'];
                 }
                 if (isset($old_slider_image) && $old_slider_image != null && $old_slider_image != "") {
-                    $slider_image = FCPATH . uploads_path . "/slider/" . $old_slider_image;
+                    $slider_image = FCPATH . uploads_path . "/" . $old_slider_image;
                     if (file_exists($slider_image)) {
                         unlink($slider_image);
                     }
@@ -110,7 +110,7 @@ class Slider extends MY_Controller {
         $slider = $this->model_slider->getData("app_slider", "*", "id='$id'");
         if (count($slider) > 0) {
 
-            $slider_image = FCPATH . uploads_path . "/slider/" . $slider[0]['image'];
+            $slider_image = FCPATH . uploads_path . "/" . $slider[0]['image'];
             if (file_exists($slider_image)) {
                 unlink($slider_image);
             }

@@ -31,7 +31,7 @@ class Message extends MY_Controller {
         } else {
             $id = isset($data['customer_list'][0]) ? $data['customer_list'][0]['customer_id'] : 0;
         }
-        $data['title'] = translate('manage') . " " . translate('event');
+        $data['title'] = translate('manage') . " " . translate('service');
         $this->load->view('admin/message', $data);
     }
 

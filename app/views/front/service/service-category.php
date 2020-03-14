@@ -3,7 +3,7 @@
     <div class="mt-20">
         <?php $this->load->view('message'); ?>        
     </div>
-    <h3 class="text-center mt-20"><?php echo isset($event_data) && count($event_data) > 0 ? $event_data[0]['category_title'] : translate('event_category'); ?></h3>
+    <h3 class="text-center mt-20"><?php echo isset($service_data) && count($service_data) > 0 ? $service_data[0]['category_title'] : translate('service_category'); ?></h3>
     <div class="row">
         <div class="col-md-12">
             <?php
@@ -14,21 +14,21 @@
             <div class="mb-4 resp_mb-60">
                 <div class="row">
                     <?php
-                    if (isset($event_data) && count($event_data) > 0) {
-                        foreach ($event_data as $key => $value) {
+                    if (isset($service_data) && count($service_data) > 0) {
+                        foreach ($service_data as $key => $value) {
                             if (isset($value['image']) && $value['image'] != '') {
                                 $imageArr = json_decode($value['image']);
                             }
                             ?>
                             <div class="col-md-4">
-                                <div class="card hoverable position-r home_card event-card">
+                                <div class="card hoverable position-r home_card service-card">
                                     <div class="view overlay">
                                         <a href="<?php echo base_url('service-details/' . slugify($value['title']) . '/' . $value['id']); ?>">
-                                            <img class="card-img-top" src="<?php echo check_admin_image(isset($imageArr[0]) && $imageArr[0] != '' ? UPLOAD_PATH . "event/$imageArr[0]" : ''); ?>">
+                                            <img class="card-img-top" src="<?php echo check_admin_image(isset($imageArr[0]) && $imageArr[0] != '' ? UPLOAD_PATH . "service/$imageArr[0]" : ''); ?>">
                                         </a>
                                         <ul class="titlebtn list-inline inline-ul pb-10">
                                             <li class="product_cat">
-                                                <a href="<?php echo base_url('event-category/' . $value['category_id']); ?>" style="text-decoration: none;">
+                                                <a href="<?php echo base_url('service-category/' . $value['category_id']); ?>" style="text-decoration: none;">
                                                     <?php echo $value['category_title']; ?>
                                                 </a>
                                             </li>
@@ -39,7 +39,7 @@
                                         <div class="w-100">
                                             <div class="sell pull-left">
                                                 <p><i class="fa fa-clock-o mr-10 text-success"></i>
-                                                    <?php echo str_replace('{slot_time}', $value['slot_time'], translate('event_time')); ?></p>
+                                                    <?php echo str_replace('{slot_time}', $value['slot_time'], translate('service_time')); ?></p>
                                             </div>
                                             <div class="sell pull-right">
                                                 <p><i class="fa fa-map-marker pr-10 text-danger"></i><?php echo $value['city_title']; ?></p>

@@ -11,7 +11,7 @@ class Coupon extends MY_Controller {
         set_time_zone();
     }
 
-    //show event page
+    //show service page
     public function index() {
         $coupon_data = $this->model_service->getData('app_service_coupon', '*', "created_by=" . $this->login_id);
         $data['coupon_data'] = $coupon_data;
@@ -19,19 +19,19 @@ class Coupon extends MY_Controller {
         $this->load->view('admin/coupon/manage_coupon', $data);
     }
 
-    //show add event form
+    //show add service form
     public function add_coupon() {
-        $data['event_data'] = $this->model_service->getData('app_services', '*', "status='A' AND type='S' AND created_by=" . $this->login_id);
+        $data['service_data'] = $this->model_service->getData('app_services', '*', "status='A' AND created_by=" . $this->login_id);
         $data['title'] = translate('add') . " " . translate('coupon');
         $this->load->view('admin/coupon/add_update_coupon', $data);
     }
 
-    //show edit event form
+    //show edit service form
     public function update_coupon($id) {
         $coupon = $this->model_service->getData("app_service_coupon", "*", "id='$id'");
         if (isset($coupon[0]) && !empty($coupon[0])) {
             $data['coupon_data'] = $coupon[0];
-            $data['event_data'] = $this->model_service->getData('app_services', '*', "status='A' AND type='S' AND created_by=" . $this->login_id);
+            $data['service_data'] = $this->model_service->getData('app_services', '*', "status='A' AND created_by=" . $this->login_id);
             $data['title'] = translate('update') . " " . translate('coupon');
             $this->load->view('admin/coupon/add_update_coupon', $data);
         } else {
@@ -39,12 +39,12 @@ class Coupon extends MY_Controller {
         }
     }
 
-    //add/edit an event
+    //add/edit an service
     public function save_coupon() {
         $id = (int) $this->input->post('id', true);
         $this->form_validation->set_rules('title', '', 'required');
         $this->form_validation->set_rules('valid_till', '', 'required');
-        $this->form_validation->set_rules('event_id[]', '', 'required');
+        $this->form_validation->set_rules('service_id[]', '', 'required');
         $this->form_validation->set_rules('code', '', 'required|is_unique[app_service_coupon.code.id.' . $id . ']');
         $this->form_validation->set_rules('discount_type', '', 'required');
         $this->form_validation->set_rules('discount_value', '', 'required');
@@ -62,7 +62,7 @@ class Coupon extends MY_Controller {
 
             $data['title'] = $this->input->post('title', true);
             $data['valid_till'] = $this->input->post('valid_till', true);
-            $data['event_id'] = json_encode($this->input->post('event_id[]', true));
+            $data['service_id'] = json_encode($this->input->post('service_id[]', true));
             $data['code'] = $this->input->post('code', true);
             $data['discount_type'] = $this->input->post('discount_type', true);
             $data['discount_value'] = $this->input->post('discount_value', true);
@@ -84,7 +84,7 @@ class Coupon extends MY_Controller {
         }
     }
 
-    //delete an event
+    //delete an service
     public function delete_coupon($id) {
         $this->model_service->delete('app_service_coupon', 'id=' . $id . " AND created_by=" . $this->login_id);
         $this->session->set_flashdata('msg', translate('record_delete'));

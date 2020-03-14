@@ -10,15 +10,7 @@ $address = isset($vendor_data['address']) ? $vendor_data['address'] : set_value(
 $status = (set_value("status")) ? set_value("status") : (!empty($vendor_data) ? $vendor_data['status'] : 'A');
 
 $profile_image = (set_value("profile_image")) ? set_value("profile_image") : (!empty($vendor_data) ? $vendor_data['profile_image'] : '');
-if (isset($profile_image) && $profile_image != "") {
-    if (file_exists(FCPATH . 'assets/uploads/profiles/' . $profile_image)) {
-        $image = base_url("assets/uploads/profiles/" . $profile_image);
-    } else {
-        $image = base_url("assets/images/no-image.png");
-    }
-} else {
-    $image = base_url("assets/images/no-image.png");
-}
+$image = check_profile_image($profile_image);
 
 
 if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') {

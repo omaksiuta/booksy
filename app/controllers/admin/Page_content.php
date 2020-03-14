@@ -19,13 +19,13 @@ class Page_content extends MY_Controller {
         $this->load->view('admin/master/manage_content', $data);
     }
 
-    //show add event form
+    //show add content form
     public function add_content() {
         $data['title'] = translate('add') . " " . translate('content_management');
         $this->load->view('admin/master/add_update_content', $data);
     }
 
-    //show edit event form
+    //show edit content form
     public function update_content($id) {
         $cond = 'id=' . $id;
         $app_content = $this->model_city->getData("app_content", "*", $cond);
@@ -38,7 +38,7 @@ class Page_content extends MY_Controller {
         }
     }
 
-    //add/edit an event
+    //add/edit an content
     public function save_content() {
         $id = (int) $this->input->post('id', true);
         $this->form_validation->set_rules('title', 'title', 'trim|required|is_unique[app_content.title.id.' . $id . ']');
@@ -72,7 +72,7 @@ class Page_content extends MY_Controller {
         }
     }
 
-    //delete an event
+    //delete an service
     public function delete_content($id) {
         $this->model_city->delete('app_content', "id=" . $id);
         $this->session->set_flashdata('msg', translate('record_delete'));

@@ -52,22 +52,12 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                                         } else {
                                             $status_string = '<span class="badge badge-danger">' . translate('inactive') . '</span>';
                                         }
-
                                         $category_image =$row['category_image'];
-                                        if (isset($category_image) && $category_image != "") {
-                                            if (file_exists(FCPATH . 'assets/uploads/category/' . $category_image)) {
-                                                $image = base_url("assets/uploads/category/" . $category_image);
-                                            } else {
-                                                $image = base_url("assets/images/no-image.png");
-                                            }
-                                        } else {
-                                            $image = base_url("assets/images/no-image.png");
-                                        }
                                         ?>
                                         <tr>
                                             <td class="text-center"><?php echo $key + 1; ?></td>
                                             <td class="text-left"><?php echo $row['title']; ?></td>
-                                            <td class="text-center"><a href="<?php echo $image; ?>" target="_blank"><img class="img-thumbnail" width="50" src="<?php echo $image; ?>"/></a></td>
+                                            <td class="text-center"><a href="<?php echo check_service_image($category_image); ?>" target="_blank"><img class="img-thumbnail" width="50" src="<?php echo check_service_image($category_image); ?>"/></a></td>
                                             <td class="text-center"><?php echo $status_string; ?></td>
                                             <td class="text-center"><?php echo get_formated_date($row['created_on'], "N"); ?></td>
                                             <td class="td-actions text-center">

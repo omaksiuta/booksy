@@ -17,24 +17,24 @@ class Testimonial extends MY_Controller {
 
     //show home page
     public function index() {
-        $event = $this->model_dashboard->getData('app_testimonial', '*');
-        $data['testimonial_data'] = $event;
+        $service = $this->model_dashboard->getData('app_testimonial', '*');
+        $data['testimonial_data'] = $service;
         $data['title'] = translate('manage') . " " . translate('testimonial');
         $this->load->view('admin/master/manage_testimonial', $data);
     }
 
-    //show add event form
+    //show add service form
     public function add_testimonial() {
         $data['title'] = translate('add') . " " . translate('testimonial');
         $this->load->view('admin/master/add_update_testimonial', $data);
     }
 
-    //show edit event form
+    //show edit service form
     public function update_testimonial($id) {
         $cond = 'id=' . $id;
-        $event = $this->model_dashboard->getData("app_testimonial", "*", $cond);
-        if (isset($event[0]) && !empty($event[0])) {
-            $data['app_testimonial'] = $event[0];
+        $service = $this->model_dashboard->getData("app_testimonial", "*", $cond);
+        if (isset($service[0]) && !empty($service[0])) {
+            $data['app_testimonial'] = $service[0];
             $data['title'] = translate('update') . " " . translate('testimonial');
             $this->load->view('admin/master/add_update_testimonial', $data);
         } else {
@@ -44,7 +44,7 @@ class Testimonial extends MY_Controller {
         }
     }
 
-    //add/edit an event
+    //add/edit an service
     public function save_testimonial() {
         $id = (int) $this->input->post('id', true);
         $this->form_validation->set_rules('name', 'title', 'trim|required');
@@ -93,19 +93,19 @@ class Testimonial extends MY_Controller {
         }
     }
 
-    //delete an event
+    //delete an service
     public function delete_testimonial($id) {
-        $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/category';
+        $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
         $id = (int) $id;
         if ($id > 0) {
             $cond = 'id=' . $id;
-            $event = $this->model_dashboard->getData("app_testimonial", "*", $cond);
+            $app_testimonial = $this->model_dashboard->getData("app_testimonial", "*", $cond);
 
-            if (count($event) > 0) {
-                $image = isset($event[0]['image']) ? $event[0]['image'] : "";
+            if (count($app_testimonial) > 0) {
+                $image = isset($app_testimonial[0]['image']) ? $app_testimonial[0]['image'] : "";
 
                 if (isset($image) && $image != "") {
-                    if (file_exists(FCPATH . uploads_path . '/category/' . $image)) {
+                    if (file_exists(FCPATH . uploads_path . '/' . $image)) {
                         @unlink($uploadPath . "/" . $image);
                     }
                 }

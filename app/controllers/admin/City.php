@@ -19,27 +19,27 @@ class city extends MY_Controller {
 
     //show home page
     public function index() {
-        $event = $this->model_city->getData('', '*');
-        $data['city_data'] = $event;
+        $service = $this->model_city->getData('', '*');
+        $data['city_data'] = $service;
         $data['title'] = translate('manage') . " " . translate('city');
         $this->load->view('admin/master/manage_city', $data);
     }
 
-    //show add event form
+    //show add service form
     public function add_city() {
         $data['title'] = translate('add') . " " . translate('city');
         $this->load->view('admin/master/add_update_city', $data);
     }
 
-    //show edit event form
+    //show edit service form
     public function update_city($id) {
         $cond = 'city_id=' . $id;
         if ($this->session->userdata('Type_Admin') != "A") {
             $cond .= 'AND city_created_by=' . $this->login_id;
         }
-        $event = $this->model_city->getData("app_city", "*", $cond);
-        if (isset($event[0]) && !empty($event[0])) {
-            $data['city_data'] = $event[0];
+        $service = $this->model_city->getData("app_city", "*", $cond);
+        if (isset($service[0]) && !empty($service[0])) {
+            $data['city_data'] = $service[0];
             $data['title'] = translate('update') . " " . translate('city');
             $this->load->view('admin/master/add_update_city', $data);
         } else {
@@ -54,7 +54,7 @@ class city extends MY_Controller {
         $this->model_city->update('app_city', $data, "city_id=$id");
     }
 
-    //add/edit an event
+    //add/edit an service
     public function save_city() {
         $city_id = (int) $this->input->post('id', true);
         $this->form_validation->set_rules('city_title', 'title', 'trim|required|is_unique[app_city.city_title.city_id.' . $city_id . ']');
@@ -88,10 +88,10 @@ class city extends MY_Controller {
         }
     }
 
-    //delete an event
+    //delete an service
     public function delete_city($id) {
-        $event_data = $this->model_city->getData('app_services', 'id', "city='$id'");
-        if (isset($event_data) && count($event_data) > 0) {
+        $service_data = $this->model_city->getData('app_services', 'id', "city='$id'");
+        if (isset($service_data) && count($service_data) > 0) {
             $this->session->set_flashdata('msg', translate('record_not_allowed_to_delete'));
             $this->session->set_flashdata('msg_class', 'failure');
             echo 'false';

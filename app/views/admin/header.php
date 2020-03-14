@@ -78,7 +78,7 @@ $login_user_details = get_login_admin();
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img src="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $login_user_details['profile_image']); ?>" alt="User Image" class="avatar-img rounded-circle">
+                                    <img src="<?php echo check_profile_image($login_user_details['profile_image']); ?>" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
                                     <h6><?php echo $login_user_details['first_name'] . " " . $login_user_details['last_name']; ?></h6>

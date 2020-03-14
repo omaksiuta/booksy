@@ -17,14 +17,3 @@ $hostname = "enter_hostname";
 $username = "enter_db_username";
 $password = "enter_db_password";
 $database = "enter_database_name";
-
-
-app_event->app_services
-
-app_event_book->app_service_appointment
-
-app_event_category->app_service_category
-
-app_appointment_payment->app_service_appointment_payment
-
-app_coupon->app_service_coupon

@@ -27,7 +27,7 @@ class Dashboard extends CI_Controller {
                 "jointype" => "LEFT"),
             array(
                 "table" => "app_services",
-                "condition" => "app_services.id=app_service_appointment.event_id",
+                "condition" => "app_services.id=app_service_appointment.service_id",
                 "jointype" => "LEFT")
         );
         $current_date = date('Y-m-d');
@@ -54,7 +54,7 @@ class Dashboard extends CI_Controller {
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
         $appointment_type = isset($_REQUEST['appointment_type']) ? $_REQUEST['appointment_type'] : "U";
 
-        $cond = " app_service_appointment.event_id >0 AND app_service_appointment.type='S' AND app_service_appointment.payment_status!='IN'";
+        $cond = " app_service_appointment.service_id >0 AND app_service_appointment.type='S' AND app_service_appointment.payment_status!='IN'";
 
         $cond .= " AND app_service_appointment.staff_id=" . $staff_id;
 
@@ -80,7 +80,7 @@ class Dashboard extends CI_Controller {
                 "jointype" => "LEFT"),
             array(
                 "table" => "app_services",
-                "condition" => "app_services.id=app_service_appointment.event_id",
+                "condition" => "app_services.id=app_service_appointment.service_id",
                 "jointype" => "LEFT"),
             array(
                 "table" => "app_admin",
@@ -96,7 +96,7 @@ class Dashboard extends CI_Controller {
 
     public function send_remainder() {
 
-        $id = $this->input->post('event_book_id', true);
+        $id = $this->input->post('service_book_id', true);
         $staff_id = (int) $this->session->userdata('staff_id');
         if ((int) $id > 0) {
             $cond = "app_service_appointment.id = '$id'";
@@ -107,15 +107,15 @@ class Dashboard extends CI_Controller {
                     "jointype" => "LEFT"),
                 array(
                     "table" => "app_services",
-                    "condition" => "app_services.id=app_service_appointment.event_id",
+                    "condition" => "app_services.id=app_service_appointment.service_id",
                     "jointype" => "LEFT")
             );
 
             $res = $this->model_dashboard->getData('app_service_appointment', 'app_service_appointment.*,app_customer.first_name,app_customer.last_name,app_customer.email, app_services.title,app_services.description, app_services.created_by', $cond, $join)[0];
 
-            $service_data = get_full_event_service_data($res['event_id']);
+            $service_data = get_full_service_service_data($res['service_id']);
 
-            $event_title = $res['title'];
+            $service_title = $res['title'];
             $name = ($res['first_name']) . " " . ($res['last_name']);
             $email = $res['email'];
             $description = $res['description'];
@@ -163,7 +163,7 @@ class Dashboard extends CI_Controller {
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'left'
             ),
             array(
@@ -194,9 +194,9 @@ class Dashboard extends CI_Controller {
         );
 
         $e_condition = "app_service_appointment.id=" . $id;
-        $event_data = $this->model_dashboard->getData("app_service_appointment", "app_service_appointment.* ,app_service_appointment.price as final_price,app_services.title as Event_title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,CONCAT(app_customer.first_name,' ',app_customer.last_name) as Customer_name,app_customer.phone as Customer_phone,app_customer.email as Customer_email,app_service_appointment.addons_id,app_services.price,app_admin.company_name,app_services.description as Event_description, app_services.payment_type", $e_condition, $join);
+        $service_data = $this->model_dashboard->getData("app_service_appointment", "app_service_appointment.* ,app_service_appointment.price as final_price,app_services.title as service_title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,CONCAT(app_customer.first_name,' ',app_customer.last_name) as Customer_name,app_customer.phone as Customer_phone,app_customer.email as Customer_email,app_service_appointment.addons_id,app_services.price,app_admin.company_name,app_services.description as service_description, app_services.payment_type", $e_condition, $join);
         
-        $data['event_data'] = $event_data;
+        $data['service_data'] = $service_data;
         $this->load->view('staff/view_booking_details', $data);
     }
 

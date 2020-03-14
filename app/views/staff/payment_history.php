@@ -27,7 +27,7 @@ include VIEWPATH . 'vendor/header.php';
                                                 <th class="text-center">#</th>
                                                 <th class="text-center"><?php echo translate('vendor_name'); ?></th>
                                                 <th class="text-center"><?php echo translate('payment_gateway'); ?></th>
-                                                <th class="text-center"><?php echo translate('event'); ?></th>
+                                                <th class="text-center"><?php echo translate('service'); ?></th>
                                                 <th class="text-center"><?php echo translate('customer_name'); ?></th>
                                                 <th class="text-center"><?php echo translate('vendor_amount'); ?></th>
                                                 <th class="text-center"><?php echo translate('admin_amount'); ?></th>
@@ -47,7 +47,7 @@ include VIEWPATH . 'vendor/header.php';
                                                         <td class="text-center"><?php echo $i; ?></td>
                                                         <td class="text-center"><?php echo $row['vendor_name']; ?></td>
                                                         <td class="text-center"><?php echo isset($row['payment_method']) ? $row['payment_method'] : "NA"; ?></td>
-                                                        <td class="text-center"><?php echo isset($row['event_name']) && $row['event_name'] != NULL ? "" . $row['event_name'] : "NA"; ?></td>
+                                                        <td class="text-center"><?php echo isset($row['service_name']) && $row['service_name'] != NULL ? "" . $row['service_name'] : "NA"; ?></td>
                                                         <td class="text-center"><?php echo isset($row['customer_name']) && $row['customer_name'] != NULL ? "" . $row['customer_name'] : "NA"; ?></td>
                                                         <td class="text-center"><?php echo price_format($row['vendor_price']); ?></td>
                                                         <td class="text-center"><?php echo price_format($row['admin_price']); ?></td>

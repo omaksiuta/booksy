@@ -90,7 +90,7 @@ class Staff extends MY_Controller {
                 'created_by' => $created_by
             );
 
-            $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/profiles';
+            $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
             if (isset($_FILES['profile_image']["name"]) && $_FILES['profile_image']["name"] != "") {
                 $tmp_name = $_FILES["profile_image"]["tmp_name"];
                 $temp = explode(".", $_FILES["profile_image"]["name"]);
@@ -150,7 +150,7 @@ class Staff extends MY_Controller {
                 $this->model_customer->delete('app_admin', 'id=' . $id);
 
                 //delete images
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/profiles';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $hidden_profile_image = $staff_data[0]['profile_image'];
                 if ($hidden_profile_image != "" && $hidden_profile_image != NULL) {
                     @unlink($uploadPath . "/" . $hidden_profile_image);
@@ -193,7 +193,7 @@ class Staff extends MY_Controller {
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'left'
             ),
             array(
@@ -223,13 +223,10 @@ class Staff extends MY_Controller {
             )
         );
 
-        $s_condition = "app_services.type = 'S' AND app_service_appointment.staff_id=" . $id;
-        $appointment = $this->model_customer->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_admin.first_name,app_admin.last_name,app_admin.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as event_description, app_services.payment_type", $s_condition, $join);
+        $s_condition = "app_service_appointment.staff_id=" . $id;
+        $appointment = $this->model_customer->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_admin.first_name,app_admin.last_name,app_admin.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as service_description, app_services.payment_type", $s_condition, $join);
         $data['service_appointment_data'] = $appointment;
-        
-        $e_condition = "app_services.type = 'E' AND app_service_appointment.staff_id=" . $id;
-        $e_appointment = $this->model_customer->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_admin.first_name,app_admin.last_name,app_admin.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as event_description, app_services.payment_type", $e_condition, $join);
-        $data['event_appointment_data'] = $e_appointment;
+
         $this->load->view('admin/staff/staff-booking', $data);
     }
 
@@ -276,7 +273,7 @@ class Staff extends MY_Controller {
             $this->session->set_flashdata('msg_class', 'success');
             redirect($folder_url . '/staff-details/' . $customer_id);
         } else {
-            $this->session->set_flashdata('msg', $rply['errorMessage']);
+            $this->session->set_flashdata('msg', $staff_data['errorMessage']);
             $this->session->set_flashdata('msg_class', 'failure');
             redirect($folder_url . '/staff-details/' . $customer_id);
         }

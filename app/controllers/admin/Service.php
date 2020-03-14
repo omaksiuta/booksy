@@ -280,7 +280,7 @@ class Service extends MY_Controller {
                         $_FILES['userFile']['error'] = $_FILES['image']['error'][$i];
                         $_FILES['userFile']['size'] = $_FILES['image']['size'][$i];
 
-                        $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/service';
+                        $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                         $config['upload_path'] = $uploadPath;
                         $config['allowed_types'] = 'gif|jpg|png|jpeg';
                         $temp = explode(".", $_FILES["userFile"]["name"]);
@@ -325,7 +325,7 @@ class Service extends MY_Controller {
                 }
             }
             if (isset($_FILES['seo_og_image']) && $_FILES['seo_og_image']['name'] != '') {
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/service';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
                 $banner_tmp_name = $_FILES["seo_og_image"]["tmp_name"];
                 $banner_temp = explode(".", $_FILES["seo_og_image"]["name"]);
                 $nanner_name = uniqid();
@@ -526,7 +526,7 @@ class Service extends MY_Controller {
             $data['type'] = "S";
             $data['created_by'] = $this->login_id;
 
-            $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/category';
+            $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
 
             if (isset($_FILES['category_image']["name"]) && $_FILES['category_image']["name"] != "") {
                 $tmp_name = $_FILES["category_image"]["tmp_name"];
@@ -546,7 +546,7 @@ class Service extends MY_Controller {
 
                 $this->image_lib->resize();
 
-                if (isset($hidden_main_image) && $hidden_main_image != "" && file_exists(FCPATH . uploads_path . '/category/' . $hidden_main_image)) {
+                if (isset($hidden_main_image) && $hidden_main_image != "" && file_exists(FCPATH . uploads_path . '/' . $hidden_main_image)) {
                     @unlink($uploadPath . "/" . $hidden_main_image);
                 }
             }
@@ -759,7 +759,7 @@ class Service extends MY_Controller {
                 $data['service_id'] = $this->input->post('service_id', true);
                 $data['user_id'] = $this->login_id;
 
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/service';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
 
                 if (isset($_FILES['service_add_on_image']["name"]) && $_FILES['service_add_on_image']["name"] != "") {
                     $tmp_name = $_FILES["service_add_on_image"]["tmp_name"];

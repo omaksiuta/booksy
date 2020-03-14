@@ -48,7 +48,7 @@
                                                     <td><?php echo $i; ?></td>
                                                     <td>
                                                         <h2 class="table-avatar">
-                                                            <a href="<?php echo base_url('admin/customer-details/' . $row['id']); ?>" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $row['profile_image']); ?>" alt="<?php echo $row['first_name'] . ' ' . $row['last_name']; ?>"></a>
+                                                            <a href="<?php echo base_url('admin/customer-details/' . $row['id']); ?>" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="<?php echo check_profile_image($row['profile_image']); ?>" alt="<?php echo $row['first_name'] . ' ' . $row['last_name']; ?>"></a>
                                                             <a href="<?php echo base_url('admin/customer-details/' . $row['id']); ?>"><?php echo $row['first_name'] . ' ' . $row['last_name']; ?><br/><small><?php echo $row['email']; ?></small></a>
                                                         </h2>
                                                     </td>

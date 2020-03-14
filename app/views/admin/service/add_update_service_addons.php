@@ -15,15 +15,7 @@ $event_add_on_image = isset($app_service_addons['image']) ? $app_service_addons[
 $add_on_id = !empty($app_service_addons) ? $app_service_addons['add_on_id'] : 0;
 
 
-if (isset($app_service_addons['image']) && $app_service_addons['image'] != "") {
-    if (file_exists(FCPATH . 'assets/uploads/event/' . $app_service_addons['image'])) {
-        $image = base_url("assets/uploads/event/" . $app_service_addons['image']);
-    } else {
-        $image = base_url("assets/images/no-image.png");
-    }
-} else {
-    $image = base_url("assets/images/no-image.png");
-}
+$image = check_service_image($app_service_addons['image']);
 ?>
 <input id="folder_name" name="folder_name" type="hidden" value="<?php echo isset($folder_name) && $folder_name != '' ? $folder_name : ''; ?>"/>
 <div class="page-wrapper" style="min-height: 473px;">

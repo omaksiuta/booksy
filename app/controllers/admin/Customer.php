@@ -161,7 +161,7 @@ class Customer extends MY_Controller {
             $join = array(
                 array(
                     'table' => 'app_services',
-                    'condition' => 'app_services.id=app_service_appointment.event_id',
+                    'condition' => 'app_services.id=app_service_appointment.service_id',
                     'jointype' => 'left'
                 ),
                 array(
@@ -191,16 +191,9 @@ class Customer extends MY_Controller {
                 )
             );
 
-            $s_condition = "app_services.type = 'S' AND app_service_appointment.customer_id=" . $id;
-            $appointment = $this->model_customer->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as event_description, app_services.payment_type", $s_condition, $join);
+            $s_condition = "app_service_appointment.customer_id=" . $id;
+            $appointment = $this->model_customer->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as service_description, app_services.payment_type", $s_condition, $join);
             $data['service_appointment_data'] = $appointment;
-            $e_condition = "app_services.type = 'E' AND app_service_appointment.customer_id=" . $id;
-            $e_appointment = $this->model_customer->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as event_description, app_services.payment_type", $e_condition, $join);
-            $data['event_appointment_data'] = $e_appointment;
-
-
-
-
             $this->load->view('admin/customer/customer_details', $data);
         } else {
             redirect('admin/customer');
@@ -245,7 +238,7 @@ class Customer extends MY_Controller {
             );
 
             if (isset($_FILES['profile_image']) && $_FILES['profile_image']['name'] != '') {
-                $uploadPath = uploads_path . '/profiles';
+                $uploadPath = uploads_path . '/';
                 $tmp_name = $_FILES["profile_image"]["tmp_name"];
                 $temp = explode(".", $_FILES["profile_image"]["name"]);
                 $newfilename = (uniqid()) . '.' . end($temp);
@@ -253,7 +246,7 @@ class Customer extends MY_Controller {
                 $data['profile_image'] = $newfilename;
 
                 if (isset($hidden_image) && $hidden_image != "") {
-                    @unlink(FCPATH . uploads_path . '/profiles/' . $hidden_image);
+                    @unlink(FCPATH . uploads_path . '/' . $hidden_image);
                 }
             }
 
@@ -289,12 +282,12 @@ class Customer extends MY_Controller {
         }
     }
 
-    function view_event_booking_details($id) {
+    function view_service_booking_details($id) {
         $data['title'] = translate('view') . " " . ('booking');
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'left'
             ),
             array(
@@ -325,8 +318,8 @@ class Customer extends MY_Controller {
         );
 
         $e_condition = "app_service_appointment.id=" . $id;
-        $event_data = $this->model_customer->getData("app_service_appointment", "app_service_appointment.* ,app_service_appointment.price as final_price,app_services.title as Event_title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,CONCAT(app_customer.first_name,' ',app_customer.last_name) as Customer_name,app_customer.phone as Customer_phone,app_customer.email as Customer_email,app_services.price,app_admin.company_name,app_services.description as Event_description, app_services.payment_type", $e_condition, $join);
-        $data['event_data'] = $event_data;
+        $service_data = $this->model_customer->getData("app_service_appointment", "app_service_appointment.* ,app_service_appointment.price as final_price,app_services.title as service_title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,CONCAT(app_customer.first_name,' ',app_customer.last_name) as Customer_name,app_customer.phone as Customer_phone,app_customer.email as Customer_email,app_services.price,app_admin.company_name,app_services.description as service_description, app_services.payment_type", $e_condition, $join);
+        $data['service_data'] = $service_data;
         $this->load->view('admin/customer/view_booking_details', $data);
     }
 

@@ -20,13 +20,13 @@ class location extends MY_Controller {
                 "jointype" => "LEFT")
         );
         $cond = '';
-        $event = $this->model_location->getData('', '*', $cond, $join);
-        $data['loc_data'] = $event;
+        $location = $this->model_location->getData('', '*', $cond, $join);
+        $data['loc_data'] = $location;
         $data['title'] = translate('manage') . " " . translate('location');
         $this->load->view('admin/master/manage_location', $data);
     }
 
-    //show add event form
+    //show add location form
     public function add_location() {
         $data['title'] = translate('add') . " " . translate('location');
         $city = $this->model_location->getData("app_city", "*", 'city_status = "A"');
@@ -34,15 +34,15 @@ class location extends MY_Controller {
         $this->load->view('admin/master/add_update_location', $data);
     }
 
-    //show edit event form
+    //show edit location form
     public function update_location($id) {
         $cond = 'loc_id=' . $id;
         if ($this->session->userdata('Type_Admin') != "A") {
             $cond .= 'AND loc_created_by=' . $this->login_id;
         }
-        $event = $this->model_location->getData("app_location", "*", $cond);
-        if (isset($event[0]) && !empty($event[0])) {
-            $data['loc_data'] = $event[0];
+        $location = $this->model_location->getData("app_location", "*", $cond);
+        if (isset($location[0]) && !empty($location[0])) {
+            $data['loc_data'] = $location[0];
             $city = $this->model_location->getData("app_city", "*", 'city_status = "A"');
             $data['city_list'] = $city;
             $data['title'] = translate('update') . " " . translate('location');
@@ -52,7 +52,7 @@ class location extends MY_Controller {
         }
     }
 
-    //add/edit an event
+    //add/edit an location
     public function save_location() {
         $loc_id = (int) $this->input->post('id', true);
         
@@ -93,11 +93,11 @@ class location extends MY_Controller {
         }
     }
 
-    //delete an event
+    //delete an location
     public function delete_location($id) {
-        $event_data = $this->model_location->getData('app_services', 'id', "location='$id'");
-        if (isset($event_data) && count($event_data) > 0) {
-            $this->session->set_flashdata('msg', translate('event_location_exist'));
+        $location_data = $this->model_location->getData('app_services', 'id', "location='$id'");
+        if (isset($location_data) && count($location_data) > 0) {
+            $this->session->set_flashdata('msg', translate('location_location_exist'));
             $this->session->set_flashdata('msg_class', 'failure');
             echo 'false';
             exit(0);

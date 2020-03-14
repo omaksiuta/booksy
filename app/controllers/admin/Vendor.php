@@ -34,8 +34,8 @@ class Vendor extends MY_Controller {
 
     //delete vendor
     public function delete_vendor($id) {
-        $event_data = $this->model_vendor->getData('app_services', 'id', "created_by='$id'");
-        if (isset($event_data) && count($event_data) > 0) {
+        $service_data = $this->model_vendor->getData('app_services', 'id', "created_by='$id'");
+        if (isset($service_data) && count($service_data) > 0) {
             $this->session->set_flashdata('msg', translate('record_not_allowed_to_delete'));
             $this->session->set_flashdata('msg_class', 'failure');
             echo 'false';
@@ -186,7 +186,7 @@ class Vendor extends MY_Controller {
                 'profile_status' => 'V'
             );
 
-            $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/profiles';
+            $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/';
             if (isset($_FILES['profile_image']["name"]) && $_FILES['profile_image']["name"] != "") {
                 $tmp_name = $_FILES["profile_image"]["tmp_name"];
                 $temp = explode(".", $_FILES["profile_image"]["name"]);

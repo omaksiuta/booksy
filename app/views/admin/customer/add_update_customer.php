@@ -175,7 +175,7 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                                 <div class="form-group">
                                     <br/>
                                     <div class="d-inline-block">
-                                        <img id="preview" src="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $profile_image); ?>"  style="height: 50px;width: 50px"/>
+                                        <img id="preview" src="<?php echo check_profile_image($profile_image); ?>"  style="height: 50px;width: 50px"/>
                                     </div>
                                 </div>
                             </div>

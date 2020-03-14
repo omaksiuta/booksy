@@ -706,36 +706,32 @@ function get_Langauge() {
     }
 }
 
-function check_admin_image($image) {
-    if (file_exists(dirname(BASEPATH) . "/" . $image) && pathinfo($image, PATHINFO_EXTENSION) != '') {
-        return base_url() . $image;
-    } else {
-        return base_url() . "assets/images/no-image.png";
-    }
-}
 
 function check_service_image($image) {
-    if (file_exists(dirname(BASEPATH) . "/" . $image) && pathinfo($image, PATHINFO_EXTENSION) != '') {
-        return base_url() . $image;
-    } else {
-        return $img_src = base_url() . UPLOAD_PATH . "service/services.png";
-    }
-}
 
-function check_service_image($image) {
-    if (file_exists(dirname(BASEPATH) . "/" . $image) && pathinfo($image, PATHINFO_EXTENSION) != '') {
-        return base_url() . $image;
+    if (isset($image) && $image != "") {
+        if (file_exists(FCPATH . 'assets/uploads/' . $image)) {
+            return base_url("assets/uploads/" . $image);
+        } else {
+            return base_url("assets/images/no-image.png");
+        }
     } else {
-        return base_url() . "assets/images/service.jpg";
+        return base_url("assets/images/no-image.png");
     }
 }
 
 function check_profile_image($image) {
-    if (file_exists(dirname(BASEPATH) . "/" . $image) && pathinfo($image, PATHINFO_EXTENSION) != '') {
-        return base_url() . $image;
+
+    if (isset($image) && $image != "") {
+        if (file_exists(FCPATH . 'assets/uploads/' . $image)) {
+            return base_url("assets/uploads/" . $image);
+        } else {
+            return base_url() . "assets/images/user.png";
+        }
     } else {
         return base_url() . "assets/images/user.png";
     }
+
 }
 
 function check_appointment_status($val) {

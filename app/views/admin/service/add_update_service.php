@@ -409,7 +409,7 @@ $id = (set_value("id")) ? set_value("id") : (!empty($event_data) ? $event_data['
                                                 ?>
                                                 <div class="col-sm-3 service_gallery_images">
                                                     <div class="card">
-                                                        <img class="card-img-top" src="<?php echo check_admin_image(UPLOAD_PATH . "event/" . $value); ?>" height="150">
+                                                        <img class="card-img-top" src="<?php echo check_service_image($value); ?>" height="150">
                                                         <div class="card-body">
                                                             <input type="hidden" name="service_images_hidden[]" value="<?php echo $value; ?>"/>
                                                             <input class="d-none" type="file" id="imag_none" >
@@ -525,8 +525,8 @@ $id = (set_value("id")) ? set_value("id") : (!empty($event_data) ? $event_data['
                                             <?php if ($seo_og_image != '') { ?>
                                                 <ul class="list-inline inline-ul" id="images_ul">
                                                     <li class="hover-btn">
-                                                        <img src = "<?php echo check_admin_image(UPLOAD_PATH . "event/" . $seo_og_image); ?>" class = "img-thumbnail mr-10 mb-10 height-100" width = "100px"/>
-                                                        <a class="btn-danger btn-floating btn-sm red-gradient waves-effect waves-light remove-btn" onclick="delete_event_seo_image(this);" data-url="<?php echo UPLOAD_PATH . "event/" . $seo_og_image; ?>" data-id="<?php echo $id; ?>"><i class="fe fe-trash"></i></a>
+                                                        <img src="<?php echo check_service_image($seo_og_image); ?>" class = "img-thumbnail mr-10 mb-10 height-100" width = "100px"/>
+                                                        <a class="btn-danger btn-floating btn-sm red-gradient waves-effect waves-light remove-btn" onclick="delete_event_seo_image(this);" data-url="<?php echo check_service_image($seo_og_image); ?>" data-id="<?php echo $id; ?>"><i class="fe fe-trash"></i></a>
                                                     </li>
                                                 </ul>
                                             <?php } ?>

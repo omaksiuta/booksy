@@ -1,7 +1,7 @@
 <?php
 $get_all_booked_adons = array();
-if (isset($event_data[0]['addons_id']) && $event_data[0]['addons_id'] != ""):
-    $get_all_booked_adons = get_service_addons_by_id($event_data[0]['addons_id']);
+if (isset($service_data[0]['addons_id']) && $service_data[0]['addons_id'] != ""):
+    $get_all_booked_adons = get_service_addons_by_id($service_data[0]['addons_id']);
 endif;
 
 include VIEWPATH . 'staff/header.php';
@@ -54,7 +54,7 @@ include VIEWPATH . 'staff/header.php';
                                             <p><?php echo translate('appointment') . " " . translate('instructions'); ?> : </p>
                                         </div>
                                         <div class="col-md-9 m-auto">
-                                            <span><?php echo $event_data[0]['description']; ?></span>
+                                            <span><?php echo $service_data[0]['description']; ?></span>
                                         </div>
                                     </div>
                                     <hr class='hr_margin_5'/>
@@ -63,7 +63,7 @@ include VIEWPATH . 'staff/header.php';
                                             <p><?php echo translate('date'); ?> : </p>
                                         </div>
                                         <div class="col-md-9 m-auto">
-                                            <span><?php echo get_formated_date($event_data[0]['start_date'] . " " . $event_data[0]['start_time']); ?></span>
+                                            <span><?php echo get_formated_date($service_data[0]['start_date'] . " " . $service_data[0]['start_time']); ?></span>
                                         </div>
                                     </div>
                                     <hr class='hr_margin_5'/>
@@ -72,7 +72,7 @@ include VIEWPATH . 'staff/header.php';
                                             <p><?php echo translate('total') . " " . translate('payment'); ?> : </p>
                                         </div>
                                         <div class="col-md-9 m-auto">
-                                            <span><?php echo isset($event_data[0]['payment_type']) && $event_data[0]['payment_type'] == 'F' ? translate("free") : price_format($event_data[0]['final_price']); ?></span>
+                                            <span><?php echo isset($service_data[0]['payment_type']) && $service_data[0]['payment_type'] == 'F' ? translate("free") : price_format($service_data[0]['final_price']); ?></span>
                                         </div>
                                     </div>
                                     <hr class='hr_margin_5'/>
@@ -81,7 +81,7 @@ include VIEWPATH . 'staff/header.php';
                                             <p><?php echo translate('payment') . " " . translate('status'); ?> : </p>
                                         </div>
                                         <div class="col-md-9 m-auto">
-                                            <span><?php echo check_appointment_pstatus($event_data[0]['payment_status']); ?></span>
+                                            <span><?php echo check_appointment_pstatus($service_data[0]['payment_status']); ?></span>
                                         </div>
                                     </div>
                                     <hr class='hr_margin_5'/>
@@ -90,18 +90,18 @@ include VIEWPATH . 'staff/header.php';
                                             <p><?php echo translate('booking') . " " . translate('status'); ?> : </p>
                                         </div>
                                         <div class="col-md-9 m-auto">
-                                            <span><?php echo check_appointment_status($event_data[0]['status']); ?></span>
+                                            <span><?php echo check_appointment_status($service_data[0]['status']); ?></span>
                                         </div>
                                     </div>
                                     <hr class='hr_margin_5'/>
                                     <?php
                                     $staff_member = "-";
-                                    if ($event_data[0]['staff_id'] != 0) {
-                                        $staff_data = get_staff_by_id($event_data[0]['staff_id'])[0];
+                                    if ($service_data[0]['staff_id'] != 0) {
+                                        $staff_data = get_staff_by_id($service_data[0]['staff_id'])[0];
                                         $staff_member = $staff_data['first_name'] . " " . $staff_data['last_name'];
                                     }
                                     ?>
-                                    <?php if (isset($event_data[0]['staff_id']) && $event_data[0]['staff_id'] > 0): ?>
+                                    <?php if (isset($service_data[0]['staff_id']) && $service_data[0]['staff_id'] > 0): ?>
                                         <div class="row">
                                             <div class="col-md-3 m-auto">
                                                 <p><?php echo translate('staff'); ?> : </p>
@@ -156,9 +156,9 @@ include VIEWPATH . 'staff/header.php';
                                     <?php endif; ?>
 
                                     <div class="row">
-                                        <?php if ($event_data[0]['type'] == 'S' && $event_data[0]['status'] != 'C' && $appointment_booking_date >= date("Y-m-d H:i:s")) { ?>
+                                        <?php if ($service_data[0]['type'] == 'S' && $service_data[0]['status'] != 'C' && $appointment_booking_date >= date("Y-m-d H:i:s")) { ?>
                                             <div class="col-md-6">
-                                                <a href="<?php echo base_url($folder_name . '/change-booking-time/' . $event_data[0]['id'] . '/' . $event_data[0]['event_id']) ?>" class="btn btn-block btn-success p-1"><i class="fa fa-clock-o p-2"></i><?php echo translate('change') . " " . translate('appointment') . " " . translate('time'); ?></a>
+                                                <a href="<?php echo base_url($folder_name . '/change-booking-time/' . $service_data[0]['id'] . '/' . $service_data[0]['service_id']) ?>" class="btn btn-block btn-success p-1"><i class="fa fa-clock-o p-2"></i><?php echo translate('change') . " " . translate('appointment') . " " . translate('time'); ?></a>
                                             </div>
                                         <?php } ?>
                                     </div>
@@ -179,7 +179,7 @@ include VIEWPATH . 'staff/header.php';
                                         <p><?php echo translate('category'); ?> : </p>
                                     </div>
                                     <div class="col-md-9 m-auto">
-                                        <span><?php echo $event_data[0]['category_title']; ?></span>
+                                        <span><?php echo $service_data[0]['category_title']; ?></span>
                                     </div>
                                 </div>
                                 <hr class='hr_margin_5'/>
@@ -188,7 +188,7 @@ include VIEWPATH . 'staff/header.php';
                                         <p><?php echo translate('title'); ?> : </p>
                                     </div>
                                     <div class="col-md-9 m-auto">
-                                        <span><?php echo $event_data[0]['Event_title']; ?></span>
+                                        <span><?php echo $service_data[0]['service_title']; ?></span>
                                     </div>
                                 </div>
                                 <hr class='hr_margin_5'/>
@@ -197,7 +197,7 @@ include VIEWPATH . 'staff/header.php';
                                         <p><?php echo translate('company') . " " . translate('name'); ?> : </p>
                                     </div>
                                     <div class="col-md-9 m-auto">
-                                        <span><?php echo $event_data[0]['company_name']; ?></span>
+                                        <span><?php echo $service_data[0]['company_name']; ?></span>
                                     </div>
                                 </div>
                                 <hr class='hr_margin_5'/>
@@ -206,7 +206,7 @@ include VIEWPATH . 'staff/header.php';
                                         <p><?php echo translate('location'); ?> : </p>
                                     </div>
                                     <div class="col-md-9 m-auto">
-                                        <span><?php echo $event_data[0]['loc_title']; ?></span>
+                                        <span><?php echo $service_data[0]['loc_title']; ?></span>
                                     </div>
                                 </div>
                                 <hr class='hr_margin_5'/>
@@ -215,7 +215,7 @@ include VIEWPATH . 'staff/header.php';
                                         <p><?php echo translate('city'); ?> : </p>
                                     </div>
                                     <div class="col-md-9 m-auto">
-                                        <span><?php echo $event_data[0]['city_title']; ?></span>
+                                        <span><?php echo $service_data[0]['city_title']; ?></span>
                                     </div>
                                 </div>
                                 <hr class='hr_margin_5'/>
@@ -233,7 +233,7 @@ include VIEWPATH . 'staff/header.php';
                                         <p><?php echo translate('name'); ?> : </p>
                                     </div>
                                     <div class="col-md-9 m-auto">
-                                        <span><?php echo $event_data[0]['Customer_name']; ?></span>
+                                        <span><?php echo $service_data[0]['Customer_name']; ?></span>
                                     </div>
                                 </div>
                                 <hr class='hr_margin_5'/>
@@ -242,7 +242,7 @@ include VIEWPATH . 'staff/header.php';
                                         <p><?php echo translate('email'); ?> : </p>
                                     </div>
                                     <div class="col-md-9 m-auto">
-                                        <span><?php echo $event_data[0]['Customer_email']; ?></span>
+                                        <span><?php echo $service_data[0]['Customer_email']; ?></span>
                                     </div>
                                 </div>
                                 <hr class='hr_margin_5'/>
@@ -251,8 +251,8 @@ include VIEWPATH . 'staff/header.php';
                                         <p><?php echo translate('phone'); ?> : </p>
                                     </div>
                                     <div class="col-md-9 m-auto">
-                                        <?php if ($event_data[0]['Customer_phone'] != '') { ?>
-                                            <span><?php echo $event_data[0]['Customer_phone']; ?></span>
+                                        <?php if ($service_data[0]['Customer_phone'] != '') { ?>
+                                            <span><?php echo $service_data[0]['Customer_phone']; ?></span>
                                         <?php } else { ?>
                                             <span>N/A</span>
                                         <?php } ?>

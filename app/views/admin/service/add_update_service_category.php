@@ -11,17 +11,7 @@ $status = (set_value("status")) ? set_value("status") : (!empty($category_data) 
 $type = (set_value("type")) ? set_value("type") : (!empty($category_data) ? $category_data['type'] : '');
 $category_image = (set_value("category_image")) ? set_value("category_image") : (!empty($category_data) ? $category_data['category_image'] : '');
 $id = !empty($category_data) ? $category_data['id'] : 0;
-
-
-if (isset($category_image) && $category_image != "") {
-    if (file_exists(FCPATH . 'assets/uploads/category/' . $category_image)) {
-        $image = base_url("assets/uploads/category/" . $category_image);
-    } else {
-        $image = base_url("assets/images/no-image.png");
-    }
-} else {
-    $image = base_url("assets/images/no-image.png");
-}
+$image = check_service_image($category_image);
 ?>
 <input id="folder_name" name="folder_name" type="hidden" value="<?php echo isset($folder_name) && $folder_name != '' ? $folder_name : ''; ?>"/>
 

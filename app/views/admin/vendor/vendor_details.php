@@ -42,8 +42,8 @@ $my_wallet = $vendor_data['my_wallet'];
                 <div class="profile-header">
                     <div class="row align-items-center">
                         <div class="col-auto profile-image">
-                            <a target="_blank" href="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $profile_image); ?>">
-                                <img class="rounded-circle" alt="User Image" src="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $profile_image); ?>">
+                            <a target="_blank" href="<?php echo check_profile_image($profile_image); ?>">
+                                <img class="rounded-circle" alt="User Image" src="<?php echo check_profile_image($profile_image); ?>">
                             </a>
                         </div>
                         <div class="col ml-md-n2 profile-user-info">
@@ -113,10 +113,6 @@ $my_wallet = $vendor_data['my_wallet'];
                                             <p class="col-sm-12 mb-0 mb-sm-3">
                                                 <?php if (get_site_setting('enable_service') == 'Y'): ?>
                                                     <a target="_blank" href="<?php echo base_url('admin/manage-service?vendor=' . $cust_id); ?>" class="btn btn-info"><?php echo translate('service'); ?></a>
-                                                <?php endif; ?>
-                                                    
-                                                <?php if (get_site_setting('enable_event') == 'Y'): ?>
-                                                    <a target="_blank" href="<?php echo base_url('admin/manage-event?vendor=' . $cust_id); ?>" class="btn btn-info"><?php echo translate('event'); ?></a>
                                                 <?php endif; ?>
                                             </p>
                                         </div>

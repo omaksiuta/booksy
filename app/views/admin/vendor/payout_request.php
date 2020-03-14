@@ -64,7 +64,7 @@ $get_current_currency = get_current_currency();
                                             <td class="text-center"><?php echo $i; ?></td>
                                             <td>
                                                 <h2 class="table-avatar">
-                                                    <a href="<?php echo base_url('admin/vendor-details/' . $row['vendor_id']); ?>" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $row['vendor_profile_image']); ?>" alt="<?php echo $row['vendor_name']; ?>"></a>
+                                                    <a href="<?php echo base_url('admin/vendor-details/' . $row['vendor_id']); ?>" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="<?php echo check_profile_image($row['vendor_profile_image']); ?>" alt="<?php echo $row['vendor_name']; ?>"></a>
                                                     <a href="<?php echo base_url('admin/vendor-details/' . $row['vendor_id']); ?>"><?php echo $row['vendor_name']; ?>
                                                         <br/><span class="btn btn-sm bg-primary-light text-left"><?php echo $row['company_name']; ?></span>
                                                     </a>

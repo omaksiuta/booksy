@@ -12,7 +12,7 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
 $id = (set_value("id")) ? set_value("id") : (!empty($coupon_data) ? $coupon_data['id'] : '');
 $title = (set_value("title")) ? set_value("title") : (!empty($coupon_data) ? $coupon_data['title'] : '');
 $valid_till = (set_value("valid_till")) ? set_value("valid_till") : (!empty($coupon_data) ? $coupon_data['valid_till'] : '');
-$event_id = (set_value("event_id")) ? set_value("event_id") : (!empty($coupon_data) ? json_decode($coupon_data['event_id']) : array());
+$service_id = (set_value("service_id")) ? set_value("service_id") : (!empty($coupon_data) ? json_decode($coupon_data['service_id']) : array());
 $code = (set_value("code")) ? set_value("code") : (!empty($coupon_data) ? $coupon_data['code'] : '');
 $discount_type = (set_value("discount_type")) ? set_value("discount_type") : (!empty($coupon_data) ? $coupon_data['discount_type'] : '');
 $discount_value = (set_value("discount_value")) ? set_value("discount_value") : (!empty($coupon_data) ? $coupon_data['discount_value'] : '');
@@ -77,12 +77,12 @@ $status = (set_value("status")) ? set_value("status") : (!empty($coupon_data) ? 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="title"> <?php echo translate('coupon_discount_on'); ?><small class="required">*</small></label><br/>
-                                    <select id="coupon_event_box" name="event_id[]" required="" class="form-control" multiple="multiple" style="width: 100%">
-                                        <?php foreach ($event_data as $value): ?>
-                                            <option <?php echo (in_array($value['id'], $event_id)) ? "selected='selected'" : ""; ?> value="<?php echo $value['id'] ?>"><?php echo $value['title'] ?></option>
+                                    <select id="coupon_service_box" name="service_id[]" required="" class="form-control select2" multiple="multiple" style="width: 100%">
+                                        <?php foreach ($service_data as $value): ?>
+                                            <option <?php echo (in_array($value['id'], $service_id)) ? "selected='selected'" : ""; ?> value="<?php echo $value['id'] ?>"><?php echo $value['title'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <?php echo form_error('event_id'); ?>
+                                    <?php echo form_error('service_id'); ?>
                                 </div>
                             </div>
                         </div>
