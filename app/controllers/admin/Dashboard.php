@@ -21,7 +21,7 @@ class Dashboard extends MY_Controller {
         $data['total_vendor'] = $this->model_dashboard->Totalcount('app_admin', "type='V'");
         $data['total_payout_request'] = $this->model_dashboard->Totalcount('app_payment_request', "status!='S'");
         $data['total_customer'] = $this->model_dashboard->Totalcount('app_customer');
-        $data['total_event'] = $this->model_dashboard->Totalcount('app_services');
+        $data['total_service'] = $this->model_dashboard->Totalcount('app_services');
         $data['total_appointment'] = $this->model_dashboard->Totalcount('app_service_appointment', 'type="S" AND status="A"');
         $data['total_my_wallet'] = $this->model_dashboard->total_my_wallet($this->login_id);
 
@@ -32,7 +32,7 @@ class Dashboard extends MY_Controller {
                 "jointype" => "LEFT"),
             array(
                 "table" => "app_services",
-                "condition" => "app_services.id=app_service_appointment.event_id",
+                "condition" => "app_services.id=app_service_appointment.service_id",
                 "jointype" => "LEFT")
         );
         $current_date = date('Y-m-d');
@@ -88,7 +88,7 @@ class Dashboard extends MY_Controller {
 
     //show mandatory update
     public function mandatory_update() {
-        $data['total_event_category'] = $this->model_dashboard->Totalcount('app_service_category');
+        $data['total_service_category'] = $this->model_dashboard->Totalcount('app_service_category');
         $data['total_location'] = $this->model_dashboard->Totalcount('app_location');
         $data['total_city'] = $this->model_dashboard->Totalcount('app_city');
         $data['total_payment'] = $this->model_dashboard->check_payment();
@@ -107,9 +107,9 @@ class Dashboard extends MY_Controller {
                 $data['payment_status'] = "S";
                 $this->model_dashboard->update('app_service_appointment_payment', $data, "id=$id");
 
-                //update event status
-                $data_event['payment_status'] = "S";
-                $this->model_dashboard->update('app_service_appointment', $data_event, "id=" . $payment_data[0]['booking_id']);
+                //update service status
+                $data_service['payment_status'] = "S";
+                $this->model_dashboard->update('app_service_appointment', $data_service, "id=" . $payment_data[0]['booking_id']);
 
                 $vendor_amount = $payment_data[0]['vendor_price'];
                 $admin_amount = $payment_data[0]['admin_price'];

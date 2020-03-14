@@ -19,7 +19,7 @@ class Front extends CI_Controller {
         error_reporting(E_ALL);
         $this->Per_Page = get_site_setting('display_record_per_page');
         set_time_zone();
-        update_event_status();
+        update_service_status();
         //$this->output->enable_profiler(TRUE);
     }
 
@@ -39,9 +39,9 @@ class Front extends CI_Controller {
 
     //show home page
     public function index() {
-        $location_event = $this->uri->segment(1);
+        $location_service = $this->uri->segment(1);
         $location_segment = urldecode($this->uri->segment(2));
-        if (isset($location_event) && $location_event == "city") {
+        if (isset($location_service) && $location_service == "city") {
             $city_data_res = $this->model_front->getData('app_city', 'city_id', 'city_title="' . $location_segment . '"');
             if (count($city_data_res) > 0) {
                 $this->session->unset_userdata('location');
@@ -95,16 +95,16 @@ class Front extends CI_Controller {
         );
         $top_cities = $this->model_front->getData('app_city', 'app_city.*', 'app_services.status="A"', $city_join, 'city_id', 'city_id', '', 12, array(), '', array(), 'DESC');
         /*
-         * list of event category
+         * list of service category
          */
         $service_category = $this->model_front->getData('app_service_category', '*', 'status="A" AND type="S"');
         /*
-         * recent list of booked events
+         * recent list of booked services
          */
         $join = array(
             array(
                 'table' => 'app_service_appointment',
-                'condition' => 'app_service_appointment.event_id=app_services.id',
+                'condition' => 'app_service_appointment.service_id=app_services.id',
                 'jointype' => 'inner'
             )
         );
@@ -139,7 +139,7 @@ class Front extends CI_Controller {
 
         $display_record_per_page = get_site_setting('display_record_per_page');
 
-        $total_service = $this->model_front->getData("app_services", 'app_admin.company_name,app_admin.profile_image,app_services.*,app_services.id as event_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title', $service_cond, $service_join, 'app_services.id desc', 'app_services.id', '', $display_record_per_page);
+        $total_service = $this->model_front->getData("app_services", 'app_admin.company_name,app_admin.profile_image,app_services.*,app_services.id as service_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title', $service_cond, $service_join, 'app_services.id desc', 'app_services.id', '', $display_record_per_page);
 
         $data['total_service'] = $total_service;
         $data['title'] = translate('home');
@@ -158,132 +158,6 @@ class Front extends CI_Controller {
         }
     }
 
-    //show category page
-    public function event_category($title, $category_id) {
-        $title = trim($title);
-        $category_id = (int) $category_id;
-        if ($category_id) {
-            $events_category = $this->model_front->getData("app_service_category", 'title,id', 'type="E"', '', '', 'title');
-            $category_verify = $this->model_front->getData('app_service_category', 'title,id', 'status="A" AND id=' . $category_id);
-            if (count($category_verify) > 0) {
-                /*
-                 * list of top city
-                 */
-                $city_join = array(
-                    array(
-                        'table' => 'app_services',
-                        'condition' => 'app_city.city_id=app_services.city',
-                        'jointype' => 'inner'
-                    )
-                );
-                $top_cities = $this->model_front->getData('app_city', 'app_city.*', 'app_services.status="A"', $city_join, 'city_id', 'city_id', '', 12, array(), '', array(), 'DESC');
-
-                $join = array(
-                    array(
-                        'table' => 'app_service_category',
-                        'condition' => 'app_service_category.id=app_services.category_id',
-                        'jointype' => 'INNER'
-                    ),
-                    array(
-                        'table' => 'app_city',
-                        'condition' => 'app_city.city_id=app_services.city',
-                        'jointype' => 'INNER'
-                    )
-                );
-                $event = $this->model_front->getData("app_services", 'app_services.*,app_service_category.title as category_title,app_city.city_title', " app_services.type='E' AND app_services.status='A' AND category_id=" . $category_id, $join);
-                $data['event_data'] = $event;
-                $data['events_category'] = $events_category;
-                $data['category_data'] = $category_verify[0];
-                $data['title'] = isset($category_verify[0]) && count($category_verify[0]) > 0 ? $category_verify[0]['title'] : translate('event_category');
-                $data['topCity_List'] = $top_cities;
-                $this->load->view('front/event/event_category', $data);
-            } else {
-                redirect(base_url());
-            }
-        } else {
-            redirect(base_url());
-        }
-    }
-
-    //event details
-    public function event_details() {
-        /*
-         * list of top city
-         */
-        $city_join = array(
-            array(
-                'table' => 'app_services',
-                'condition' => 'app_city.city_id=app_services.city',
-                'jointype' => 'inner'
-            )
-        );
-        $top_cities = $this->model_front->getData('app_city', 'app_city.*', 'app_services.status="A"', $city_join, 'city_id', 'city_id', '', 12, array(), '', array(), 'DESC');
-        $event_id = (int) $this->uri->segment(3);
-        if ($event_id > 0) {
-            $user_id = $this->session->userdata('CUST_ID');
-            $join = array(
-                array(
-                    'table' => 'app_city',
-                    'condition' => 'app_city.city_id=app_services.city',
-                    'jointype' => 'left'
-                ),
-                array(
-                    'table' => 'app_location',
-                    'condition' => 'app_location.loc_id=app_services.location',
-                    'jointype' => 'left'
-                ),
-                array(
-                    'table' => 'app_service_category',
-                    'condition' => 'app_service_category.id=app_services.category_id',
-                    'jointype' => 'left'
-                ),
-                array(
-                    'table' => 'app_admin',
-                    'condition' => 'app_admin.id=app_services.created_by',
-                    'jointype' => 'left'
-                ),
-                array(
-                    'table' => 'app_services_sponsor',
-                    'condition' => 'app_services_sponsor.event_id=app_services.id',
-                    'jointype' => 'left'
-                )
-            );
-
-            $event = $this->model_front->getData("app_services", "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_admin.id as app_admin_id, app_admin.first_name, app_admin.last_name, app_admin.email,app_admin.phone, app_admin.profile_image,app_admin.google_link, app_admin.twitter_link, app_admin.fb_link, app_admin.instagram_link, app_admin.company_name, app_admin.website, app_services_sponsor.sponsor_name,app_services_sponsor.website_link, app_services_sponsor.sponsor_image, app_services_sponsor.id as sid", "app_services.id=" . $event_id . " AND app_services.type='E'", $join);
-
-            if (isset($event) && count($event) > 0) {
-                if (isset($event[0]['created_by']) && $event[0]['created_by'] > 0) {
-                    $event_book = $this->model_front->getData("app_service_appointment", " sum(event_booked_seat) as booked_seat", "event_id='$event_id'");
-                    $customer_id_sess = (int) $this->session->userdata('CUST_ID');
-                    $customer = $this->model_front->getData("app_customer", "id,first_name,last_name,email", "id=" . $customer_id_sess);
-                    $data['customer_data'] = isset($customer[0]) ? $customer[0] : array();
-                    $data['event_data'] = $event[0];
-                    $data['event_book'] = isset($event_book[0]['booked_seat']) ? $event_book[0]['booked_seat'] : 0;
-
-                    $data['title'] = isset($event[0]['title']) ? ($event[0]['title']) : translate('event_details');
-                    $data['meta_description'] = isset($event[0]['seo_description']) ? $event[0]['seo_description'] : '';
-                    $data['meta_keyword'] = isset($event[0]['seo_keyword']) ? $event[0]['seo_keyword'] : '';
-                    $data['meta_og_img'] = isset($event[0]['seo_og_image']) ? $event[0]['seo_og_image'] : '';
-                    $data['topCity_List'] = $top_cities;
-
-                    $this->load->view('front/event/event-details', $data);
-                } else {
-                    $this->session->set_flashdata('msg_class', 'failure');
-                    $this->session->set_flashdata('msg', translate('invalid_request'));
-                    redirect(base_url());
-                }
-            } else {
-                $this->session->set_flashdata('msg_class', 'failure');
-                $this->session->set_flashdata('msg', translate('invalid_request'));
-                redirect(base_url());
-            }
-        } else {
-            $this->session->set_flashdata('msg_class', 'failure');
-            $this->session->set_flashdata('msg', translate('invalid_request'));
-            redirect(base_url());
-        }
-    }
-
     //service details
     public function service_details() {
         /*
@@ -297,9 +171,9 @@ class Front extends CI_Controller {
             )
         );
         $top_cities = $this->model_front->getData('app_city', 'app_city.*', 'app_services.status="A"', $city_join, 'city_id', 'city_id', '', 12, array(), '', array(), 'DESC');
-        $event_id = (int) $this->uri->segment(3);
-        if ($event_id > 0) {
-            /* Get Event List */
+        $service_id = (int) $this->uri->segment(3);
+        if ($service_id > 0) {
+            /* Get service List */
             $user_id = $this->session->userdata('CUST_ID');
             $join = array(
                 array(
@@ -318,15 +192,15 @@ class Front extends CI_Controller {
                     'jointype' => 'left'
                 )
             );
-            $event = $this->model_front->getData("app_services", "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title", "app_services.id=" . $event_id . " AND app_services.type='S'", $join);
+            $service = $this->model_front->getData("app_services", "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title", "app_services.id=" . $service_id . " AND app_services.type='S'", $join);
 
-            if (isset($event) && count($event) > 0) {
+            if (isset($service) && count($service) > 0) {
 
-                if (isset($event[0]['created_by']) && $event[0]['created_by'] > 0) {
-                    $event_book = $this->model_front->getData("app_service_appointment", "id", "event_id='$event_id'");
-                    $admin_data = $this->model_front->getData("app_admin", "*", "id=" . $event[0]['created_by']);
-                    $user_rating = $this->model_front->getData("app_rating", "*", "user_id='$user_id' AND event_id='$event_id'");
-                    $user_rating = $this->model_front->getData("app_rating", "*", "user_id='$user_id' AND event_id='$event_id'");
+                if (isset($service[0]['created_by']) && $service[0]['created_by'] > 0) {
+                    $service_book = $this->model_front->getData("app_service_appointment", "id", "service_id='$service_id'");
+                    $admin_data = $this->model_front->getData("app_admin", "*", "id=" . $service[0]['created_by']);
+                    $user_rating = $this->model_front->getData("app_rating", "*", "user_id='$user_id' AND service_id='$service_id'");
+                    $user_rating = $this->model_front->getData("app_rating", "*", "user_id='$user_id' AND service_id='$service_id'");
 
                     //all rating data
                     $rjoin = array(array(
@@ -336,21 +210,21 @@ class Front extends CI_Controller {
                         ),
                         array(
                             'table' => 'app_services',
-                            'condition' => 'app_vendor_review.event_id=app_services.id',
+                            'condition' => 'app_vendor_review.service_id=app_services.id',
                             'jointype' => 'INNER'
                     ));
-                    $vendor_rating_data = $this->model_front->getData('app_vendor_review', 'app_services.title, app_customer.first_name, app_customer.last_name, app_customer.profile_image, app_vendor_review.*', 'app_vendor_review.event_id = ' . $event_id, $rjoin);
+                    $vendor_rating_data = $this->model_front->getData('app_vendor_review', 'app_services.title, app_customer.first_name, app_customer.last_name, app_customer.profile_image, app_vendor_review.*', 'app_vendor_review.service_id = ' . $service_id, $rjoin);
 
-                    $data['event_data'] = $event[0];
-                    $data['event_book'] = count($event_book);
+                    $data['service_data'] = $service[0];
+                    $data['service_book'] = count($service_book);
                     $data['user_rating'] = isset($user_rating) && count($user_rating) > 0 ? $user_rating[0] : '';
-                    $data['event_rating'] = $vendor_rating_data;
+                    $data['service_rating'] = $vendor_rating_data;
                     $data['admin_data'] = $admin_data[0];
 
-                    $data['title'] = isset($event[0]['title']) ? ($event[0]['title']) : translate('event_details');
-                    $data['meta_description'] = isset($event[0]['seo_description']) ? $event[0]['seo_description'] : '';
-                    $data['meta_keyword'] = isset($event[0]['seo_keyword']) ? $event[0]['seo_keyword'] : '';
-                    $data['meta_og_img'] = isset($event[0]['seo_og_image']) ? $event[0]['seo_og_image'] : '';
+                    $data['title'] = isset($service[0]['title']) ? ($service[0]['title']) : translate('service_details');
+                    $data['meta_description'] = isset($service[0]['seo_description']) ? $service[0]['seo_description'] : '';
+                    $data['meta_keyword'] = isset($service[0]['seo_keyword']) ? $service[0]['seo_keyword'] : '';
+                    $data['meta_og_img'] = isset($service[0]['seo_og_image']) ? $service[0]['seo_og_image'] : '';
                     $data['topCity_List'] = $top_cities;
 
                     $this->load->view('front/service/service-details', $data);
@@ -399,22 +273,22 @@ class Front extends CI_Controller {
             ),
         );
         $select_value = "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_admin.company_name";
-        $event = $this->model_front->getData("app_services", $select_value, "app_services.id=" . $id . " AND app_services.type='S'", $join_data);
-        if (!isset($event) || isset($event) && count($event) == 0) {
+        $service = $this->model_front->getData("app_services", $select_value, "app_services.id=" . $id . " AND app_services.type='S'", $join_data);
+        if (!isset($service) || isset($service) && count($service) == 0) {
             $this->session->set_flashdata('msg_class', 'failure');
             $this->session->set_flashdata('msg', translate('invalid_request'));
             redirect(base_url());
         }
 
-        $min = $event[0]['slot_time'];
-        $allow_day = explode(",", $event[0]['days']);
+        $min = $service[0]['slot_time'];
+        $allow_day = explode(",", $service[0]['days']);
         $date = date('d-m-Y');
         $month = date("m", strtotime($date));
 
         //Get Staff
         $staff_member_value = 0;
-        if (isset($event[0]['staff']) && $event[0]['staff'] != ""):
-            $staff = get_staff_by_id($event[0]['staff']);
+        if (isset($service[0]['staff']) && $service[0]['staff'] != ""):
+            $staff = get_staff_by_id($service[0]['staff']);
 
             if ($staff_id > 0):
                 $staff_member_value = $staff_id;
@@ -429,7 +303,7 @@ class Front extends CI_Controller {
         if ($staff_member_value > 0) {
             $current_selected_staff = get_staff_by_id($id);
         } else {
-            $current_selected_staff = get_VendorDetails($event[0]['created_by']);
+            $current_selected_staff = get_VendorDetails($service[0]['created_by']);
         }
 
         $data['staff_member_value'] = $staff_member_value;
@@ -440,7 +314,7 @@ class Front extends CI_Controller {
         $day = date("d", strtotime($date));
 
         //Get Holiday List
-        $get_holiday_list = get_holiday_list_by_vendor($event[0]['created_by']);
+        $get_holiday_list = get_holiday_list_by_vendor($service[0]['created_by']);
 
         //Display Current date data
         if (isset($date) && $date != "") {
@@ -493,17 +367,17 @@ class Front extends CI_Controller {
         //get user details
         $customer_id_sess = (int) $this->session->userdata('CUST_ID');
         $customer = $this->model_front->getData("app_customer", "id,first_name,last_name,email", "id=" . $customer_id_sess);
-        $app_service_addons = $this->model_front->getData("app_service_addons", "*", "event_id=" . $id);
+        $app_service_addons = $this->model_front->getData("app_service_addons", "*", "service_id=" . $id);
 
-        $data['event_payment_price'] = number_format($event[0]['price'], 0);
-        $data['event_payment_type'] = $event[0]['payment_type'];
-        $data['slot_time'] = $event[0]['slot_time'];
-        $data['event_title'] = $event[0]['title'];
-        $data['event_id'] = $event[0]['id'];
+        $data['service_payment_price'] = number_format($service[0]['price'], 0);
+        $data['service_payment_type'] = $service[0]['payment_type'];
+        $data['slot_time'] = $service[0]['slot_time'];
+        $data['service_title'] = $service[0]['title'];
+        $data['service_id'] = $service[0]['id'];
         $data['current_date'] = $date;
         $data['day_data'] = $day_data;
         $data['app_service_addons'] = $app_service_addons;
-        $data['event_data'] = isset($event[0]) ? $event[0] : array();
+        $data['service_data'] = isset($service[0]) ? $service[0] : array();
         $data['customer_data'] = isset($customer[0]) ? $customer[0] : array();
         $data['title'] = translate('book_your_appointment');
         $this->load->view('front/service/days', $data);
@@ -512,17 +386,17 @@ class Front extends CI_Controller {
     public function time_slots($min, $update = NULL) {
 
         $customer_id = (int) $this->session->userdata('CUST_ID');
-        $eventid = $this->input->post('eventid');
+        $serviceid = $this->input->post('serviceid');
         $staff_id = (int) $this->input->post('staff');
-        $event = $this->model_front->getData("app_services", "*", "id = $eventid AND slot_time='$min'");
-        $slot_time = $event[0]['slot_time'];
-        $multiple_slotbooking_allow = $event[0]['multiple_slotbooking_allow'];
-        $multiple_slotbooking_limit = $event[0]['multiple_slotbooking_limit'];
+        $service = $this->model_front->getData("app_services", "*", "id = $serviceid AND slot_time='$min'");
+        $slot_time = $service[0]['slot_time'];
+        $multiple_slotbooking_allow = $service[0]['multiple_slotbooking_allow'];
+        $multiple_slotbooking_limit = $service[0]['multiple_slotbooking_limit'];
 
-        $j = date("h:i a", strtotime("-" . $slot_time . "minute", strtotime($event[0]['end_time'])));
-        $datetime1 = new DateTime($event[0]['start_time']);
-        $datetime2 = new DateTime($event[0]['end_time']);
-        $gap_time = ($event[0]['padding_time']);
+        $j = date("h:i a", strtotime("-" . $slot_time . "minute", strtotime($service[0]['end_time'])));
+        $datetime1 = new DateTime($service[0]['start_time']);
+        $datetime2 = new DateTime($service[0]['end_time']);
+        $gap_time = ($service[0]['padding_time']);
 
         $interval = $datetime1->diff($datetime2);
         $extra_minute = $interval->format('%i');
@@ -532,14 +406,14 @@ class Front extends CI_Controller {
         $var_gap_time = 1;
         for ($i = 1; $i <= $minute / ($slot_time + $gap_time); $i++) {
             if ($i == 1) {
-                $time_array[] = date("H:i", strtotime($event[0]['start_time']));
+                $time_array[] = date("H:i", strtotime($service[0]['start_time']));
             } else {
-                $time_array[] = date("H:i", strtotime("+" . (($slot_time * ($i - 1)) + $gap_time * $var_gap_time) . " minute", strtotime($event[0]['start_time'])));
+                $time_array[] = date("H:i", strtotime("+" . (($slot_time * ($i - 1)) + $gap_time * $var_gap_time) . " minute", strtotime($service[0]['start_time'])));
                 $var_gap_time++;
             }
         }
 
-        if (($key = array_search(date("H:i", strtotime($event[0]['end_time'])), $time_array)) !== false) {
+        if (($key = array_search(date("H:i", strtotime($service[0]['end_time'])), $time_array)) !== false) {
             unset($time_array[$key]);
         }
         $date = $this->input->post('date');
@@ -558,7 +432,7 @@ class Front extends CI_Controller {
         if ($staff_id > 0):
             $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '$date' AND staff_id=" . $staff_id . " AND status IN ('A')");
         else:
-            $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '$date' AND event_id=" . $eventid . " AND status IN ('A')");
+            $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '$date' AND service_id=" . $serviceid . " AND status IN ('A')");
         endif;
 
         if (isset($result) && count($result) > 0) {
@@ -566,9 +440,9 @@ class Front extends CI_Controller {
                 if ($min == $value['slot_time']) {
 
                     if ($staff_id > 0):
-                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND staff_id=" . $staff_id . " AND event_id=" . $eventid . " AND status IN ('A')");
+                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND staff_id=" . $staff_id . " AND service_id=" . $serviceid . " AND status IN ('A')");
                     else:
-                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND event_id=" . $eventid . " AND status IN ('A')");
+                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND service_id=" . $serviceid . " AND status IN ('A')");
                     endif;
 
 
@@ -621,7 +495,7 @@ class Front extends CI_Controller {
                 }
 
                 if (isset($customer_id) && $customer_id > 0) {
-                    $html .= '<a class="time-button w-49 time-respo ml-2 time-confirm hide-confirm" onclick="confirm_form(this);" data-price=' . get_price($eventid, $date) . ' data-ddate="' . get_formated_date($date, "N") . '" data-date="' . $date . '" data-dtime="' . get_formated_time(strtotime($value)) . '" data-time="' . date('H:i:s', strtotime($value)) . '"> ' . translate('confirm') . '</a>';
+                    $html .= '<a class="time-button w-49 time-respo ml-2 time-confirm hide-confirm" onclick="confirm_form(this);" data-price=' . get_price($serviceid, $date) . ' data-ddate="' . get_formated_date($date, "N") . '" data-date="' . $date . '" data-dtime="' . get_formated_time(strtotime($value)) . '" data-time="' . date('H:i:s', strtotime($value)) . '"> ' . translate('confirm') . '</a>';
                 } else {
                     $html .= '<a class="time-button w-49 time-respo ml-2 time-confirm hide-confirm" onclick="login_protected_modal(this)" data-message="' . translate("login_required_for_book") . '"> ' . translate('confirm') . '</a>';
                 }
@@ -638,17 +512,17 @@ class Front extends CI_Controller {
 
     public function time_slots_admin($min, $update = NULL) {
         $customer_id = (int) $this->session->userdata('CUST_ID');
-        $eventid = $this->input->post('eventid');
+        $serviceid = $this->input->post('serviceid');
         $staff_id = (int) $this->input->post('staff');
-        $event = $this->model_front->getData("app_services", "*", "id = $eventid AND slot_time='$min'");
-        $slot_time = $event[0]['slot_time'];
-        $multiple_slotbooking_allow = $event[0]['multiple_slotbooking_allow'];
-        $multiple_slotbooking_limit = $event[0]['multiple_slotbooking_limit'];
+        $service = $this->model_front->getData("app_services", "*", "id = $serviceid AND slot_time='$min'");
+        $slot_time = $service[0]['slot_time'];
+        $multiple_slotbooking_allow = $service[0]['multiple_slotbooking_allow'];
+        $multiple_slotbooking_limit = $service[0]['multiple_slotbooking_limit'];
 
-        $j = date("h:i a", strtotime("-" . $slot_time . "minute", strtotime($event[0]['end_time'])));
-        $datetime1 = new DateTime($event[0]['start_time']);
-        $datetime2 = new DateTime($event[0]['end_time']);
-        $gap_time = ($event[0]['padding_time']);
+        $j = date("h:i a", strtotime("-" . $slot_time . "minute", strtotime($service[0]['end_time'])));
+        $datetime1 = new DateTime($service[0]['start_time']);
+        $datetime2 = new DateTime($service[0]['end_time']);
+        $gap_time = ($service[0]['padding_time']);
 
         $interval = $datetime1->diff($datetime2);
         $extra_minute = $interval->format('%i');
@@ -658,14 +532,14 @@ class Front extends CI_Controller {
         $var_gap_time = 1;
         for ($i = 1; $i <= $minute / ($slot_time + $gap_time); $i++) {
             if ($i == 1) {
-                $time_array[] = date("H:i", strtotime($event[0]['start_time']));
+                $time_array[] = date("H:i", strtotime($service[0]['start_time']));
             } else {
-                $time_array[] = date("H:i", strtotime("+" . (($slot_time * ($i - 1)) + $gap_time * $var_gap_time) . " minute", strtotime($event[0]['start_time'])));
+                $time_array[] = date("H:i", strtotime("+" . (($slot_time * ($i - 1)) + $gap_time * $var_gap_time) . " minute", strtotime($service[0]['start_time'])));
                 $var_gap_time++;
             }
         }
 
-        if (($key = array_search(date("H:i", strtotime($event[0]['end_time'])), $time_array)) !== false) {
+        if (($key = array_search(date("H:i", strtotime($service[0]['end_time'])), $time_array)) !== false) {
             unset($time_array[$key]);
         }
         $date = $this->input->post('date');
@@ -684,7 +558,7 @@ class Front extends CI_Controller {
         if ($staff_id > 0):
             $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '$date' AND staff_id=" . $staff_id . " AND status IN ('A')");
         else:
-            $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '$date' AND event_id=" . $eventid . " AND status IN ('A')");
+            $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '$date' AND service_id=" . $serviceid . " AND status IN ('A')");
         endif;
 
         if (isset($result) && count($result) > 0) {
@@ -692,9 +566,9 @@ class Front extends CI_Controller {
                 if ($min == $value['slot_time']) {
 
                     if ($staff_id > 0):
-                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND staff_id=" . $staff_id . " AND event_id=" . $eventid . " AND status IN ('A')");
+                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND staff_id=" . $staff_id . " AND service_id=" . $serviceid . " AND status IN ('A')");
                     else:
-                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND event_id=" . $eventid . " AND status IN ('A')");
+                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND service_id=" . $serviceid . " AND status IN ('A')");
                     endif;
 
                     if (isset($multiple_slotbooking_allow) && $multiple_slotbooking_allow == 'Y') {
@@ -741,7 +615,7 @@ class Front extends CI_Controller {
                 }
 
                 $html .= '<div class="col-md-12 mt-2 text-center"><a class="time-button" onclick="confirm_time(this);"><span id="time-select">' . get_formated_time(strtotime($value)) . ' </span> - <span>' . $end_time_format . '</span></a>';
-                $html .= '<a class="time-button w-49 time-respo ml-2 time-confirm hide-confirm" onclick="confirm_form(this);" data-price=' . get_price($eventid, $date) . ' data-ddate="' . get_formated_date($date, "N") . '" data-date="' . $date . '" data-dtime="' . get_formated_time(strtotime($value)) . '" data-time="' . date('H:i:s', strtotime($value)) . '"> ' . translate('confirm') . '</a>';
+                $html .= '<a class="time-button w-49 time-respo ml-2 time-confirm hide-confirm" onclick="confirm_form(this);" data-price=' . get_price($serviceid, $date) . ' data-ddate="' . get_formated_date($date, "N") . '" data-date="' . $date . '" data-dtime="' . get_formated_time(strtotime($value)) . '" data-time="' . date('H:i:s', strtotime($value)) . '"> ' . translate('confirm') . '</a>';
                 $html .= '</div></div>';
             }
         } else {
@@ -758,19 +632,19 @@ class Front extends CI_Controller {
         $appointment_id = (int) $this->input->post('appointment_id');
         $description = $this->input->post('description', true);
         $slot_time = $this->input->post('user_slot_time');
-        $event_id = (int) $this->input->post('event_id');
+        $service_id = (int) $this->input->post('service_id');
         $bookdate = $this->input->post('user_datetime');
-        $event_payment_type = $this->input->post('event_payment_type');
-        $event_booking_seat = $this->input->post('total_booked_seat');
+        $service_payment_type = $this->input->post('service_payment_type');
+        $service_booking_seat = $this->input->post('total_booked_seat');
         $staff_member_id = $this->input->post('staff_member_id');
 
-        //Check valid event id
-        if ($event_id > 0):
-            $service_data = get_full_event_service_data($event_id);
+        //Check valid service id
+        if ($service_id > 0):
+            $service_data = get_full_service_service_data($service_id);
 
             if (isset($service_data['id']) && $service_data['id'] > 0 && $service_data['type'] == 'S'):
 
-                $event_title = isset($service_data['title']) ? ($service_data['title']) : '';
+                $service_title = isset($service_data['title']) ? ($service_data['title']) : '';
                 $vendor_id = isset($service_data['created_by']) ? ($service_data['created_by']) : '';
                 $type = $service_data['type'];
                 $total_seat = $service_data['total_seat'];
@@ -782,17 +656,17 @@ class Front extends CI_Controller {
                     redirect('login');
                 }
 
-                $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $event_id, $staff_member_id);
+                $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $service_id, $staff_member_id);
                 if ($check_multiple_book_status == FALSE) {
                     $this->session->set_flashdata('msg_class', 'failure');
                     $this->session->set_flashdata('msg', translate('not_allowed_booking'));
-                    redirect(base_url('day-slots/' . $event_id));
+                    redirect(base_url('day-slots/' . $service_id));
                 } else {
                     $insert['customer_id'] = $customer_id;
                     $insert['description'] = $description;
                     $insert['slot_time'] = $slot_time;
-                    $insert['event_id'] = $event_id;
-                    $insert['event_booked_seat'] = $event_booking_seat;
+                    $insert['service_id'] = $service_id;
+                    $insert['service_booked_seat'] = $service_booking_seat;
                     $insert['start_date'] = date("Y-m-d", strtotime($bookdate));
                     $insert['start_time'] = date("H:i:s", strtotime($bookdate));
                     $insert['payment_status'] = 'S';
@@ -889,10 +763,10 @@ class Front extends CI_Controller {
         $main_amount = $this->input->post('main_amount');
         $description = $this->input->post('description');
         $slot_time = $this->input->post('user_slot_time');
-        $event_id = (int) $this->input->post('event_id');
+        $service_id = (int) $this->input->post('service_id');
         $bookdate = $this->input->post('user_datetime');
-        $event_payment_type = $this->input->post('event_payment_type');
-        $event_booking_seat = $this->input->post('total_booked_seat');
+        $service_payment_type = $this->input->post('service_payment_type');
+        $service_booking_seat = $this->input->post('total_booked_seat');
         $staff_member_id = $this->input->post('staff_member_id');
         $add_ons_hidden_id = $this->input->post('add_ons_id') ? $this->input->post('add_ons_id') : array();
 
@@ -907,19 +781,19 @@ class Front extends CI_Controller {
             $add_ons_price = $add_ons_price + get_addons_price_by_id($val);
         endforeach;
 
-        //Check valid event id
-        if (isset($event_id) && $event_id > 0):
-            $service_data = get_full_event_service_data($event_id);
+        //Check valid service id
+        if (isset($service_id) && $service_id > 0):
+            $service_data = get_full_service_service_data($service_id);
             if (isset($service_data['id']) && $service_data['id'] > 0 && $service_data['type'] == 'S'):
-                $event_title = isset($service_data['title']) ? ($service_data['title']) : '';
+                $service_title = isset($service_data['title']) ? ($service_data['title']) : '';
                 $type = $service_data['type'];
                 $total_seat = $service_data['total_seat'];
 
-                $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $event_id, $staff_member_id);
+                $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $service_id, $staff_member_id);
                 if ($check_multiple_book_status == FALSE) {
                     $this->session->set_flashdata('msg_class', 'failure');
                     $this->session->set_flashdata('msg', translate('not_allowed_booking'));
-                    redirect(base_url('day-slots/' . $event_id));
+                    redirect(base_url('day-slots/' . $service_id));
                 } else {
                     //discount data
                     $discount_coupon = $this->input->post('discount_coupon');
@@ -927,9 +801,9 @@ class Front extends CI_Controller {
                     $final_price = isset($service_data['price']) ? $service_data['price'] : 0;
 
                     if (isset($discount_coupon_id) && $discount_coupon_id > 0 && isset($discount_coupon)) {
-                        $final_price = get_discount_price($event_id, $discount_coupon, $discount_coupon_id, $bookdate);
+                        $final_price = get_discount_price($service_id, $discount_coupon, $discount_coupon_id, $bookdate);
                     } else {
-                        $final_price = get_discount_price_by_date($event_id, $bookdate);
+                        $final_price = get_discount_price_by_date($service_id, $bookdate);
                     }
                     //add add_ons value in final amount 
                     $final_price = $final_price + $add_ons_price;
@@ -940,8 +814,8 @@ class Front extends CI_Controller {
                     $insert['customer_id'] = $customer_id;
                     $insert['description'] = $description;
                     $insert['slot_time'] = $slot_time;
-                    $insert['event_id'] = $event_id;
-                    $insert['event_booked_seat'] = $event_booking_seat;
+                    $insert['service_id'] = $service_id;
+                    $insert['service_booked_seat'] = $service_booking_seat;
                     $insert['start_date'] = date("Y-m-d", strtotime($bookdate));
                     $insert['start_time'] = date("H:i:s", strtotime($bookdate));
 
@@ -958,7 +832,7 @@ class Front extends CI_Controller {
 
                     $data['customer_id'] = $customer_id;
                     $data['vendor_id'] = $service_data['created_by'];
-                    $data['event_id'] = $event_id;
+                    $data['service_id'] = $service_id;
                     $data['booking_id'] = $book;
                     $data['payment_id'] = '';
                     $data['customer_payment_id'] = '';
@@ -1055,9 +929,9 @@ class Front extends CI_Controller {
             $appointment_id = (int) $this->input->post('appointment_id');
             $description = $this->input->post('description');
             $slot_time = $this->input->post('user_slot_time');
-            $event_id = (int) $this->input->post('event_id');
+            $service_id = (int) $this->input->post('service_id');
             $bookdate = $this->input->post('user_datetime');
-            $event_payment_type = $this->input->post('event_payment_type');
+            $service_payment_type = $this->input->post('service_payment_type');
             $staff_member_id = $this->input->post('staff_member_id');
             $add_ons_hidden_id = $this->input->post('add_ons_id') ? $this->input->post('add_ons_id') : array();
 
@@ -1073,18 +947,18 @@ class Front extends CI_Controller {
             endforeach;
 
 
-            //Check valid event id
-            if (isset($event_id) && $event_id > 0):
-                $service_data = get_full_event_service_data($event_id);
+            //Check valid service id
+            if (isset($service_id) && $service_id > 0):
+                $service_data = get_full_service_service_data($service_id);
                 if (isset($service_data['id']) && $service_data['id'] > 0 && $service_data['type'] == 'S'):
-                    $event_title = isset($service_data['title']) ? ($service_data['title']) : '';
+                    $service_title = isset($service_data['title']) ? ($service_data['title']) : '';
                     $type = $service_data['type'];
 
-                    $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $event_id, $staff_member_id);
+                    $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $service_id, $staff_member_id);
                     if ($check_multiple_book_status == FALSE) {
                         $this->session->set_flashdata('msg_class', 'failure');
                         $this->session->set_flashdata('msg', translate('not_allowed_booking'));
-                        redirect(base_url('day-slots/' . $event_id));
+                        redirect(base_url('day-slots/' . $service_id));
                     } else {
                         include APPPATH . 'third_party/init.php';
                         $customer_id = (int) $this->session->userdata('CUST_ID');
@@ -1096,7 +970,7 @@ class Front extends CI_Controller {
                         $insert['customer_id'] = $customer_id;
                         $insert['description'] = $description;
                         $insert['slot_time'] = $slot_time;
-                        $insert['event_id'] = $event_id;
+                        $insert['service_id'] = $service_id;
                         $insert['type'] = 'S';
                         $insert['start_date'] = date("Y-m-d", strtotime($bookdate));
                         $insert['start_time'] = date("H:i:s", strtotime($bookdate));
@@ -1107,9 +981,9 @@ class Front extends CI_Controller {
                         $final_price = isset($service_data['price']) ? $service_data['price'] : 0;
 
                         if (isset($discount_coupon_id) && $discount_coupon_id > 0 && isset($discount_coupon)) {
-                            $final_price = get_discount_price($event_id, $discount_coupon, $discount_coupon_id, $bookdate);
+                            $final_price = get_discount_price($service_id, $discount_coupon, $discount_coupon_id, $bookdate);
                         } else {
-                            $final_price = get_discount_price_by_date($event_id, $bookdate);
+                            $final_price = get_discount_price_by_date($service_id, $bookdate);
                         }
 
                         //add add_ons value in final amount 
@@ -1155,7 +1029,7 @@ class Front extends CI_Controller {
 
                                     $data['customer_id'] = $customer_id;
                                     $data['vendor_id'] = $service_data['created_by'];
-                                    $data['event_id'] = $event_id;
+                                    $data['service_id'] = $service_id;
                                     $data['booking_id'] = $book;
                                     $data['payment_id'] = $charge_response['id'];
                                     $data['response_details'] = json_encode($charge_response);
@@ -1232,7 +1106,7 @@ class Front extends CI_Controller {
                                         $this->sendmail->send($define_param2, $subject2, $html2);
                                     endif;
 
-                                    $this->session->set_flashdata('msg', translate('transaction_success_event') . "<br>" . translate('booking_insert'));
+                                    $this->session->set_flashdata('msg', translate('transaction_success_service') . "<br>" . translate('booking_insert'));
                                     $this->session->set_flashdata('msg_class', 'success');
                                     redirect('appointment-success/' . $book);
                                 } else {
@@ -1245,34 +1119,34 @@ class Front extends CI_Controller {
                                 $err = $body['error'];
                                 $this->session->set_flashdata('msg', $err['message']);
                                 $this->session->set_flashdata('msg_class', 'failure');
-                                redirect(base_url('day-slots/' . $event_id));
+                                redirect(base_url('day-slots/' . $service_id));
                             } catch (\Stripe\Error\RateLimit $e) {
                                 $this->session->set_flashdata('msg', "Too many requests made to the API too quickly");
                                 $this->session->set_flashdata('msg_class', 'failure');
-                                redirect(base_url('day-slots/' . $event_id));
+                                redirect(base_url('day-slots/' . $service_id));
                             } catch (\Stripe\Error\InvalidRequest $e) {
                                 $this->session->set_flashdata('msg', "Invalid parameters were supplied to Stripe's API");
                                 $this->session->set_flashdata('msg_class', 'failure');
-                                redirect(base_url('day-slots/' . $event_id));
+                                redirect(base_url('day-slots/' . $service_id));
                             } catch (\Stripe\Error\Authentication $e) {
                                 $this->session->set_flashdata('msg', "Authentication with Stripe's API failed");
                                 $this->session->set_flashdata('msg_class', 'failure');
-                                redirect(base_url('day-slots/' . $event_id));
+                                redirect(base_url('day-slots/' . $service_id));
                             } catch (\Stripe\Error\ApiConnection $e) {
                                 $this->session->set_flashdata('msg', "Network communication with Stripe failed");
                                 $this->session->set_flashdata('msg_class', 'failure');
-                                redirect(base_url('day-slots/' . $event_id));
+                                redirect(base_url('day-slots/' . $service_id));
                             } catch (\Stripe\Error\Base $e) {
                                 $this->session->set_flashdata('msg', "Something else happened, completely unrelated to Stripe");
                                 $this->session->set_flashdata('msg_class', 'failure');
-                                redirect(base_url('day-slots/' . $event_id));
+                                redirect(base_url('day-slots/' . $service_id));
                             } catch (Exception $e) {
                                 $this->session->set_flashdata('msg', "Something else happened, completely unrelated to Stripe");
                                 $this->session->set_flashdata('msg_class', 'failure');
-                                redirect(base_url('day-slots/' . $event_id));
+                                redirect(base_url('day-slots/' . $service_id));
                             }
                         } else {
-                            redirect(base_url('day-slots/' . $event_id));
+                            redirect(base_url('day-slots/' . $service_id));
                         }
                     }
                 else:
@@ -1308,7 +1182,7 @@ class Front extends CI_Controller {
 
             $description = $this->input->post('description');
             $slot_time = $this->input->post('user_slot_time');
-            $event_id = (int) $this->input->post('event_id');
+            $service_id = (int) $this->input->post('service_id');
             $bookdate = $this->input->post('user_datetime');
             $staff_member_id = $this->input->post('staff_member_id');
             $add_ons_hidden_id = $this->input->post('add_ons_id') ? $this->input->post('add_ons_id') : array();
@@ -1324,17 +1198,17 @@ class Front extends CI_Controller {
                 $add_ons_price = $add_ons_price + get_addons_price_by_id($val);
             endforeach;
 
-            //Check valid event id
-            if (isset($event_id) && $event_id > 0):
-                $service_data = get_full_event_service_data($event_id);
+            //Check valid service id
+            if (isset($service_id) && $service_id > 0):
+                $service_data = get_full_service_service_data($service_id);
                 if (isset($service_data['id']) && $service_data['id'] > 0 && $service_data['type'] == 'S'):
                     $type = $service_data['type'];
 
-                    $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $event_id, $staff_member_id);
+                    $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $service_id, $staff_member_id);
                     if ($check_multiple_book_status == FALSE) {
                         $this->session->set_flashdata('msg_class', 'failure');
                         $this->session->set_flashdata('msg', translate('not_allowed_booking'));
-                        redirect(base_url('day-slots/' . $event_id));
+                        redirect(base_url('day-slots/' . $service_id));
                     } else {
                         //discount data
                         $discount_coupon = $this->input->post('discount_coupon');
@@ -1342,9 +1216,9 @@ class Front extends CI_Controller {
                         $final_price = isset($service_data['price']) ? $service_data['price'] : 0;
 
                         if (isset($discount_coupon_id) && $discount_coupon_id > 0 && isset($discount_coupon)) {
-                            $final_price = get_discount_price($event_id, $discount_coupon, $discount_coupon_id, $bookdate);
+                            $final_price = get_discount_price($service_id, $discount_coupon, $discount_coupon_id, $bookdate);
                         } else {
-                            $final_price = get_discount_price_by_date($event_id, $bookdate);
+                            $final_price = get_discount_price_by_date($service_id, $bookdate);
                         }
 
                         //add add_ons value in final amount 
@@ -1353,7 +1227,7 @@ class Front extends CI_Controller {
                         $insert['customer_id'] = $customer_id;
                         $insert['description'] = $description;
                         $insert['slot_time'] = $slot_time;
-                        $insert['event_id'] = $event_id;
+                        $insert['service_id'] = $service_id;
                         $insert['start_date'] = date("Y-m-d", strtotime($bookdate));
                         $insert['start_time'] = date("H:i:s", strtotime($bookdate));
                         $insert['payment_status'] = 'IN';
@@ -1367,13 +1241,13 @@ class Front extends CI_Controller {
                         $this->session->set_userdata('booking_id', $app_service_appointment);
                         $this->session->set_userdata('description', $description);
                         $this->session->set_userdata('bookdate', $bookdate);
-                        $this->session->set_userdata('event_id', $event_id);
-                        $this->session->set_userdata('event_price', $final_price);
+                        $this->session->set_userdata('service_id', $service_id);
+                        $this->session->set_userdata('service_price', $final_price);
 
                         $this->paypal->add_field('rm', 2);
                         $this->paypal->add_field('cmd', '_xclick');
                         $this->paypal->add_field('amount', $final_price);
-                        $this->paypal->add_field('item_name', "Event Booking Payment");
+                        $this->paypal->add_field('item_name', "service Booking Payment");
                         $this->paypal->add_field('currency_code', trim($get_current_currency['code']));
                         $this->paypal->add_field('custom', $app_service_appointment);
                         $this->paypal->add_field('business', get_payment_setting('paypal_merchant_email'));
@@ -1413,7 +1287,7 @@ class Front extends CI_Controller {
 
             $description = $this->input->post('description');
             $slot_time = $this->input->post('user_slot_time');
-            $event_id = (int) $this->input->post('event_id');
+            $service_id = (int) $this->input->post('service_id');
             $bookdate = $this->input->post('user_datetime');
             $staff_member_id = $this->input->post('staff_member_id');
             $add_ons_hidden_id = $this->input->post('add_ons_id') ? $this->input->post('add_ons_id') : array();
@@ -1429,17 +1303,17 @@ class Front extends CI_Controller {
                 $add_ons_price = $add_ons_price + get_addons_price_by_id($val);
             endforeach;
 
-            //Check valid event id
-            if (isset($event_id) && $event_id > 0):
-                $service_data = get_full_event_service_data($event_id);
+            //Check valid service id
+            if (isset($service_id) && $service_id > 0):
+                $service_data = get_full_service_service_data($service_id);
                 if (isset($service_data['id']) && $service_data['id'] > 0 && $service_data['type'] == 'S'):
                     $type = $service_data['type'];
 
-                    $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $event_id, $staff_member_id);
+                    $check_multiple_book_status = check_multiple_book_status(date("Y-m-d", strtotime($bookdate)), date("H:i:s", strtotime($bookdate)), $type, $service_id, $staff_member_id);
                     if ($check_multiple_book_status == FALSE) {
                         $this->session->set_flashdata('msg_class', 'failure');
                         $this->session->set_flashdata('msg', translate('not_allowed_booking'));
-                        redirect(base_url('day-slots/' . $event_id));
+                        redirect(base_url('day-slots/' . $service_id));
                     } else {
                         //discount data
                         $discount_coupon = $this->input->post('discount_coupon');
@@ -1447,9 +1321,9 @@ class Front extends CI_Controller {
                         $final_price = isset($service_data['price']) ? $service_data['price'] : 0;
 
                         if (isset($discount_coupon_id) && $discount_coupon_id > 0 && isset($discount_coupon)) {
-                            $final_price = get_discount_price($event_id, $discount_coupon, $discount_coupon_id, $bookdate);
+                            $final_price = get_discount_price($service_id, $discount_coupon, $discount_coupon_id, $bookdate);
                         } else {
-                            $final_price = get_discount_price_by_date($event_id, $bookdate);
+                            $final_price = get_discount_price_by_date($service_id, $bookdate);
                         }
 
                         //add add_ons value in final amount 
@@ -1458,7 +1332,7 @@ class Front extends CI_Controller {
                         $insert['customer_id'] = $customer_id;
                         $insert['description'] = $description;
                         $insert['slot_time'] = $slot_time;
-                        $insert['event_id'] = $event_id;
+                        $insert['service_id'] = $service_id;
                         $insert['start_date'] = date("Y-m-d", strtotime($bookdate));
                         $insert['start_time'] = date("H:i:s", strtotime($bookdate));
                         $insert['payment_status'] = 'IN';
@@ -1472,8 +1346,8 @@ class Front extends CI_Controller {
                         $this->session->set_userdata('booking_id', $app_service_appointment);
                         $this->session->set_userdata('description', $description);
                         $this->session->set_userdata('bookdate', $bookdate);
-                        $this->session->set_userdata('event_id', $event_id);
-                        $this->session->set_userdata('event_price', $final_price);
+                        $this->session->set_userdata('service_id', $service_id);
+                        $this->session->set_userdata('service_price', $final_price);
 
                         include APPPATH . 'third_party/2checkout/Twocheckout.php';
 
@@ -1542,32 +1416,32 @@ class Front extends CI_Controller {
 
                 $description = $this->session->userdata('description');
                 $bookdate = $this->session->userdata('bookdate');
-                $event_price = $this->session->userdata('event_price');
-                $event_id = $this->session->userdata('event_id');
+                $service_price = $this->session->userdata('service_price');
+                $service_id = $this->session->userdata('service_id');
 
                 $customer_id = (int) $this->session->userdata('CUST_ID');
-                $service_data = get_full_event_service_data($event_id);
-                $event_title = isset($service_data['title']) ? ($service_data['title']) : '';
+                $service_data = get_full_service_service_data($service_id);
+                $service_title = isset($service_data['title']) ? ($service_data['title']) : '';
 
                 if (get_site_setting('enable_membership') == 'Y') {
-                    $vendor_amount = $event_price;
+                    $vendor_amount = $service_price;
                     $admin_amount = 0;
                 } else {
-                    $vendor_amount = get_vendor_amount($event_price, $service_data['created_by']);
-                    $admin_amount = get_admin_amount($event_price);
+                    $vendor_amount = get_vendor_amount($service_price, $service_data['created_by']);
+                    $admin_amount = get_admin_amount($service_price);
                 }
 
 
                 $data['customer_id'] = $customer_id;
                 $data['vendor_id'] = $service_data['created_by'];
-                $data['event_id'] = $event_id;
+                $data['service_id'] = $service_id;
                 $data['booking_id'] = $booking_id;
                 $data['vendor_price'] = $vendor_amount;
                 $data['admin_price'] = $admin_amount;
                 $data['payment_id'] = $_REQUEST['invoice_id'];
                 $data['customer_payment_id'] = $_REQUEST['order_number'];
                 $data['transaction_id'] = $_REQUEST['order_number'];
-                $data['payment_price'] = $event_price;
+                $data['payment_price'] = $service_price;
                 $data['failure_code'] = '';
                 $data['failure_message'] = '';
                 $data['payment_method'] = '2Checkout';
@@ -1581,7 +1455,7 @@ class Front extends CI_Controller {
                 $app_service_appointment['status'] = 'A';
                 $app_service_appointment['vendor_price'] = $vendor_amount;
                 $app_service_appointment['admin_price'] = $admin_amount;
-                $app_service_appointment['price'] = $event_price;
+                $app_service_appointment['price'] = $service_price;
                 $app_service_appointment['payment_status'] = 'S';
                 $this->model_front->update('app_service_appointment', $app_service_appointment, "id=" . $booking_id);
 
@@ -1600,7 +1474,7 @@ class Front extends CI_Controller {
                 endif;
                 $parameter['appointment_date'] = get_formated_date(($bookdate));
                 $parameter['service_data'] = $service_data;
-                $parameter['price'] = price_format($event_price);
+                $parameter['price'] = price_format($service_price);
                 $html = $this->load->view("email_template/service_booking_customer", $parameter, true);
                 $this->sendmail->send($define_param, $subject, $html);
                 //Send email to vendor
@@ -1618,7 +1492,7 @@ class Front extends CI_Controller {
                 $parameterv['appointment_date'] = get_formated_date(($bookdate));
                 $parameterv['service_data'] = $service_data;
                 $parameterv['customer_data'] = $customer[0];
-                $parameterv['price'] = price_format($event_price);
+                $parameterv['price'] = price_format($service_price);
                 $html2 = $this->load->view("email_template/service_booking_vendor", $parameterv, true);
                 $this->sendmail->send($define_param2, $subject2, $html2);
 
@@ -1636,7 +1510,7 @@ class Front extends CI_Controller {
                     $parameters['appointment_date'] = get_formated_date(($bookdate));
                     $parameters['service_data'] = $service_data;
                     $parameters['customer_data'] = $customer[0];
-                    $parameters['price'] = price_format($event_price);
+                    $parameters['price'] = price_format($service_price);
 
                     $html2 = $this->load->view("email_template/service_booking_vendor", $parameters, true);
                     $this->sendmail->send($define_param2, $subject2, $html2);
@@ -1646,10 +1520,10 @@ class Front extends CI_Controller {
                 $this->session->unset_userdata('booking_id');
                 $this->session->unset_userdata('description');
                 $this->session->unset_userdata('bookdate');
-                $this->session->unset_userdata('event_price');
-                $this->session->unset_userdata('event_id');
+                $this->session->unset_userdata('service_price');
+                $this->session->unset_userdata('service_id');
 
-                $this->session->set_flashdata('msg', translate('transaction_success_event') . "<br>" . translate('booking_insert'));
+                $this->session->set_flashdata('msg', translate('transaction_success_service') . "<br>" . translate('booking_insert'));
                 $this->session->set_flashdata('msg_class', 'success');
                 redirect('appointment-success/' . $booking_id);
             } else if (isset($_REQUEST['booking_type']) && $_REQUEST['booking_type'] == "E") {
@@ -1657,26 +1531,26 @@ class Front extends CI_Controller {
 
                 $description = $this->session->userdata('description');
                 $bookdate = $this->session->userdata('bookdate');
-                $event_price = $this->session->userdata('event_price');
-                $event_id = $this->session->userdata('event_id');
+                $service_price = $this->session->userdata('service_price');
+                $service_id = $this->session->userdata('service_id');
 
                 $customer_id = (int) $this->session->userdata('CUST_ID');
-                $event_data = get_full_event_service_data($event_id);
-                $event_title = isset($event_data['title']) ? ($event_data['title']) : '';
-                $event_booking_seat = isset($event_data['event_booked_seat']) ? ($event_data['event_booked_seat']) : '';
+                $service_data = get_full_service_service_data($service_id);
+                $service_title = isset($service_data['title']) ? ($service_data['title']) : '';
+                $service_booking_seat = isset($service_data['service_booked_seat']) ? ($service_data['service_booked_seat']) : '';
 
                 if (get_site_setting('enable_membership') == 'Y') {
-                    $vendor_amount = $event_price;
+                    $vendor_amount = $service_price;
                     $admin_amount = 0;
                 } else {
-                    $vendor_amount = get_vendor_amount($event_price, $event_data['created_by']);
-                    $admin_amount = get_admin_amount($event_price);
+                    $vendor_amount = get_vendor_amount($service_price, $service_data['created_by']);
+                    $admin_amount = get_admin_amount($service_price);
                 }
 
 
                 $data['customer_id'] = $customer_id;
-                $data['vendor_id'] = $event_data['created_by'];
-                $data['event_id'] = $event_id;
+                $data['vendor_id'] = $service_data['created_by'];
+                $data['service_id'] = $service_id;
                 $data['booking_id'] = $booking_id;
                 $data['vendor_price'] = $vendor_amount;
                 $data['admin_price'] = $admin_amount;
@@ -1686,7 +1560,7 @@ class Front extends CI_Controller {
                 $data['transaction_id'] = $_REQUEST['order_number'];
 
 
-                $data['payment_price'] = $event_price;
+                $data['payment_price'] = $service_price;
                 $data['failure_code'] = '';
                 $data['failure_message'] = '';
                 $data['payment_method'] = '2Checkout';
@@ -1708,50 +1582,50 @@ class Front extends CI_Controller {
                 $app_service_appointment['status'] = 'A';
                 $app_service_appointment['vendor_price'] = $vendor_amount;
                 $app_service_appointment['admin_price'] = $admin_amount;
-                $app_service_appointment['price'] = $event_price;
+                $app_service_appointment['price'] = $service_price;
                 $app_service_appointment['type'] = 'E';
                 $app_service_appointment['payment_status'] = 'S';
                 $this->model_front->update('app_service_appointment', $app_service_appointment, "id=" . $booking_id);
 
-                $up_qry_vendor = $this->db->query("UPDATE app_admin SET my_earning=my_earning+" . $vendor_amount . ",my_wallet=my_wallet+" . $vendor_amount . " WHERE id=" . $event_data['created_by']);
+                $up_qry_vendor = $this->db->query("UPDATE app_admin SET my_earning=my_earning+" . $vendor_amount . ",my_wallet=my_wallet+" . $vendor_amount . " WHERE id=" . $service_data['created_by']);
                 $up_qry_admin = $this->db->query("UPDATE app_admin SET my_wallet=my_wallet+" . $admin_amount . " WHERE id=1");
 
 
                 $name = ($customer[0]['first_name']) . " " . ($customer[0]['last_name']);
-                $subject = $event_data['title'] . ' | ' . translate('appointment_booking');
+                $subject = $service_data['title'] . ' | ' . translate('appointment_booking');
                 $define_param['to_name'] = $name;
                 $define_param['to_email'] = $customer[0]['email'];
 
                 $parameter['name'] = $name;
-                $parameter['event_booking_seat'] = $event_booking_seat;
-                $parameter['event_data'] = $event_data;
-                $parameter['price'] = price_format($event_price);
-                $html = $this->load->view("email_template/event_booking_customer", $parameter, true);
+                $parameter['service_booking_seat'] = $service_booking_seat;
+                $parameter['service_data'] = $service_data;
+                $parameter['price'] = price_format($service_price);
+                $html = $this->load->view("email_template/service_booking_customer", $parameter, true);
                 $this->sendmail->send($define_param, $subject, $html);
 
                 //Send email to vendor
-                $vendor_name = ($event_data['first_name']) . " " . ($event_data['last_name']);
-                $vendor_email = $event_data['email'];
-                $subject2 = $event_data['title'] . ' | ' . translate('appointment_booking');
+                $vendor_name = ($service_data['first_name']) . " " . ($service_data['last_name']);
+                $vendor_email = $service_data['email'];
+                $subject2 = $service_data['title'] . ' | ' . translate('appointment_booking');
                 $define_param2['to_name'] = $vendor_name;
                 $define_param2['to_email'] = $vendor_email;
 
                 $parameterv['name'] = $vendor_name;
-                $parameterv['event_booking_seat'] = $event_booking_seat;
-                $parameterv['event_data'] = $event_data;
+                $parameterv['service_booking_seat'] = $service_booking_seat;
+                $parameterv['service_data'] = $service_data;
                 $parameterv['customer_data'] = $customer[0];
-                $parameterv['price'] = price_format($event_price);
-                $html2 = $this->load->view("email_template/event_booking_vendor", $parameterv, true);
+                $parameterv['price'] = price_format($service_price);
+                $html2 = $this->load->view("email_template/service_booking_vendor", $parameterv, true);
                 $this->sendmail->send($define_param2, $subject2, $html2);
 
                 //unset session
                 $this->session->unset_userdata('booking_id');
                 $this->session->unset_userdata('description');
                 $this->session->unset_userdata('bookdate');
-                $this->session->unset_userdata('event_price');
-                $this->session->unset_userdata('event_id');
+                $this->session->unset_userdata('service_price');
+                $this->session->unset_userdata('service_id');
 
-                $this->session->set_flashdata('msg', translate('transaction_success_event') . "<br>" . translate('booking_insert'));
+                $this->session->set_flashdata('msg', translate('transaction_success_service') . "<br>" . translate('booking_insert'));
                 $this->session->set_flashdata('msg_class', 'success');
                 redirect('appointment-success/' . $booking_id);
             } else if (isset($_REQUEST['booking_type']) && $_REQUEST['booking_type'] == "VP") {
@@ -1763,7 +1637,7 @@ class Front extends CI_Controller {
 
                 $data['customer_id'] = $vendor_id;
                 $data['package_id'] = $package;
-                $data['remaining_event'] = 0;
+                $data['remaining_service'] = 0;
                 $data['payment_method'] = '2Checkout';
                 $data['transaction_id'] = $_REQUEST['order_number'];
                 $data['customer_payment_id'] = $_REQUEST['invoice_id'];
@@ -1799,8 +1673,8 @@ class Front extends CI_Controller {
             $this->session->unset_userdata('booking_id');
             $this->session->unset_userdata('description');
             $this->session->unset_userdata('bookdate');
-            $this->session->unset_userdata('event_price');
-            $this->session->unset_userdata('event_id');
+            $this->session->unset_userdata('service_price');
+            $this->session->unset_userdata('service_id');
 
             $this->session->set_flashdata('msg', translate('transaction_fail'));
             $this->session->set_flashdata('msg_class', 'failure');
@@ -1819,32 +1693,32 @@ class Front extends CI_Controller {
 
             $description = $this->session->userdata('description');
             $bookdate = $this->session->userdata('bookdate');
-            $event_price = $this->session->userdata('event_price');
-            $event_id = $this->session->userdata('event_id');
+            $service_price = $this->session->userdata('service_price');
+            $service_id = $this->session->userdata('service_id');
 
             $customer_id = (int) $this->session->userdata('CUST_ID');
-            $service_data = get_full_event_service_data($event_id);
-            $event_title = isset($service_data['title']) ? ($service_data['title']) : '';
+            $service_data = get_full_service_service_data($service_id);
+            $service_title = isset($service_data['title']) ? ($service_data['title']) : '';
 
             if (get_site_setting('enable_membership') == 'Y') {
-                $vendor_amount = $event_price;
+                $vendor_amount = $service_price;
                 $admin_amount = 0;
             } else {
-                $vendor_amount = get_vendor_amount($event_price, $service_data['created_by']);
-                $admin_amount = get_admin_amount($event_price);
+                $vendor_amount = get_vendor_amount($service_price, $service_data['created_by']);
+                $admin_amount = get_admin_amount($service_price);
             }
 
 
             $data['customer_id'] = $customer_id;
             $data['vendor_id'] = $service_data['created_by'];
-            $data['event_id'] = $event_id;
+            $data['service_id'] = $service_id;
             $data['booking_id'] = $booking_id;
             $data['vendor_price'] = $vendor_amount;
             $data['admin_price'] = $admin_amount;
             $data['payment_id'] = $_REQUEST['tx'];
             $data['customer_payment_id'] = $_REQUEST['tx'];
             $data['transaction_id'] = $_REQUEST['tx'];
-            $data['payment_price'] = $event_price;
+            $data['payment_price'] = $service_price;
             $data['failure_code'] = '';
             $data['failure_message'] = '';
             $data['payment_method'] = 'PayPal';
@@ -1858,7 +1732,7 @@ class Front extends CI_Controller {
             $app_service_appointment['status'] = 'A';
             $app_service_appointment['vendor_price'] = $vendor_amount;
             $app_service_appointment['admin_price'] = $admin_amount;
-            $app_service_appointment['price'] = $event_price;
+            $app_service_appointment['price'] = $service_price;
             $app_service_appointment['payment_status'] = 'S';
             $this->model_front->update('app_service_appointment', $app_service_appointment, "id=" . $booking_id);
 
@@ -1877,7 +1751,7 @@ class Front extends CI_Controller {
             endif;
             $parameter['appointment_date'] = get_formated_date(($bookdate));
             $parameter['service_data'] = $service_data;
-            $parameter['price'] = price_format($event_price);
+            $parameter['price'] = price_format($service_price);
             $html = $this->load->view("email_template/service_booking_customer", $parameter, true);
             $this->sendmail->send($define_param, $subject, $html);
             //Send email to vendor
@@ -1895,7 +1769,7 @@ class Front extends CI_Controller {
             $parameterv['appointment_date'] = get_formated_date(($bookdate));
             $parameterv['service_data'] = $service_data;
             $parameterv['customer_data'] = $customer[0];
-            $parameterv['price'] = price_format($event_price);
+            $parameterv['price'] = price_format($service_price);
             $html2 = $this->load->view("email_template/service_booking_vendor", $parameterv, true);
             $this->sendmail->send($define_param2, $subject2, $html2);
 
@@ -1913,7 +1787,7 @@ class Front extends CI_Controller {
                 $parameters['appointment_date'] = get_formated_date(($bookdate));
                 $parameters['service_data'] = $service_data;
                 $parameters['customer_data'] = $customer[0];
-                $parameters['price'] = price_format($event_price);
+                $parameters['price'] = price_format($service_price);
 
                 $html2 = $this->load->view("email_template/service_booking_vendor", $parameters, true);
                 $this->sendmail->send($define_param2, $subject2, $html2);
@@ -1923,11 +1797,11 @@ class Front extends CI_Controller {
             $this->session->unset_userdata('booking_id');
             $this->session->unset_userdata('description');
             $this->session->unset_userdata('bookdate');
-            $this->session->unset_userdata('event_price');
-            $this->session->unset_userdata('event_id');
+            $this->session->unset_userdata('service_price');
+            $this->session->unset_userdata('service_id');
 
 
-            $this->session->set_flashdata('msg', translate('transaction_success_event') . "<br>" . translate('booking_insert'));
+            $this->session->set_flashdata('msg', translate('transaction_success_service') . "<br>" . translate('booking_insert'));
             $this->session->set_flashdata('msg_class', 'success');
             redirect('appointment-success/' . $booking_id);
         } else {
@@ -1938,8 +1812,8 @@ class Front extends CI_Controller {
             $this->session->unset_userdata('booking_id');
             $this->session->unset_userdata('description');
             $this->session->unset_userdata('bookdate');
-            $this->session->unset_userdata('event_price');
-            $this->session->unset_userdata('event_id');
+            $this->session->unset_userdata('service_price');
+            $this->session->unset_userdata('service_id');
 
             $this->session->set_flashdata('msg', translate('transaction_fail'));
             $this->session->set_flashdata('msg_class', 'failure');
@@ -1948,7 +1822,7 @@ class Front extends CI_Controller {
     }
 
     public function paypal_cancel() {
-        //remove booked event due to unseccesfull payment
+        //remove booked service due to unseccesfull payment
         $booking_id = $this->session->userdata('booking_id');
         $this->db->where("id", $booking_id);
         $this->db->delete("app_service_appointment");
@@ -1957,7 +1831,7 @@ class Front extends CI_Controller {
         $this->session->unset_userdata('booking_id');
         $this->session->unset_userdata('description');
         $this->session->unset_userdata('bookdate');
-        $this->session->unset_userdata('event_id');
+        $this->session->unset_userdata('service_id');
 
         $this->session->set_flashdata('msg', translate('transaction_fail'));
         $this->session->set_flashdata('msg_class', 'failure');
@@ -1966,7 +1840,7 @@ class Front extends CI_Controller {
 
     //appointment list
     public function appointment() {
-        $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : "";
+        $service = isset($_REQUEST['service']) ? $_REQUEST['service'] : "";
         $vendor = isset($_REQUEST['vendor']) ? $_REQUEST['vendor'] : "";
         $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : "";
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
@@ -1976,7 +1850,7 @@ class Front extends CI_Controller {
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'left'
             ),
             array(
@@ -2009,8 +1883,8 @@ class Front extends CI_Controller {
         $condition = "app_service_appointment.customer_id=" . $customer_id . " AND app_service_appointment.type='S' AND app_service_appointment.start_date>='" . $cur_date . "' ";
         $condition_past = "app_service_appointment.customer_id=" . $customer_id . " AND app_service_appointment.type='S' AND app_service_appointment.start_date<'" . $cur_date . "' ";
 
-        if (isset($event) && $event > 0) {
-            $condition .= " AND app_service_appointment.event_id=" . $event;
+        if (isset($service) && $service > 0) {
+            $condition .= " AND app_service_appointment.service_id=" . $service;
         }
 
         if (isset($vendor) && $vendor > 0) {
@@ -2024,8 +1898,8 @@ class Front extends CI_Controller {
             $condition .= " AND app_services.payment_type='" . $type . "'";
         }
 
-        $appointment = $this->model_front->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as event_description, app_services.payment_type", $condition, $join, "app_service_appointment.start_date ASC,app_service_appointment.start_time ASC");
-        $past_appointment = $this->model_front->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as event_description, app_services.payment_type", $condition_past, $join, "app_service_appointment.start_date DESC,app_service_appointment.start_time DESC");
+        $appointment = $this->model_front->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as service_description, app_services.payment_type", $condition, $join, "app_service_appointment.start_date ASC,app_service_appointment.start_time ASC");
+        $past_appointment = $this->model_front->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as service_description, app_services.payment_type", $condition_past, $join, "app_service_appointment.start_date DESC,app_service_appointment.start_time DESC");
 
         $city_join = array(
             array(
@@ -2044,13 +1918,13 @@ class Front extends CI_Controller {
         $this->load->view('front/profile/appointment', $data);
     }
 
-    public function my_event_booking() {
+    public function my_service_booking() {
         $this->authenticate->check();
         $customer_id = (int) $this->session->userdata('CUST_ID');
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'INNER'
             ),
             array(
@@ -2084,14 +1958,14 @@ class Front extends CI_Controller {
         $condition = "app_service_appointment.customer_id=" . $customer_id . " AND app_service_appointment.type='E' AND DATE(app_services.end_date)>='" . $cur_date . "' ";
         $condition_past = "app_service_appointment.customer_id=" . $customer_id . " AND app_service_appointment.type='E' AND DATE(app_services.end_date)<'" . $cur_date . "' ";
 
-        $appointment = $this->model_front->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as event_description, app_services.payment_type", $condition, $join, "app_service_appointment.start_date ASC,app_service_appointment.start_time ASC");
-        $past_appointment = $this->model_front->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as event_description, app_services.payment_type", $condition_past, $join, "app_service_appointment.start_date DESC,app_service_appointment.start_time DESC");
+        $appointment = $this->model_front->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as service_description, app_services.payment_type", $condition, $join, "app_service_appointment.start_date ASC,app_service_appointment.start_time ASC");
+        $past_appointment = $this->model_front->getData("app_service_appointment", "app_service_appointment.*,app_admin.id as aid ,app_service_appointment.price as final_price,app_admin.company_name,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price,app_admin.first_name,app_admin.last_name,app_admin.company_name,app_services.image,app_services.description as service_description, app_services.payment_type", $condition_past, $join, "app_service_appointment.start_date DESC,app_service_appointment.start_time DESC");
 
         $data['appointment_data'] = $appointment;
         $data['past_appointment'] = $past_appointment;
 
-        $data['title'] = translate('event') . " " . translate('booking');
-        $this->load->view('front/profile/event-booking', $data);
+        $data['title'] = translate('service') . " " . translate('booking');
+        $this->load->view('front/profile/service-booking', $data);
     }
 
     //delete appointment
@@ -2099,7 +1973,7 @@ class Front extends CI_Controller {
         $id = (int) $this->uri->segment(2);
         $services = $this->model_front->getData("app_service_appointment", "*", "id='$id' AND status IN('P','R')");
         if (count($services) > 0) {
-            $event_id = (int) $services[0]['event_id'];
+            $service_id = (int) $services[0]['service_id'];
             $customer_id = (int) $services[0]['customer_id'];
             $app_customer = $this->model_front->getData("app_customer", "*", "id=" . $customer_id)[0];
 
@@ -2111,17 +1985,17 @@ class Front extends CI_Controller {
                 $this->model_front->delete("app_services_ticket_type_booking", "booking_id=" . $id);
             endif;
 
-            if ($event_id > 0) {
-                $event_data = get_full_event_service_data($event_id);
+            if ($service_id > 0) {
+                $service_data = get_full_service_service_data($service_id);
                 //Send email to vendor
-                $vendor_name = ($event_data['first_name']) . " " . ($event_data['last_name']);
-                $vendor_email = $event_data['email'];
-                $subject2 = translate('notification') . ' | ' . $event_data['title'];
+                $vendor_name = ($service_data['first_name']) . " " . ($service_data['last_name']);
+                $vendor_email = $service_data['email'];
+                $subject2 = translate('notification') . ' | ' . $service_data['title'];
                 $define_param2['to_name'] = $vendor_name;
                 $define_param2['to_email'] = $vendor_email;
 
                 $parameterv['name'] = $vendor_name;
-                $parameterv['event_data'] = $event_data;
+                $parameterv['service_data'] = $service_data;
                 $parameterv['booking_date'] = get_formated_date($bookdate);
                 $parameterv['customer_data'] = $app_customer;
 
@@ -2142,12 +2016,12 @@ class Front extends CI_Controller {
 
     //update appointment
     public function update_appointment($id, $date = NULL) {
-        $event = $this->model_front->getData("app_service_appointment", "*", "id='$id'");
-        if (isset($event) && count($event) > 0) {
+        $service = $this->model_front->getData("app_service_appointment", "*", "id='$id'");
+        if (isset($service) && count($service) > 0) {
             if (!is_null($date)) {
                 $data['update_date'] = $this->general->decrypt($date);
             }
-            $data['appointment_data'] = $event[0];
+            $data['appointment_data'] = $service[0];
             $data['title'] = translate('manage') . " " . translate('appointment');
             $this->load->view('front/profile/manage-appointment', $data);
         } else {
@@ -2157,27 +2031,27 @@ class Front extends CI_Controller {
     }
 
     //check days available or not
-    private function _day_slots_check($k, $min, $cur_event_id, $staff_member_id) {
-        $event = $this->model_front->getData("app_services", "*", "status='A' AND slot_time='" . $min . "' AND id=" . $cur_event_id);
+    private function _day_slots_check($k, $min, $cur_service_id, $staff_member_id) {
+        $service = $this->model_front->getData("app_services", "*", "status='A' AND slot_time='" . $min . "' AND id=" . $cur_service_id);
 
-        $slot_time = $event[0]['slot_time'];
-        $multiple_slotbooking_allow = $event[0]['multiple_slotbooking_allow'];
-        $multiple_slotbooking_limit = $event[0]['multiple_slotbooking_limit'];
+        $slot_time = $service[0]['slot_time'];
+        $multiple_slotbooking_allow = $service[0]['multiple_slotbooking_allow'];
+        $multiple_slotbooking_limit = $service[0]['multiple_slotbooking_limit'];
 
-        $j = get_formated_time(strtotime("-" . $slot_time . "minute", strtotime($event[0]['end_time'])));
-        $datetime1 = new DateTime($event[0]['start_time']);
-        $datetime2 = new DateTime($event[0]['end_time']);
+        $j = get_formated_time(strtotime("-" . $slot_time . "minute", strtotime($service[0]['end_time'])));
+        $datetime1 = new DateTime($service[0]['start_time']);
+        $datetime2 = new DateTime($service[0]['end_time']);
         $interval = $datetime1->diff($datetime2);
         $minute = $interval->format('%h') * 60;
         $time_array = array();
         for ($i = 1; $i <= $minute / $slot_time; $i++) {
             if ($i == 1) {
-                $time_array[] = get_formated_time(strtotime($event[0]['start_time']));
+                $time_array[] = get_formated_time(strtotime($service[0]['start_time']));
             } else {
-                $time_array[] = get_formated_time(strtotime("+" . $slot_time * ($i - 1) . " minute", strtotime($event[0]['start_time'])));
+                $time_array[] = get_formated_time(strtotime("+" . $slot_time * ($i - 1) . " minute", strtotime($service[0]['start_time'])));
             }
         }
-        if (($key = array_search(get_formated_time(strtotime($event[0]['end_time'])), $time_array)) !== false) {
+        if (($key = array_search(get_formated_time(strtotime($service[0]['end_time'])), $time_array)) !== false) {
             unset($time_array[$key]);
         }
         $start_date = date("Y-m-d", strtotime($k));
@@ -2196,7 +2070,7 @@ class Front extends CI_Controller {
         if ($staff_member_id > 0):
             $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $start_date . "' AND staff_id=" . $staff_member_id . " AND status IN ('A')");
         else:
-            $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $start_date . "' AND event_id=" . $cur_event_id . " AND status IN ('A')");
+            $result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $start_date . "' AND service_id=" . $cur_service_id . " AND status IN ('A')");
         endif;
 
         if (isset($result) && count($result) > 0) {
@@ -2204,9 +2078,9 @@ class Front extends CI_Controller {
                 if ($min == $value['slot_time']) {
 
                     if ($staff_member_id > 0):
-                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $start_date . "' AND event_id=" . $cur_event_id . " AND staff_id=" . $staff_member_id . " AND status IN ('A')");
+                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $start_date . "' AND service_id=" . $cur_service_id . " AND staff_id=" . $staff_member_id . " AND status IN ('A')");
                     else:
-                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $start_date . "' AND event_id=" . $cur_event_id . " AND status IN ('A')");
+                        $multiple_boook_result = $this->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $start_date . "' AND service_id=" . $cur_service_id . " AND status IN ('A')");
                     endif;
 
                     if (isset($multiple_slotbooking_allow) && $multiple_slotbooking_allow == 'Y') {
@@ -2263,16 +2137,16 @@ class Front extends CI_Controller {
         return $time_array;
     }
 
-    public function submit_rating($event_id) {
+    public function submit_rating($service_id) {
         $user_id = $this->session->userdata('CUST_ID');
         $rating = $this->input->post('rating');
         $review = $this->input->post('review');
         $appointment_id = $this->input->post('appointment_id');
-        $check_rating = $this->model_front->getData('app_rating', 'id', "user_id='$user_id' AND event_id='$event_id'");
+        $check_rating = $this->model_front->getData('app_rating', 'id', "user_id='$user_id' AND service_id='$service_id'");
         if (isset($check_rating) && count($check_rating) == 0) {
             $data = array(
                 'user_id' => $user_id,
-                'event_id' => $event_id,
+                'service_id' => $service_id,
                 'rating' => $rating,
                 'appointment_id' => $appointment_id,
                 'review' => $review
@@ -2322,7 +2196,7 @@ class Front extends CI_Controller {
                         'condition' => 'app_service_category.id=app_services.category_id',
                         'jointype' => 'INNER'
                 ));
-                $event_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='E' AND app_services.created_by='$admin_id'", $join);
+                $service_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='E' AND app_services.created_by='$admin_id'", $join);
                 $service_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='S' AND app_services.created_by='$admin_id'", $join);
                 $category_data = $this->model_front->getData("app_service_category", "app_service_category.*", "app_services.status='A' AND app_services.created_by='$admin_id'", $cjoin, 'title', 'app_service_category.id');
                 /*
@@ -2338,18 +2212,18 @@ class Front extends CI_Controller {
                 $top_cities = $this->model_front->getData('app_city', 'app_city.*', 'app_services.status="A"', $city_join, 'city_id', 'city_id', '', 12, array(), '', array(), 'DESC');
 
                 /*
-                 * recent list of booked events
+                 * recent list of booked services
                  */
                 $join = array(
                     array(
                         'table' => 'app_service_appointment',
-                        'condition' => 'app_service_appointment.event_id=app_services.id',
+                        'condition' => 'app_service_appointment.service_id=app_services.id',
                         'jointype' => 'inner'
                     )
                 );
                 $book_cond = 'app_services.status="A"';
 
-                $recent_events = $this->model_front->getData("app_services", 'app_services.*', $book_cond, $join, '', 'app_services.id', '', 10);
+                $recent_services = $this->model_front->getData("app_services", 'app_services.*', $book_cond, $join, '', 'app_services.id', '', 10);
 
                 $city_join = array(
                     array(
@@ -2373,7 +2247,7 @@ class Front extends CI_Controller {
                     ),
                     array(
                         'table' => 'app_services',
-                        'condition' => 'app_vendor_review.event_id=app_services.id',
+                        'condition' => 'app_vendor_review.service_id=app_services.id',
                         'jointype' => 'INNER'
                 ));
                 $vendor_rating_data = $this->model_front->getData('app_vendor_review', 'app_services.title, app_services.category_id, app_customer.first_name, app_customer.last_name, app_customer.profile_image, app_vendor_review.*', 'app_vendor_review.vendor_id = ' . $admin_id, $rjoin);
@@ -2385,9 +2259,9 @@ class Front extends CI_Controller {
                 $data['rating_data'] = isset($rating_data) ? $rating_data : array();
                 $data['vendor_rating_data'] = $vendor_rating_data;
                 $data['vendor_gallery_data'] = $vendor_gallery_data;
-                $data['Recent_events'] = $recent_events;
+                $data['Recent_services'] = $recent_services;
                 $data['topCity_List'] = $top_cities;
-                $data['event_data'] = $event_data;
+                $data['service_data'] = $service_data;
                 $data['service_data'] = $service_data;
                 $data['category_data'] = $category_data;
                 $this->load->view('front/profile/profile-details', $data);
@@ -2474,12 +2348,12 @@ class Front extends CI_Controller {
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'inner'
             ),
             array(
                 'table' => 'app_service_appointment_payment',
-                'condition' => 'app_service_appointment_payment.event_id=app_service_appointment.event_id',
+                'condition' => 'app_service_appointment_payment.service_id=app_service_appointment.service_id',
                 'jointype' => 'inner'
             )
         );
@@ -2521,7 +2395,7 @@ class Front extends CI_Controller {
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'left'
             ),
             array(
@@ -2540,12 +2414,12 @@ class Front extends CI_Controller {
                 'jointype' => 'left'
             )
         );
-        $event = $this->model_front->getData("app_service_appointment", "app_services.image,app_service_appointment.*,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title", "app_service_appointment.id='$id' AND app_service_appointment.customer_id=" . $from_id, $join);
+        $service = $this->model_front->getData("app_service_appointment", "app_services.image,app_service_appointment.*,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title", "app_service_appointment.id='$id' AND app_service_appointment.customer_id=" . $from_id, $join);
 
-        if (count($event) > 0) {
+        if (count($service) > 0) {
             //$data['invoice_path'] = $this->GeneratePDF_HTML("E", $id);
             //$this->model_front->update('app_service_appointment', array('invoice_file' => $data['invoice_path']), "id='$id'");
-            $data['event_data'] = $event[0];
+            $data['service_data'] = $service[0];
             $data['title'] = translate('appointment') . " " . translate('details');
             $this->load->view('front/profile/appointment-success', $data);
         } else {
@@ -2559,7 +2433,7 @@ class Front extends CI_Controller {
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'left'
             ),
             array(
@@ -2588,11 +2462,11 @@ class Front extends CI_Controller {
                 'jointype' => 'left'
             )
         );
-        $event = $this->model_front->getData("app_service_appointment", "app_admin.company_name, app_admin.first_name as afname, app_admin.last_name as alname, app_admin.email as aemail, app_admin.phone as aphone, app_service_appointment.*,app_services.created_by,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price, app_customer.email", "app_service_appointment.id='$id'", $join);
+        $service = $this->model_front->getData("app_service_appointment", "app_admin.company_name, app_admin.first_name as afname, app_admin.last_name as alname, app_admin.email as aemail, app_admin.phone as aphone, app_service_appointment.*,app_services.created_by,app_services.title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_customer.first_name,app_customer.last_name,app_customer.phone,app_services.price, app_customer.email", "app_service_appointment.id='$id'", $join);
         $img_path = get_CompanyLogo();
 
-        if (isset($event) && !empty($event)) {
-            foreach ($event as $eRow) {
+        if (isset($service) && !empty($service)) {
+            foreach ($service as $eRow) {
                 $title = $eRow['title'];
                 $loc_title = $eRow['loc_title'];
                 $city_title = $eRow['city_title'];
@@ -2701,12 +2575,12 @@ class Front extends CI_Controller {
         }
     }
 
-    public function search_events() {
+    public function search_services() {
 
         $search_txt = $this->input->post('search_txt');
-        $events = $this->model_front->getData("app_services", 'app_services.*', "app_services.status='A' AND title LIKE '" . $search_txt . "%'", array());
-        if (isset($events) && !empty($events)) {
-            echo json_encode(array("status" => "success", "data" => $events));
+        $services = $this->model_front->getData("app_services", 'app_services.*', "app_services.status='A' AND title LIKE '" . $search_txt . "%'", array());
+        if (isset($services) && !empty($services)) {
+            echo json_encode(array("status" => "success", "data" => $services));
             exit(0);
         } else {
             echo json_encode(array("status" => "failure"));
@@ -2714,7 +2588,7 @@ class Front extends CI_Controller {
         }
     }
 
-    public function locations_events() {
+    public function locations_services() {
         $locations = $this->input->post('locations');
         $is_search = $this->session->userdata('location');
         if ($locations != '') {
@@ -2748,7 +2622,7 @@ class Front extends CI_Controller {
             ),
             array(
                 'table' => 'app_service_appointment',
-                'condition' => 'app_service_appointment.event_id=app_services.id',
+                'condition' => 'app_service_appointment.service_id=app_services.id',
                 'jointype' => 'left'
             ),
         );
@@ -2767,11 +2641,11 @@ class Front extends CI_Controller {
         if (isset($locations) && !empty($locations)) {
             $cond .= ' AND location  IN (' . $locations . ')';
         }
-        $events = $this->model_front->getData("app_services", '(SELECT COUNT(id) FROM app_service_appointment WHERE event_id = app_services.id) as totalBook, app_services.*,app_service_category.title as category_title,app_city.city_title, app_location.loc_title, app_admin.profile_image, app_admin.company_name', $cond, $join, '', 'app_services.id', '', '', array(), '', array(), '', $row, $sort_by);
+        $services = $this->model_front->getData("app_services", '(SELECT COUNT(id) FROM app_service_appointment WHERE service_id = app_services.id) as totalBook, app_services.*,app_service_category.title as category_title,app_city.city_title, app_location.loc_title, app_admin.profile_image, app_admin.company_name', $cond, $join, '', 'app_services.id', '', '', array(), '', array(), '', $row, $sort_by);
 
-        $total_Event = $this->model_front->getData("app_services", 'app_services.*,app_service_category.title as category_title,app_city.city_title, app_location.loc_title, app_admin.profile_image, app_admin.company_name', $cond, $join, '', 'app_services.id', '', '', array(), '', array(), '');
-        if (isset($events) && !empty($events)) {
-            echo json_encode(array("status" => "success", "data" => $events, "total_Event" => count($total_Event)));
+        $total_service = $this->model_front->getData("app_services", 'app_services.*,app_service_category.title as category_title,app_city.city_title, app_location.loc_title, app_admin.profile_image, app_admin.company_name', $cond, $join, '', 'app_services.id', '', '', array(), '', array(), '');
+        if (isset($services) && !empty($services)) {
+            echo json_encode(array("status" => "success", "data" => $services, "total_service" => count($total_service)));
             exit(0);
         } else {
             echo json_encode(array("status" => "failure"));
@@ -2780,12 +2654,12 @@ class Front extends CI_Controller {
     }
 
     public function discount_coupon() {
-        $event_id = $this->input->post('event_id');
+        $service_id = $this->input->post('service_id');
         $add_ons_amount = $this->input->post('add_ons_amount');
         $booking_date = $this->input->post('booking_date');
         $discount_coupon = $this->input->post('discount_coupon');
         $coupon = $this->model_front->getData("app_service_coupon", "*", "code='$discount_coupon' AND status='A'");
-        $app_services = $this->model_front->getData("app_services", "*", "id=" . $event_id . " AND status='A'");
+        $app_services = $this->model_front->getData("app_services", "*", "id=" . $service_id . " AND status='A'");
 
         if (count($app_services) > 0) {
             $app_services_data = $app_services[0];
@@ -2793,37 +2667,37 @@ class Front extends CI_Controller {
             if (count($coupon) > 0) {
                 $coupon_signle_data = $coupon[0];
                 $valid_till = $coupon_signle_data['valid_till'];
-                $event_id_array = $coupon_signle_data['event_id'];
+                $service_id_array = $coupon_signle_data['service_id'];
                 $discount_type = $coupon_signle_data['discount_type'];
                 $discount_value = $coupon_signle_data['discount_value'];
 
-                //get event price details
-                $event_price = 0;
+                //get service price details
+                $service_price = 0;
                 $discountDate = date('Y-m-d', strtotime($booking_date));
                 if (isset($app_services_data['discounted_price']) && $app_services_data['discounted_price'] > 0 && ($discountDate >= $app_services_data['from_date']) && ($discountDate <= $app_services_data['to_date'])) {
-                    $event_price = $app_services_data['discounted_price'];
+                    $service_price = $app_services_data['discounted_price'];
                 } else {
-                    $event_price = $app_services_data['price'];
+                    $service_price = $app_services_data['price'];
                 }
 
-                $final_price = ($event_price + $add_ons_amount);
-                //Apply coupon disocunt on event price
+                $final_price = ($service_price + $add_ons_amount);
+                //Apply coupon disocunt on service price
                 if ($discount_type == 'P') {
                     $final_price = ($final_price - ($final_price * ($discount_value / 100)));
                 } else {
                     $final_price = $final_price - $discount_value;
                 }
 
-                $event_id_ary = json_decode($event_id_array);
+                $service_id_ary = json_decode($service_id_array);
 
                 if ($valid_till >= $discountDate) {
 
-                    if (in_array($event_id, $event_id_ary)) {
+                    if (in_array($service_id, $service_id_ary)) {
                         $html = "";
                         echo json_encode(array("status" => true, 'id' => base64_encode($coupon_signle_data['id']), 'price' => ($final_price), "message" => translate('coupon_code_apply')));
                         exit(0);
                     } else {
-                        echo json_encode(array("status" => false, "message" => translate('coupon_code_not_associated_event')));
+                        echo json_encode(array("status" => false, "message" => translate('coupon_code_not_associated_service')));
                         exit(0);
                     }
                 } else {
@@ -2963,7 +2837,7 @@ class Front extends CI_Controller {
         $insert['customer_id'] = $user_id;
         $insert['vendor_id'] = $this->input->post('vendor_id', true);
         $insert['appointment_id'] = $this->input->post('appointment_id', true);
-        $insert['event_id'] = $this->input->post('event_id', true);
+        $insert['service_id'] = $this->input->post('service_id', true);
         $insert['quality_rating'] = $this->input->post('quality_rating', true);
         $insert['location_rating'] = $this->input->post('location_rating', true);
         $insert['space_rating'] = $this->input->post('space_rating', true);
@@ -2993,20 +2867,20 @@ class Front extends CI_Controller {
         $this->form_validation->set_rules('emailid', '', 'required|valid_email');
         $this->form_validation->set_rules('phoneno', '', 'required');
         $this->form_validation->set_rules('message', '', 'required');
-        $event_id = (int) $this->input->post('event_id', TRUE);
-        $event_cat_id = $this->input->post('event_category_id', TRUE);
+        $service_id = (int) $this->input->post('service_id', TRUE);
+        $service_cat_id = $this->input->post('service_category_id', TRUE);
         $admin_id = $this->input->post('admin_id', TRUE);
 
-        $event_Res = $this->model_front->getData("app_services", "*", "id='$event_id'");
+        $service_Res = $this->model_front->getData("app_services", "*", "id='$service_id'");
 
-        $type = isset($event_Res[0]['type']) ? $event_Res[0]['type'] : "";
-        $event_title = isset($event_Res[0]['title']) ? $event_Res[0]['title'] : "";
+        $type = isset($service_Res[0]['type']) ? $service_Res[0]['type'] : "";
+        $service_title = isset($service_Res[0]['title']) ? $service_Res[0]['title'] : "";
 
-        $created_by = isset($event_Res[0]['created_by']) ? $event_Res[0]['created_by'] : "";
+        $created_by = isset($service_Res[0]['created_by']) ? $service_Res[0]['created_by'] : "";
         if ($this->form_validation->run() == false) {
             $this->session->set_flashdata('msg', validation_errors());
             $this->session->set_flashdata('msg_class', 'failure');
-            redirect('event-details/' . slugify($event_Res[0]['title']) . '/' . $event_id);
+            redirect('service-details/' . slugify($service_Res[0]['title']) . '/' . $service_id);
         } else {
             $fullname = $this->input->post('fullname', true);
             $emailid = $this->input->post('emailid', true);
@@ -3014,7 +2888,7 @@ class Front extends CI_Controller {
             $message = $this->input->post('message', true);
 
             $ins_data = array();
-            $ins_data['event_id'] = $event_id;
+            $ins_data['service_id'] = $service_id;
             $ins_data['admin_id'] = $admin_id;
             $ins_data['name'] = $fullname;
             $ins_data['email'] = $emailid;
@@ -3024,7 +2898,7 @@ class Front extends CI_Controller {
             $ins_id = $this->model_front->insert('app_contact_us', $ins_data);
             if ($ins_id) {
                 $admin = $this->model_front->getData("app_admin", "first_name,last_name,email", "id=" . $created_by);
-                $subject = translate('contact-us') . " | " . $event_title;
+                $subject = translate('contact-us') . " | " . $service_title;
 
                 $admin_name = ($admin[0]['first_name']) . " " . ($admin[0]['last_name']);
                 $define_param['to_name'] = $admin_name;
@@ -3035,9 +2909,9 @@ class Front extends CI_Controller {
                 $parameter['email'] = $emailid;
                 $parameter['phone'] = $phoneno;
                 if ($type == 'S'):
-                    $parameter['service'] = $event_title;
+                    $parameter['service'] = $service_title;
                 else:
-                    $parameter['event'] = $event_title;
+                    $parameter['service'] = $service_title;
                 endif;
 
                 $parameter['message'] = $message;
@@ -3051,9 +2925,9 @@ class Front extends CI_Controller {
                 $this->session->set_flashdata('msg_class', 'failure');
             }
             if ($type == 'E') {
-                redirect('event-details/' . slugify($event_Res[0]['title']) . '/' . $event_id);
+                redirect('service-details/' . slugify($service_Res[0]['title']) . '/' . $service_id);
             } else {
-                redirect('service-details/' . slugify($event_Res[0]['title']) . '/' . $event_id);
+                redirect('service-details/' . slugify($service_Res[0]['title']) . '/' . $service_id);
             }
         }
     }
@@ -3096,7 +2970,7 @@ class Front extends CI_Controller {
             $message = $this->input->post('message', true);
 
             $ins_data = array();
-            $ins_data['event_id'] = 0;
+            $ins_data['service_id'] = 0;
             $ins_data['admin_id'] = 0;
             $ins_data['name'] = $fullname;
             $ins_data['email'] = $emailid;
@@ -3134,118 +3008,7 @@ class Front extends CI_Controller {
             redirect('contact-us');
         }
     }
-
-    public function event_listing() {
-        /* Pagination Data Start */
-        $session_location = $this->session->userdata('location');
-        $location_id = $this->session->userdata('location_id');
-
-        $category = (int) $this->input->get('category', true);
-        $vendor = (int) $this->input->get('vendor', true);
-        $location = (int) $this->input->get('location', true);
-        $duration = $this->input->get('duration', true);
-
-        $join = array(
-            array(
-                'table' => 'app_service_category',
-                'condition' => '(app_service_category.id=app_services.category_id AND app_service_category.type="E")',
-                'jointype' => 'INNER'
-            ),
-            array(
-                'table' => 'app_city',
-                'condition' => 'app_city.city_id=app_services.city',
-                'jointype' => 'INNER'
-            ),
-            array(
-                'table' => 'app_location',
-                'condition' => 'app_location.loc_id=app_services.location',
-                'jointype' => 'INNER'
-            ), array(
-                'table' => 'app_admin',
-                'condition' => 'app_admin.id=app_services.created_by',
-                'jointype' => 'INNER'
-            ),
-        );
-
-        $cond = 'app_services.status="A" AND app_services.type="E" AND app_city.city_id=' . $location_id;
-        if (isset($category) && $category > 0) {
-            $cond .= " AND app_service_category.id=" . $category;
-        }
-        if (isset($vendor) && $vendor > 0) {
-            $cond .= " AND app_admin.id=" . $vendor;
-        }
-        if (isset($location) && $location > 0) {
-            $cond .= " AND app_location.loc_id=" . $location;
-        }
-
-
-        if (isset($duration) && in_array($duration, array("W", "M"))) {
-
-
-            if ($duration == 'W') {
-                $start = (date('D') != 'Mon') ? date('Y-m-d', strtotime('last Monday')) : date('Y-m-d');
-                $finish = (date('D') != 'Sun') ? date('Y-m-d', strtotime('next Sunday')) : date('Y-m-d');
-                $cond .= " AND DATE(app_services.start_date)>='" . $start . "' AND DATE(app_services.start_date)<='" . $finish . "'";
-            }
-
-            if ($duration == 'M') {
-                $cond .= " AND MONTH(app_services.start_date)=" . date('m');
-            }
-        }
-
-        $cond1 = 'app_services.status="A" AND app_services.type="E"';
-        $total_events1 = $this->model_front->getData("app_services", 'app_services.id', $cond, $join);
-
-        $rec_count = count($total_events1);
-
-        $rec_limit = get_site_setting('display_record_per_page');
-        $total_pages = ceil($rec_count / $rec_limit);
-
-        $get_page = $this->input->get('page', true);
-        if (isset($get_page)) {
-            $get_page = (int) $get_page;
-            if ($get_page > $total_pages) {
-                redirect(base_url('services?page=0'));
-            } else {
-                $page = (int) ($get_page + 1);
-            }
-        } else {
-            $page = 1;
-        }
-        $start_from = ($page - 1) * $rec_limit;
-        $left_rec = $rec_count - ($page * $rec_limit);
-        /* Pagination Data End */
-
-        $app_admin = $this->model_front->getData("app_admin", 'company_name,id', 'status="A" AND type!="S"', '', '', 'company_name');
-        $event_category = $this->model_front->getData("app_service_category", 'title,id', 'type="E"', '', '', 'title');
-        $app_location = $this->model_front->getData("app_location", 'loc_id,loc_title', 'loc_city_id=' . $location_id, '', '', 'loc_title');
-
-        $data['title'] = translate('events');
-        $total_event = $this->model_front->getData("app_services", 'app_admin.profile_image,app_admin.company_name,app_services.*,app_services.id as event_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title', $cond, $join, '', 'app_services.id', '', '', '', '', '', '', $start_from);
-
-        $data['total_Event'] = $total_event;
-        $data['left_rec'] = $left_rec;
-        $data['rec_limit'] = $rec_limit;
-        $data['page'] = $page;
-        $data['total_pages'] = $total_pages;
-        $data['vendor_data'] = $app_admin;
-        $data['app_location'] = $app_location;
-        $data['event_category'] = $event_category;
-
-        /* Get Top City */
-        $city_join = array(
-            array(
-                'table' => 'app_services',
-                'condition' => 'app_city.city_id=app_services.city',
-                'jointype' => 'inner'
-            )
-        );
-        $top_cities = $this->model_front->getData('app_city', 'app_city.*', 'app_services.status="A"', $city_join, 'city_id', 'city_id', '', 12, array(), '', array(), 'DESC');
-        $data['topCity_List'] = $top_cities;
-
-        $this->load->view('front/event/event-listing', $data);
-    }
-
+    
     public function service_listing() {
         $data['title'] = translate('service');
 
@@ -3315,7 +3078,7 @@ class Front extends CI_Controller {
         $service_category = $this->model_front->getData("app_service_category", 'title,id', 'type="S"', '', '', 'title');
         $app_location = $this->model_front->getData("app_location", 'loc_id,loc_title', 'loc_city_id=' . $location_id, '', '', 'loc_title');
 
-        $total_service = $this->model_front->getData("app_services", 'app_admin.profile_image,app_admin.company_name,app_services.*,app_services.id as event_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title', $cond, $join, '', 'app_services.id', '', '', '', '', '', '', $start_from);
+        $total_service = $this->model_front->getData("app_services", 'app_admin.profile_image,app_admin.company_name,app_services.*,app_services.id as service_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title', $cond, $join, '', 'app_services.id', '', '', '', '', '', '', $start_from);
         $data['total_service'] = $total_service;
         $data['left_rec'] = $left_rec;
         $data['rec_limit'] = $rec_limit;
@@ -3343,9 +3106,9 @@ class Front extends CI_Controller {
         $this->load->view('front/vendor-service', $data);
     }
 
-    public function event_book($event_id) {
+    public function service_book($service_id) {
 
-        $data['title'] = translate('book_your_event');
+        $data['title'] = translate('book_your_service');
         $join = array(
             array(
                 'table' => 'app_service_category',
@@ -3369,20 +3132,20 @@ class Front extends CI_Controller {
             )
         );
 
-        $cond = "app_services.status='A' AND app_services.type='E' AND app_services.id= '$event_id'";
-        $field = 'app_services.*,app_services.id as event_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title,CONCAT(app_admin.first_name," " ,app_admin.last_name) as Creater_name';
-        $event = $this->model_front->getData("app_services", $field, $cond, $join, '', 'app_services.id', '', $this->Per_Page, array(), '', array(), '', '', $sort_by = 'N');
+        $cond = "app_services.status='A' AND app_services.type='E' AND app_services.id= '$service_id'";
+        $field = 'app_services.*,app_services.id as service_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title,CONCAT(app_admin.first_name," " ,app_admin.last_name) as Creater_name';
+        $service = $this->model_front->getData("app_services", $field, $cond, $join, '', 'app_services.id', '', $this->Per_Page, array(), '', array(), '', '', $sort_by = 'N');
 
 
         //get user details
         $customer_id_sess = (int) $this->session->userdata('CUST_ID');
         $customer = $this->model_front->getData("app_customer", "id,first_name,last_name,email", "id=" . $customer_id_sess);
-        $data['event_payment_type'] = $event[0]['payment_type'];
-        $data['event_data'] = $event[0];
+        $data['service_payment_type'] = $service[0]['payment_type'];
+        $data['service_data'] = $service[0];
         $date = date('d-m-Y');
         $data['current_date'] = $date;
         $data['customer_data'] = isset($customer[0]) ? $customer[0] : array();
-        $this->load->view('front/event/event_book', $data);
+        $this->load->view('front/service/service_book', $data);
     }
 
     public function search() {
@@ -3396,8 +3159,8 @@ class Front extends CI_Controller {
             $data['search_string'] = $search_string;
             $like = array();
 
-            /* Event Join Data */
-            $event_join = array(
+            /* service Join Data */
+            $service_join = array(
                 array(
                     'table' => 'app_service_category',
                     'condition' => '(app_service_category.id=app_services.category_id AND app_service_category.type="E")',
@@ -3482,7 +3245,7 @@ class Front extends CI_Controller {
             }
 
             $field = "app_services.*,app_location.loc_title,app_city.city_title,app_admin.phone,app_admin.company_name,app_service_category.title as category_title";
-            $data['event'] = $this->model_front->getData("app_services", $field, "app_services.city='$city_id' AND app_services.type='E' AND app_services.status='A'", $event_join, "", "", "", "", array(), "", $like);
+            $data['service'] = $this->model_front->getData("app_services", $field, "app_services.city='$city_id' AND app_services.type='E' AND app_services.status='A'", $service_join, "", "", "", "", array(), "", $like);
             $data['service'] = $this->model_front->getData("app_services", $field, "app_services.city='$city_id' AND app_services.type='S' AND app_services.status='A'", $service_join, "", "", "", "", array(), "", $like);
             /* orgnizer */
             if (!empty($search_string)) {
@@ -3496,7 +3259,7 @@ class Front extends CI_Controller {
             $data['orgnizer'] = $this->model_front->getData("app_admin", '*', "", array(), "", "", "", "", array(), "", $like_orgnizer);
             if (isset($data['orgnizer']) && count($data['orgnizer']) > 0) {
                 $vendor_id = $data['orgnizer'][0]['id'];
-                $data['total_event'] = $this->model_front->Totalcount("app_services", "created_by='$vendor_id'");
+                $data['total_service'] = $this->model_front->Totalcount("app_services", "created_by='$vendor_id'");
             }
             /* Get Top City */
             $city_join = array(
@@ -3558,7 +3321,7 @@ class Front extends CI_Controller {
         $this->load->view('front/profile/invoice', $data);
     }
 
-    public function event_booking_two_checkout() {
+    public function service_booking_two_checkout() {
         $get_current_currency = get_current_currency();
 
         if (check_payment_method('2checkout') && $get_current_currency['2checkout_supported'] == 'Y') {
@@ -3570,56 +3333,56 @@ class Front extends CI_Controller {
             }
 
             $description = $this->input->post('description');
-            $event_id = (int) $this->input->post('event_id');
+            $service_id = (int) $this->input->post('service_id');
             $bookdate = $this->input->post('start_date');
 
-            $event_payment_type = $this->input->post('event_payment_type');
-            $event_booking_seat = $this->input->post('total_booked_seat');
-            $event_category_id = $this->input->post('event_category_id');
+            $service_payment_type = $this->input->post('service_payment_type');
+            $service_booking_seat = $this->input->post('total_booked_seat');
+            $service_category_id = $this->input->post('service_category_id');
 
             //Ticket type post data 
-            $event_amount = $this->input->post('amount');
-            $event_main_ticket = $this->input->post('main_ticket');
+            $service_amount = $this->input->post('amount');
+            $service_main_ticket = $this->input->post('main_ticket');
             $ticket_type_id = $this->input->post('ticket_type_id');
             $total_seat_book = $this->input->post('total_seat_book');
-            $event_price = 0;
+            $service_price = 0;
             $total_tickets = 0;
 
-            //Check valid event id
-            if ($event_id > 0):
-                $event_data = get_full_event_service_data($event_id);
-                if (isset($event_data['id']) && $event_data['id'] > 0 && $event_data['type'] == 'E'):
+            //Check valid service id
+            if ($service_id > 0):
+                $service_data = get_full_service_service_data($service_id);
+                if (isset($service_data['id']) && $service_data['id'] > 0 && $service_data['type'] == 'E'):
 
-                    $event_title = isset($event_data['title']) ? ($event_data['title']) : '';
-                    $event_start_date = isset($event_data['start_date']) ? get_formated_date($event_data['start_date'], 'Y') : '';
-                    $event_end_date = isset($event_data['end_date']) ? get_formated_date($event_data['end_date'], 'Y') : '';
-                    $type = $event_data['type'];
+                    $service_title = isset($service_data['title']) ? ($service_data['title']) : '';
+                    $service_start_date = isset($service_data['start_date']) ? get_formated_date($service_data['start_date'], 'Y') : '';
+                    $service_end_date = isset($service_data['end_date']) ? get_formated_date($service_data['end_date'], 'Y') : '';
+                    $type = $service_data['type'];
 
                     //Check Even ticket
                     for ($i = 0; $i < count($ticket_type_id); $i++):
                         $app_services_ticket_type = $this->db->query("SELECT * FROM app_services_ticket_type WHERE ticket_type_id=" . $ticket_type_id[$i])->row_array();
 
                         if (isset($app_services_ticket_type['available_ticket']) && $total_seat_book[$i] <= $app_services_ticket_type['available_ticket']) {
-                            $event_price = $event_price + ($app_services_ticket_type['ticket_type_price'] * $total_seat_book[$i]);
+                            $service_price = $service_price + ($app_services_ticket_type['ticket_type_price'] * $total_seat_book[$i]);
                             $total_tickets = ((int) $total_tickets + (int) $total_seat_book[$i]);
                         } else {
                             $this->session->set_flashdata('msg_class', 'failure');
                             $this->session->set_flashdata('msg', translate('seat_not_available'));
-                            redirect(base_url('event-details/' . slugify($event_title) . '/' . $event_id));
+                            redirect(base_url('service-details/' . slugify($service_title) . '/' . $service_id));
                         }
                     endfor;
 
-                    if (($total_tickets != $event_main_ticket) || ($event_amount != $event_price)) {
+                    if (($total_tickets != $service_main_ticket) || ($service_amount != $service_price)) {
                         $this->session->set_flashdata('msg_class', 'failure');
                         $this->session->set_flashdata('msg', translate('something_wrong'));
-                        redirect(base_url('event-details/' . slugify($event_title) . '/' . $event_id));
+                        redirect(base_url('service-details/' . slugify($service_title) . '/' . $service_id));
                     } else {
 
-                        $final_price = $event_price;
+                        $final_price = $service_price;
                         $insert['customer_id'] = $customer_id;
                         $insert['description'] = $description;
-                        $insert['event_id'] = $event_id;
-                        $insert['event_booked_seat'] = $total_tickets;
+                        $insert['service_id'] = $service_id;
+                        $insert['service_booked_seat'] = $total_tickets;
                         $insert['start_date'] = date("Y-m-d", strtotime($bookdate));
                         $insert['start_time'] = date("H:i:s", strtotime($bookdate));
                         $insert['payment_status'] = 'IN';
@@ -3631,7 +3394,7 @@ class Front extends CI_Controller {
                         //Insert Ticket type 
                         for ($i = 0; $i < count($ticket_type_id); $i++):
                             $app_services_ticket_type_booking['ticket_type_id'] = $ticket_type_id[$i];
-                            $app_services_ticket_type_booking['event_id'] = $event_id;
+                            $app_services_ticket_type_booking['service_id'] = $service_id;
                             $app_services_ticket_type_booking['booking_id'] = $app_service_appointment;
                             $app_services_ticket_type_booking['status'] = 'IN';
                             $app_services_ticket_type_booking['total_ticket'] = $total_seat_book[$i];
@@ -3643,8 +3406,8 @@ class Front extends CI_Controller {
                         $this->session->set_userdata('booking_id', $app_service_appointment);
                         $this->session->set_userdata('description', $description);
                         $this->session->set_userdata('bookdate', $bookdate);
-                        $this->session->set_userdata('event_id', $event_id);
-                        $this->session->set_userdata('event_price', $final_price);
+                        $this->session->set_userdata('service_id', $service_id);
+                        $this->session->set_userdata('service_price', $final_price);
 
                         include APPPATH . 'third_party/2checkout/Twocheckout.php';
 
@@ -3670,7 +3433,7 @@ class Front extends CI_Controller {
                             'sid' => get_payment_setting('2checkout_account_no'),
                             'mode' => '2CO',
                             'currency_code' => $get_current_currency['code'],
-                            'li_0_name' => 'Event Ticket Booking Payment',
+                            'li_0_name' => 'service Ticket Booking Payment',
                             'li_0_price' => $final_price,
                             'card_holder_name' => $this->input->post('first_name') . " " . $this->input->post('last_name'),
                             'email' => $this->input->post('email'),

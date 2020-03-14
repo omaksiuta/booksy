@@ -151,9 +151,9 @@ function get_app_testimonial() {
 }
 
 
-function get_event_price_by_id($event_id, $type = 'P') {
+function get_service_price_by_id($service_id, $type = 'P') {
     $CI = & get_instance();
-    $res = $CI->db->query("SELECT SUM(`ticket_type_price`) as price,MIN(ticket_type_price) as min_price,MAX(ticket_type_price) as max_price FROM `app_services_ticket_type` WHERE `event_id`=" . $event_id)->row_array();
+    $res = $CI->db->query("SELECT SUM(`ticket_type_price`) as price,MIN(ticket_type_price) as min_price,MAX(ticket_type_price) as max_price FROM `app_services_ticket_type` WHERE `service_id`=" . $service_id)->row_array();
     if ($res['price'] > 0) {
         if ($type == 'P') {
             return price_format($res['price']);
@@ -165,7 +165,7 @@ function get_event_price_by_id($event_id, $type = 'P') {
     }
 }
 
-function update_event_status() {
+function update_service_status() {
     $CI = & get_instance();
 
     if (get_site_setting('enable_membership') == 'Y') {
@@ -179,7 +179,7 @@ function update_event_status() {
     $CI->db->query("DELETE FROM app_service_appointment WHERE created_on + INTERVAL 5 MINUTE<'" . date('Y-m-d H:i:s') . "' AND payment_status='IN'");
 }
 
-function get_service_event_by_id($id) {
+function get_service_service_by_id($id) {
     $CI = & get_instance();
     $CI->db->select('*');
     $CI->db->from('app_services');
@@ -301,57 +301,57 @@ function get_admin_amount($amount) {
     return number_format((float) $admin_amount, 2, '.', '');
 }
 
-function get_discount_price_by_date($event_id, $booking_date) {
+function get_discount_price_by_date($service_id, $booking_date) {
 
     $CI = & get_instance();
-//get Event data
+//get service data
     $CI->db->select('*');
     $CI->db->from('app_services');
-    $where = "id=" . $event_id . " AND status='A'";
+    $where = "id=" . $service_id . " AND status='A'";
     $CI->db->where($where);
     $app_services_data = $CI->db->get()->row_array();
 
     if (isset($app_services_data['id']) && $app_services_data['id'] > 0) {
-//get event price details
-        $event_price = 0;
+//get service price details
+        $service_price = 0;
         $discountDate = date('Y-m-d', strtotime($booking_date));
         if (isset($app_services_data['discount']) && $app_services_data['discount'] > 0 && isset($app_services_data['discounted_price']) && $app_services_data['discounted_price'] > 0 && ($discountDate >= $app_services_data['from_date']) && ($discountDate <= $app_services_data['to_date'])) {
-            $event_price = $app_services_data['discounted_price'];
+            $service_price = $app_services_data['discounted_price'];
         } else {
-            $event_price = $app_services_data['price'];
+            $service_price = $app_services_data['price'];
         }
-        return $event_price;
+        return $service_price;
     } else {
         return 0;
     }
 }
 
-function get_price($event_id, $discountDates) {
+function get_price($service_id, $discountDates) {
     $CI = & get_instance();
-//get Event data
+//get service data
     $CI->db->select('*');
     $CI->db->from('app_services');
-    $where = "id=" . $event_id . " AND status='A'";
+    $where = "id=" . $service_id . " AND status='A'";
     $CI->db->where($where);
     $app_services_data = $CI->db->get()->row_array();
 
-    $event_price = 0;
+    $service_price = 0;
     $discountDate = date('Y-m-d', strtotime($discountDates));
     if (isset($app_services_data['discounted_price']) && $app_services_data['discounted_price'] > 0 && ($discountDate >= $app_services_data['from_date']) && ($discountDate <= $app_services_data['to_date'])) {
-        $event_price = $app_services_data['discounted_price'];
+        $service_price = $app_services_data['discounted_price'];
     } else {
-        $event_price = $app_services_data['price'];
+        $service_price = $app_services_data['price'];
     }
-    return $event_price;
+    return $service_price;
 }
 
-function get_discount_price($event_id, $discount_coupon, $discount_coupon_id, $booking_date) {
+function get_discount_price($service_id, $discount_coupon, $discount_coupon_id, $booking_date) {
 
     $CI = & get_instance();
-//get Event data
+//get service data
     $CI->db->select('*');
     $CI->db->from('app_services');
-    $where = "id=" . $event_id . " AND status='A'";
+    $where = "id=" . $service_id . " AND status='A'";
     $CI->db->where($where);
     $app_services_data = $CI->db->get()->row_array();
 
@@ -366,60 +366,60 @@ function get_discount_price($event_id, $discount_coupon, $discount_coupon_id, $b
         if (count($coupon_signle_data) > 0) {
 
             $valid_till = $coupon_signle_data['valid_till'];
-            $event_id_array = $coupon_signle_data['event_id'];
+            $service_id_array = $coupon_signle_data['service_id'];
             $discount_type = $coupon_signle_data['discount_type'];
             $discount_value = $coupon_signle_data['discount_value'];
 
-//get event price details
-            $event_price = 0;
+//get service price details
+            $service_price = 0;
             $discountDate = date('Y-m-d', strtotime($booking_date));
             if (isset($app_services_data['discounted_price']) && $app_services_data['discounted_price'] > 0 && ($discountDate >= $app_services_data['from_date']) && ($discountDate <= $app_services_data['to_date'])) {
-                $event_price = $app_services_data['discounted_price'];
+                $service_price = $app_services_data['discounted_price'];
             } else {
-                $event_price = $app_services_data['price'];
+                $service_price = $app_services_data['price'];
             }
 
-            $final_price = $event_price;
-//Apply coupon disocunt on event price
+            $final_price = $service_price;
+//Apply coupon disocunt on service price
             if ($discount_type == 'P') {
                 $final_price = ($final_price - ($final_price * ($discount_value / 100)));
             } else {
                 $final_price = $final_price - $discount_value;
             }
 
-            $event_id_ary = json_decode($event_id_array);
+            $service_id_ary = json_decode($service_id_array);
 
             if ($valid_till >= date('Y-m-d')) {
 
-                if (in_array($event_id, $event_id_ary)) {
+                if (in_array($service_id, $service_id_ary)) {
                     return number_format((float) $final_price, 2, '.', '');
                 } else {
                     $discountDate = date('Y-m-d');
-                    $event_price = $app_services_data['price'];
+                    $service_price = $app_services_data['price'];
                     if (isset($app_services_data['discounted_price']) && $app_services_data['discounted_price'] > 0 && ($discountDate >= $app_services_data['from_date']) && ($discountDate <= $app_services_data['to_date'])) {
-                        $event_price = $app_services_data['discounted_price'];
+                        $service_price = $app_services_data['discounted_price'];
                     }
-                    return number_format((float) $event_price, 2, '.', '');
+                    return number_format((float) $service_price, 2, '.', '');
                 }
             } else {
                 $discountDate = date('Y-m-d');
-                $event_price = $app_services_data['price'];
+                $service_price = $app_services_data['price'];
                 if (isset($app_services_data['discounted_price']) && $app_services_data['discounted_price'] > 0 && ($discountDate >= $app_services_data['from_date']) && ($discountDate <= $app_services_data['to_date'])) {
-                    $event_price = $app_services_data['discounted_price'];
+                    $service_price = $app_services_data['discounted_price'];
                 }
-                return number_format((float) $event_price, 2, '.', '');
+                return number_format((float) $service_price, 2, '.', '');
             }
         } else {
             $discountDate = date('Y-m-d');
-            $event_price = $app_services_data['price'];
+            $service_price = $app_services_data['price'];
             if (isset($app_services_data['discounted_price']) && $app_services_data['discounted_price'] > 0 && ($discountDate >= $app_services_data['from_date']) && ($discountDate <= $app_services_data['to_date'])) {
-                $event_price = $app_services_data['discounted_price'];
+                $service_price = $app_services_data['discounted_price'];
             }
-            return number_format((float) $event_price, 2, '.', '');
+            return number_format((float) $service_price, 2, '.', '');
         }
     } else {
-        $event_price = isset($app_services_data['price']) ? $app_services_data['price'] : 0;
-        return number_format((float) $event_price, 2, '.', '');
+        $service_price = isset($app_services_data['price']) ? $app_services_data['price'] : 0;
+        return number_format((float) $service_price, 2, '.', '');
     }
 }
 
@@ -478,12 +478,12 @@ function get_slote_count($id) {
     $type = $CI->session->userdata('Type_' . ucfirst($CI->uri->segment(1)));
     $vendor_id = $CI->session->userdata('Vendor_ID');
     $CI->db->select('COUNT(app_service_appointment.slot_time) as slot_time');
-    $CI->db->join('app_services', 'app_services.id=app_service_appointment.event_id', 'left');
+    $CI->db->join('app_services', 'app_services.id=app_service_appointment.service_id', 'left');
     $CI->db->from('app_service_appointment');
     if ($type == 'V') {
-        $where = "event_id='$id' AND app_services.created_by='$vendor_id' AND app_service_appointment.status='A'";
+        $where = "service_id='$id' AND app_services.created_by='$vendor_id' AND app_service_appointment.status='A'";
     } else {
-        $where = "event_id=" . $id . " AND app_service_appointment.status='A'";
+        $where = "service_id=" . $id . " AND app_service_appointment.status='A'";
     }
     $CI->db->where($where);
     $user_data = $CI->db->get()->result_array();
@@ -494,13 +494,13 @@ function get_total_booked_seat_count($id) {
     $CI = & get_instance();
     $type = $CI->session->userdata('Type_' . ucfirst($CI->uri->segment(1)));
     $vendor_id = $CI->session->userdata('Vendor_ID');
-    $CI->db->select('SUM(app_service_appointment.event_booked_seat) as Total_booked');
-    $CI->db->join('app_services', 'app_services.id=app_service_appointment.event_id', 'left');
+    $CI->db->select('SUM(app_service_appointment.service_booked_seat) as Total_booked');
+    $CI->db->join('app_services', 'app_services.id=app_service_appointment.service_id', 'left');
     $CI->db->from('app_service_appointment');
     if ($type == 'V') {
-        $where = "event_id='$id' AND app_services.created_by='$vendor_id'";
+        $where = "service_id='$id' AND app_services.created_by='$vendor_id'";
     } else {
-        $where = "event_id=" . $id;
+        $where = "service_id=" . $id;
     }
     $CI->db->where($where);
     $user_data = $CI->db->get()->result_array();
@@ -714,11 +714,11 @@ function check_admin_image($image) {
     }
 }
 
-function check_event_image($image) {
+function check_service_image($image) {
     if (file_exists(dirname(BASEPATH) . "/" . $image) && pathinfo($image, PATHINFO_EXTENSION) != '') {
         return base_url() . $image;
     } else {
-        return $img_src = base_url() . UPLOAD_PATH . "event/events.png";
+        return $img_src = base_url() . UPLOAD_PATH . "service/services.png";
     }
 }
 
@@ -943,7 +943,7 @@ function get_message($date, $chat_id) {
     return $message;
 }
 
-function get_full_event_service_data($id) {
+function get_full_service_service_data($id) {
     $CI = & get_instance();
     $CI->db->select('app_services.*,app_city.city_title,app_location.loc_title,app_service_category.title as category_title,app_admin.profile_image,app_admin.first_name,app_admin.last_name,app_admin.email,app_admin.phone,app_admin.address as vendor_address,app_admin.company_name,');
     $CI->db->join("app_admin", "app_services.created_by = app_admin.id", "INNER");
@@ -955,17 +955,17 @@ function get_full_event_service_data($id) {
     return $data_ary;
 }
 
-function get_full_event_service_data_by_booking_id($id) {
+function get_full_service_service_data_by_booking_id($id) {
     $CI = & get_instance();
 
     $select_field = "app_customer.id as customer_id,app_customer.first_name as customer_first_name,app_customer.email as customer_email,app_customer.last_name as customer_last_name,";
-    $select_field .= "app_services.id as event_id,app_services.start_date as event_start_date,app_services.end_date as event_end_date,app_services.type,app_services.address,app_services.title,app_services.type,app_services.payment_type,app_services.type,app_city.city_title,app_location.loc_title,";
+    $select_field .= "app_services.id as service_id,app_services.start_date as service_start_date,app_services.end_date as service_end_date,app_services.type,app_services.address,app_services.title,app_services.type,app_services.payment_type,app_services.type,app_city.city_title,app_location.loc_title,";
     $select_field .= "app_service_category.title as category_title,";
     $select_field .= "app_admin.profile_image,app_admin.first_name,app_admin.address as vendor_address,app_admin.last_name,app_admin.email,app_admin.phone,app_admin.address as vendor_address,app_admin.company_name,";
-    $select_field .= "app_service_appointment.id as booking_id,app_service_appointment.staff_id,app_service_appointment.addons_id,app_service_appointment.event_booked_seat,app_service_appointment.description,app_service_appointment.start_date,app_service_appointment.start_time,app_service_appointment.slot_time,app_service_appointment.price,app_service_appointment.status,app_service_appointment.payment_status,app_service_appointment.created_on";
+    $select_field .= "app_service_appointment.id as booking_id,app_service_appointment.staff_id,app_service_appointment.addons_id,app_service_appointment.service_booked_seat,app_service_appointment.description,app_service_appointment.start_date,app_service_appointment.start_time,app_service_appointment.slot_time,app_service_appointment.price,app_service_appointment.status,app_service_appointment.payment_status,app_service_appointment.created_on";
 
     $CI->db->select($select_field);
-    $CI->db->join("app_services", "app_services.id = app_service_appointment.event_id", "INNER");
+    $CI->db->join("app_services", "app_services.id = app_service_appointment.service_id", "INNER");
     $CI->db->join("app_customer", "app_customer.id = app_service_appointment.customer_id", "INNER");
     $CI->db->join("app_admin", "app_services.created_by = app_admin.id", "INNER");
     $CI->db->join("app_city", "app_services.city = app_city.city_id", "INNER");
@@ -1120,14 +1120,14 @@ function get_languages() {
     return $languages = $CI->db->select('*')->where('status', 'A')->from('app_language')->get()->result_array();
 }
 
-function cal_avarage_rating($type = 'quality_rating', $vendor_id = '', $event_id = '') {
+function cal_avarage_rating($type = 'quality_rating', $vendor_id = '', $service_id = '') {
     $CI = & get_instance();
     $CI->db->select('FORMAT((5 * sum(' . $type . ') / (count(id) * 5)), 2) as average');
     if ($vendor_id != '') {
         $CI->db->where('vendor_id', $vendor_id);
     }
-    if ($event_id != '') {
-        $CI->db->where('event_id', $event_id);
+    if ($service_id != '') {
+        $CI->db->where('service_id', $service_id);
     }
     $query = $CI->db->get('app_vendor_review');
     return $query->row()->average;
@@ -1149,18 +1149,18 @@ function chek_rating($id, $appointment_id) {
     $customer_id = $CI->session->userdata('CUST_ID');
     $CI->db->select("id");
     $CI->db->from('app_vendor_review');
-    $where = "event_id='$id' AND customer_id='$customer_id' AND appointment_id=" . $appointment_id;
+    $where = "service_id='$id' AND customer_id='$customer_id' AND appointment_id=" . $appointment_id;
     $CI->db->where($where);
     $avr_rating = $CI->db->get()->result_array();
     return isset($avr_rating) && count($avr_rating) > 0 ? 'true' : 'false';
 }
 
-function event_rating($appointment_id, $event_id) {
+function service_rating($appointment_id, $service_id) {
     if ($appointment_id) {
         $CI = & get_instance();
         $CI->db->select('*');
         $CI->db->where('appointment_id', $appointment_id);
-        $CI->db->where('event_id', $event_id);
+        $CI->db->where('service_id', $service_id);
         $query = $CI->db->get('app_vendor_review');
         $res = $query->row_array();
         return isset($res) ? $res : array();
@@ -1169,22 +1169,22 @@ function event_rating($appointment_id, $event_id) {
     }
 }
 
-function check_multiple_book_status($start_date, $start_time, $type, $event_id, $staff_member_id) {
-//echo $start_date.", ".$start_time.", ".$type.", ".$event_id;exit;
+function check_multiple_book_status($start_date, $start_time, $type, $service_id, $staff_member_id) {
+//echo $start_date.", ".$start_time.", ".$type.", ".$service_id;exit;
     $CI = & get_instance();
     $CI->load->model('model_front');
-//get event data
-    $event = $CI->model_front->getData("app_services", "*", "id=" . $event_id);
-    $min = $event[0]['slot_time'];
-    $slot_time = $event[0]['slot_time'];
-    $multiple_slotbooking_allow = $event[0]['multiple_slotbooking_allow'];
-    $multiple_slotbooking_limit = $event[0]['multiple_slotbooking_limit'];
+//get service data
+    $service = $CI->model_front->getData("app_services", "*", "id=" . $service_id);
+    $min = $service[0]['slot_time'];
+    $slot_time = $service[0]['slot_time'];
+    $multiple_slotbooking_allow = $service[0]['multiple_slotbooking_allow'];
+    $multiple_slotbooking_limit = $service[0]['multiple_slotbooking_limit'];
     $staff_member_id = (int) $staff_member_id;
 
     if ($staff_member_id > 0):
-        $multiple_boook_result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $start_time . "' AND staff_id=" . $staff_member_id . " AND start_date = '" . $start_date . "' AND event_id=" . $event_id . " AND status IN ('A')");
+        $multiple_boook_result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $start_time . "' AND staff_id=" . $staff_member_id . " AND start_date = '" . $start_date . "' AND service_id=" . $service_id . " AND status IN ('A')");
     else:
-        $multiple_boook_result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $start_time . "' AND start_date = '" . $start_date . "' AND event_id=" . $event_id . " AND status IN ('A')");
+        $multiple_boook_result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $start_time . "' AND start_date = '" . $start_date . "' AND service_id=" . $service_id . " AND status IN ('A')");
     endif;
 
 
@@ -1194,9 +1194,9 @@ function check_multiple_book_status($start_date, $start_time, $type, $event_id, 
         } else {
 
             if ($staff_member_id > 0):
-                $check_booking_existing = $CI->model_front->getData("app_service_appointment", "id", "start_date='" . $start_date . "' AND staff_id=" . $staff_member_id . " AND start_time='" . $start_time . "' AND type='$type' AND event_id=" . $event_id . " AND status IN ('A')");
+                $check_booking_existing = $CI->model_front->getData("app_service_appointment", "id", "start_date='" . $start_date . "' AND staff_id=" . $staff_member_id . " AND start_time='" . $start_time . "' AND type='$type' AND service_id=" . $service_id . " AND status IN ('A')");
             else:
-                $check_booking_existing = $CI->model_front->getData("app_service_appointment", "id", "start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND type='$type' AND event_id=" . $event_id . " AND status IN ('A')");
+                $check_booking_existing = $CI->model_front->getData("app_service_appointment", "id", "start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND type='$type' AND service_id=" . $service_id . " AND status IN ('A')");
             endif;
 
             if (count($check_booking_existing) > 0) {
@@ -1207,9 +1207,9 @@ function check_multiple_book_status($start_date, $start_time, $type, $event_id, 
         }
     } else {
         if ($staff_member_id > 0):
-            $check_booking_existing = $CI->model_front->getData("app_service_appointment", "id", "start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND staff_id=" . $staff_member_id . " AND type='$type' AND event_id=" . $event_id . " AND status IN ('A')");
+            $check_booking_existing = $CI->model_front->getData("app_service_appointment", "id", "start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND staff_id=" . $staff_member_id . " AND type='$type' AND service_id=" . $service_id . " AND status IN ('A')");
         else:
-            $check_booking_existing = $CI->model_front->getData("app_service_appointment", "id", "start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND type='$type' AND event_id=" . $event_id . " AND status IN ('A')");
+            $check_booking_existing = $CI->model_front->getData("app_service_appointment", "id", "start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND type='$type' AND service_id=" . $service_id . " AND status IN ('A')");
         endif;
 
         if (count($check_booking_existing) > 0) {
@@ -1220,7 +1220,7 @@ function check_multiple_book_status($start_date, $start_time, $type, $event_id, 
     }
 }
 
-function check_slot_available($eventid, $date, $staff_member_value) {
+function check_slot_available($serviceid, $date, $staff_member_value) {
     $staff_member_value = (int) $staff_member_value;
 
     if ($date < date("Y-m-d")) {
@@ -1229,35 +1229,35 @@ function check_slot_available($eventid, $date, $staff_member_value) {
         $CI = & get_instance();
         $customer_id = (int) $CI->session->userdata('CUST_ID');
         $CI->load->model('model_front');
-        //get event data
-        $event = $CI->model_front->getData("app_services", "*", "id=" . $eventid);
+        //get service data
+        $service = $CI->model_front->getData("app_services", "*", "id=" . $serviceid);
 
-        if (count($event) > 0) {
-            $min = $event[0]['slot_time'];
-            $slot_time = $event[0]['slot_time'];
-            $multiple_slotbooking_allow = $event[0]['multiple_slotbooking_allow'];
-            $multiple_slotbooking_limit = $event[0]['multiple_slotbooking_limit'];
+        if (count($service) > 0) {
+            $min = $service[0]['slot_time'];
+            $slot_time = $service[0]['slot_time'];
+            $multiple_slotbooking_allow = $service[0]['multiple_slotbooking_allow'];
+            $multiple_slotbooking_limit = $service[0]['multiple_slotbooking_limit'];
 
-            $j = date("h:i a", strtotime("-" . $slot_time . "minute", strtotime($event[0]['end_time'])));
-            $datetime1 = new DateTime($event[0]['start_time']);
-            $datetime2 = new DateTime($event[0]['end_time']);
+            $j = date("h:i a", strtotime("-" . $slot_time . "minute", strtotime($service[0]['end_time'])));
+            $datetime1 = new DateTime($service[0]['start_time']);
+            $datetime2 = new DateTime($service[0]['end_time']);
             $interval = $datetime1->diff($datetime2);
             $extra_minute = $interval->format('%i');
             $minute = $interval->format('%h') * 60 + $extra_minute;
-            $gap_time = ($event[0]['padding_time']);
+            $gap_time = ($service[0]['padding_time']);
 
             $time_array = array();
             $var_gap_time = 1;
             for ($i = 1; $i <= $minute / ($slot_time + $gap_time); $i++) {
                 if ($i == 1) {
-                    $time_array[] = date("H:i", strtotime($event[0]['start_time']));
+                    $time_array[] = date("H:i", strtotime($service[0]['start_time']));
                 } else {
-                    $time_array[] = date("H:i", strtotime("+" . (($slot_time * ($i - 1)) + $gap_time * $var_gap_time) . " minute", strtotime($event[0]['start_time'])));
+                    $time_array[] = date("H:i", strtotime("+" . (($slot_time * ($i - 1)) + $gap_time * $var_gap_time) . " minute", strtotime($service[0]['start_time'])));
                     $var_gap_time++;
                 }
             }
 
-            if (($key = array_search(date("H:i", strtotime($event[0]['end_time'])), $time_array)) !== false) {
+            if (($key = array_search(date("H:i", strtotime($service[0]['end_time'])), $time_array)) !== false) {
                 unset($time_array[$key]);
             }
 
@@ -1275,7 +1275,7 @@ function check_slot_available($eventid, $date, $staff_member_value) {
             if ($staff_member_value > 0):
                 $result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $date . "' AND staff_id=" . $staff_member_value . " AND status IN ('A')");
             else:
-                $result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $date . "' AND event_id=" . $eventid . " AND status IN ('A')");
+                $result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $date . "' AND service_id=" . $serviceid . " AND status IN ('A')");
             endif;
 
 
@@ -1284,9 +1284,9 @@ function check_slot_available($eventid, $date, $staff_member_value) {
                     if ($min == $value['slot_time']) {
 
                         if ($staff_member_value > 0):
-                            $multiple_boook_result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND staff_id=" . $staff_member_value . " AND start_date = '" . $date . "' AND event_id=" . $eventid . " AND status IN ('A')");
+                            $multiple_boook_result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND staff_id=" . $staff_member_value . " AND start_date = '" . $date . "' AND service_id=" . $serviceid . " AND status IN ('A')");
                         else:
-                            $multiple_boook_result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND event_id=" . $eventid . " AND status IN ('A')");
+                            $multiple_boook_result = $CI->model_front->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $date . "' AND service_id=" . $serviceid . " AND status IN ('A')");
                         endif;
 
                         if (isset($multiple_slotbooking_allow) && $multiple_slotbooking_allow == 'Y') {
