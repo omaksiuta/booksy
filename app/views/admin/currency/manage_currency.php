@@ -34,7 +34,7 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                                 <thead>
                                     <tr>
                                         <th class="text-center">#</th>
-                                        <th class="text-center"><?php echo translate('title'); ?></th>
+                                        <th class="text-left"><?php echo translate('title'); ?></th>
                                         <th class="text-center"><?php echo translate('code'); ?></th>
                                         <th class="text-center">Currency Code</th>
                                         <th class="text-center">Stripe Supported</th>
@@ -62,7 +62,7 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                                             ?>
                                             <tr>
                                                 <td class="text-center"><?php echo $i; ?></td>
-                                                <td class="text-center"><?php echo $row['title']; ?></td>
+                                                <td class="text-left"><?php echo $row['title']; ?></td>
                                                 <td class="text-center"><?php echo $row['code']; ?></td>
                                                 <td class="text-center"><?php echo $row['currency_code']; ?></td>
                                                 <td class="text-center"><?php echo $stripe_supported; ?></td>

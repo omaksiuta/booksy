@@ -1006,9 +1006,9 @@ class Service extends MY_Controller {
 
         if ($this->login_type == 'V') {
             $cond .= " AND app_services.created_by = $this->login_id";
-            $vendor_condition .= "app_services.type='S' AND app_services.created_by=" . $this->login_id;
+            $vendor_condition .= "AND app_services.created_by=" . $this->login_id;
         } else {
-            $vendor_condition .= "app_services.type='S'";
+            $vendor_condition .= "";
             $cond .= '';
         }
         if ((int) $id > 0) {

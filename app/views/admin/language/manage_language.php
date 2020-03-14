@@ -58,7 +58,7 @@ $folder_name = 'admin';
                                             <td class="td-actions text-center" w>
                                                 <a href="<?php echo base_url($translate_url); ?>" class="btn btn-sm bg-primary-light" title="<?php echo translate('translate_word'); ?>" data-toggle="tooltip" data-placement="top"><i class="fa fa-language"></i> <?php echo translate('translate_word'); ?></a>
                                                 <a href="<?php echo base_url($update_url); ?>" class="btn btn-sm bg-info-light" title="<?php echo translate('edit'); ?>" data-toggle="tooltip" data-placement="top"><i class="fe fe-pencil"></i></a>
-                                                <span class="d-inline-block" title="<?php echo translate('delete'); ?>" data-toggle="tooltip" data-placement="top"><a data-toggle="modal" onclick='DeleteRecord(this)' data-target="#delete-record" data-id="<?php echo (int) $row['id']; ?>" class="btn bt-sm bg-danger-light"><i class="fe fe-trash"></i></a></span>
+                                                <span class="d-inline-block" title="<?php echo translate('delete'); ?>" data-toggle="tooltip" data-placement="top"><a data-toggle="modal" onclick='DeleteRecord(this)' data-target="#delete-record" data-id="<?php echo (int) $row['id']; ?>" class="btn btn-sm bg-danger-light"><i class="fe fe-trash"></i></a></span>
                                             </td>
                                         </tr>
                                         <?php

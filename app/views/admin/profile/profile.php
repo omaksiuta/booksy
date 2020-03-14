@@ -45,7 +45,7 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="company_name"> <?php echo translate('company_name'); ?> <small class="required">*</small></label>
+                                    <label for="company_name"><?php echo translate('company_name'); ?> <small class="required">*</small></label>
                                     <input type="text" autocomplete="off" required="" id="company_name" name="company_name" value="<?php echo $company_name; ?>" class="form-control" placeholder="<?php echo translate('company_name'); ?>">
                                     <?php echo form_error('company_name'); ?>
 
@@ -57,7 +57,7 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="first_name"> <?php echo translate('first_name'); ?> <small class="required">*</small></label>
+                                    <label for="first_name"><?php echo translate('first_name'); ?> <small class="required">*</small></label>
                                     <input type="text" autocomplete="off" id="first_name" name="first_name" value="<?php echo $first_name; ?>" class="form-control" placeholder="<?php echo translate('first'); ?><?php echo translate('name'); ?>">
                                     <?php echo form_error('first_name'); ?>
 
@@ -66,7 +66,7 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="last_name"> <?php echo translate('last_name'); ?> <small class="required">*</small></label>
+                                    <label for="last_name"><?php echo translate('last_name'); ?> <small class="required">*</small></label>
                                     <input type="text" autocomplete="off" id="last_name" name="last_name" value="<?php echo $last_name; ?>" class="form-control" placeholder="<?php echo translate('last'); ?><?php echo translate('name'); ?>">
                                     <?php echo form_error('last_name'); ?>
                                 </div>
@@ -76,7 +76,7 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email"> <?php echo translate('email'); ?> <small class="required">*</small></label>
+                                    <label for="email"><?php echo translate('email'); ?> <small class="required">*</small></label>
                                     <input type="email" autocomplete="off" placeholder="<?php echo translate('email'); ?>" id="email" name="email" value="<?php echo $email; ?>" class="form-control">
                                     <?php echo form_error('email'); ?>
 
@@ -85,7 +85,7 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="phone"> <?php echo translate('phone'); ?> <small class="required">*</small></label>
+                                    <label for="phone"><?php echo translate('phone'); ?> <small class="required">*</small></label>
                                     <input type="text" autocomplete="off" id="phone" name="phone" value="<?php echo $phone; ?>" class="form-control" placeholder="<?php echo translate('phone'); ?>" maxlength="10" minlength="10">
                                     <?php echo form_error('phone'); ?>
                                 </div>
@@ -96,7 +96,7 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="address"> <?php echo translate('address'); ?> <small class="required">*</small></label>
+                                    <label for="address"><?php echo translate('address'); ?> <small class="required">*</small></label>
                                     <textarea type="text" id="address" name="address" class="form-control" placeholder="<?php echo translate('address'); ?>"><?php echo $address; ?></textarea>
                                     <?php echo form_error('address'); ?>
                                 </div>
@@ -104,7 +104,7 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="profile_text"> <?php echo translate('profile_text'); ?></label>
+                                    <label for="profile_text"><?php echo translate('profile_text'); ?></label>
                                     <textarea type="text" id="profile_text" name="profile_text" class="form-control" placeholder="<?php echo translate('profile_text'); ?>"><?php echo $profile_text; ?></textarea>
                                     <?php echo form_error('profile_text'); ?>
                                 </div>
@@ -149,45 +149,22 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                         <div class="row">
 
                             <div class="col-md-6">
-                                <h5 style="font-size: .8rem; color: #757575; margin-bottom: 2.5rem;"><?php echo translate('select'); ?> <?php echo translate('image'); ?> </h5>
-                                <div class="file-field">
-                                    <div class="btn btn-primary btn-sm">
-                                        <span><?php echo translate('choose_file'); ?></span>
-                                        <input onchange="readURL(this)" id="imageurl"  type="file" name="profile_image"/>
-                                    </div>
-                                    <?php echo form_error('profile_image'); ?>
-                                </div>
-                                <div class="error" id="Pro_img_validate"></div>
+                                <label><?php echo translate('choose_file'); ?></label>
+                                <input onchange="readURL(this)" id="imageurl"  type="file" name="profile_image" class="form-control"/>
+                                <?php echo form_error('profile_image'); ?>
                             </div>
                             <div class="col-md-6">
-                                <h5 style="font-size: .8rem; color: #757575; margin-bottom: 2.5rem;">Select Profile Cover Image (Size must be minimum of 1110*266)</h5>
-                                <div class="file-field">
-                                    <div class="btn btn-primary btn-sm">
-                                        <span><?php echo translate('choose_file'); ?></span>
-                                        <input onchange="readURL(this)" id="profileimageurl"  type="file" name="profile_cover_image"/>
-                                    </div>
-                                </div>
-                                <div class="error" id="Pro_cover_img_validate"></div>
+                                <label><?php echo translate('choose_file'); ?></label>
+                                <input onchange="readURL(this)" id="profileimageurl" class="form-control" type="file" name="profile_cover_image"/>
+                                <small>Select Profile Cover Image (Size must be minimum of 1110*266)</small>
                             </div>
 
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <?php
-                                if (file_exists(dirname(BASEPATH) . "/" . uploads_path . "/profiles/" . $admin_data['profile_image']) && $admin_data['profile_image'] != '') {
-                                    $img_src = base_url() . uploads_path . "/profiles/" . $admin_data['profile_image'];
-                                } else {
-                                    $img_src = base_url() . img_path . "/user.png";
-                                }
-                                ?>
-                                <img id="imageurl"  class="img"  style="border-radius:50%;" src="<?php echo $img_src; ?>" alt="<?php echo translate('profile'); ?> <?php echo translate('image'); ?>" width="100" height="100">
+                                <img id="imageurl" class="img" style="border-radius:50%;" src="<?php echo check_profile_image($admin_data['profile_image']); ?>" alt="<?php echo translate('profile'); ?> <?php echo translate('image'); ?>" width="100" height="100">
                             </div>
                             <div class="col-md-6">
-                                <?php
-                                if (file_exists(dirname(BASEPATH) . "/" . uploads_path . "/profiles/" . $admin_data['profile_cover_image']) && $admin_data['profile_cover_image'] != '') {
-                                    $cover_img_src = base_url() . uploads_path . "/profiles/" . $admin_data['profile_cover_image'];
-                                }
-                                ?>
                                 <?php
                                 if (isset($cover_img_src) && $cover_img_src != ''):
                                     $style = 'block';
@@ -195,7 +172,7 @@ $profile_cover_image = $admin_data['profile_cover_image'];
                                     $style = 'none';
                                 endif;
                                 ?>
-                                <img id="profileimageurl"  class="img"  style="width: 250px;height: 100px;display: <?php echo $style; ?>" src="<?php echo $cover_img_src; ?>" alt="">
+                                <img id="profileimageurl"  class="img"  style="width: 250px;height: 100px;" src="<?php echo check_profile_image($admin_data['profile_cover_image']); ?>" alt="">
                             </div>
                         </div>
                         <div class="form-group mt-5">

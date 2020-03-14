@@ -48,40 +48,34 @@ $folder_name = 'admin';
                         <input type="hidden" id="folder_name" value="<?php echo $folder_name; ?>"/>
                         <input type="hidden" name="id" id="id" value="<?php echo isset($currency_data['id']) ? $currency_data['id'] : 0; ?>"/>
                         <div class="row">
-                            <div class="col-md-6 ">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <?php echo form_label(translate('title') . '<small class ="required">*</small>', 'title', array('class' => 'control-label')); ?>
                                     <?php echo form_input(array('id' => 'title','autocomplete' => 'off', 'class' => 'form-control', 'name' => 'title', 'value' => $title, 'placeholder' => translate('title'))); ?>
                                     <?php echo form_error('title'); ?>
                                 </div>
-                                <div class="error" id="first_name_validate"></div>
                             </div>
-                            <div class="col-md-6 ">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <?php echo form_label(translate('currency')." ".translate('code') . '<small class ="required">*</small>', 'code', array('class' => 'control-label')); ?>
                                     <?php echo form_input(array('id' => 'code','autocomplete' => 'off', 'class' => 'form-control', 'name' => 'code', 'value' => $code, 'placeholder' => translate('code'))); ?>
                                     <?php echo form_error('code'); ?>
                                 </div>
-                                <div class="error" id="last_name_validate"></div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 ">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <?php echo form_label('Currency Symbol' . '<small class ="required">*</small>', 'currency_code', array('class' => 'control-label')); ?>
                                     <?php echo form_input(array('id' => 'currency_code','autocomplete' => 'off', 'class' => 'form-control', 'name' => 'currency_code', 'value' => $currency_code, 'placeholder' => 'Currency Code')); ?>
                                     <?php echo form_error('currency_code'); ?>
                                 </div>
-                                <div class="error" id="first_name_validate"></div>
                             </div>
-
                         </div>
 
                         <div class="row">
                             <div class="col-sm-6 b-r">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary" style="margin-top: 25px;"><?php echo translate('submit'); ?></button>
-                                    <a href="<?php echo base_url('admin/currency'); ?>" class="btn btn-info waves-effect" style="margin-top: 25px;"><?php echo translate('cancel'); ?></a>
+                                    <button type="submit" class="btn btn-primary"><?php echo translate('submit'); ?></button>
+                                    <a href="<?php echo base_url('admin/currency'); ?>" class="btn btn-info waves-effect"><?php echo translate('cancel'); ?></a>
                                 </div>
                             </div>
                         </div>

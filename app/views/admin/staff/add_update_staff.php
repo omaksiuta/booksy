@@ -7,15 +7,9 @@ $designation = isset($staff_data['designation']) ? $staff_data['designation'] : 
 $phone = isset($staff_data['phone']) ? $staff_data['phone'] : set_value('phone');
 $status = (set_value("status")) ? set_value("status") : (!empty($category_data) ? $staff_data['status'] : '');
 $profile_image = (set_value("profile_image")) ? set_value("profile_image") : (!empty($staff_data) ? $staff_data['profile_image'] : '');
-if (isset($profile_image) && $profile_image != "") {
-    if (file_exists(FCPATH . 'assets/uploads/profiles/' . $profile_image)) {
-        $image = base_url("assets/uploads/profiles/" . $profile_image);
-    } else {
-        $image = base_url("assets/images/no-image.png");
-    }
-} else {
-    $image = base_url("assets/images/no-image.png");
-}
+
+
+$image = check_profile_image($profile_image);
 
 if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') {
     include VIEWPATH . 'vendor/header.php';

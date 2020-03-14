@@ -2,40 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ae2a13dc-3fb3-436a-b0cd-09db9259288d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Setup" beforeDir="false" afterPath="$PROJECT_DIR$/Setup" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/cache/ci_session9s752nv2klc4ndi46ndk92ijh15d3sqp" beforeDir="false" afterPath="$PROJECT_DIR$/app/cache/ci_session9s752nv2klc4ndi46ndk92ijh15d3sqp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/City.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/City.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Content.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Content.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Coupon.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Coupon.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Customer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Customer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Location.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Location.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Message.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Message.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Page_content.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Page_content.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/cache/ci_sessionnkvm6jst7tvsklhfunepsu3bklajdv4j" beforeDir="false" afterPath="$PROJECT_DIR$/app/cache/ci_sessionnkvm6jst7tvsklhfunepsu3bklajdv4j" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/controllers/admin/Service.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Service.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Sitesetting.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Sitesetting.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Slider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Slider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Staff.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Staff.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Testimonial.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Testimonial.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/admin/Vendor.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/admin/Vendor.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/controllers/staff/Dashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/staff/Dashboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/helpers/function_helper.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/helpers/function_helper.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/coupon/add_update_coupon.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/coupon/add_update_coupon.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/customer/add_update_customer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/customer/add_update_customer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/customer/customer_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/customer/customer_details.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/customer/manage_customer.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/customer/manage_customer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/currency/add_update_currency.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/currency/add_update_currency.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/currency/manage_currency.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/currency/manage_currency.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views/admin/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/service/add_update_service.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/service/add_update_service.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/service/add_update_service_addons.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/service/add_update_service_addons.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/service/add_update_service_category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/service/add_update_service_category.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/service/manage_service_category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/service/manage_service_category.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/vendor/add_update_vendor.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/vendor/add_update_vendor.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/vendor/manage_vendor.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/vendor/manage_vendor.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/vendor/payout_request.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/vendor/payout_request.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/vendor/unverified_vendor.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/vendor/unverified_vendor.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/admin/vendor/vendor_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/vendor/vendor_details.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/front/service/service-category.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/front/service/service-category.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/staff/payment_history.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/staff/payment_history.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/views/staff/view_booking_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/staff/view_booking_details.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/language/manage_language.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/language/manage_language.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/profile/profile.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/profile/profile.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/staff/add_update_staff.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/staff/add_update_staff.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/staff/manage_staff.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/staff/manage_staff.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views/admin/staff/staff_details.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/views/admin/staff/staff_details.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -51,29 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/admin/header.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="80" column="77" lean-forward="true" selection-start-line="80" selection-start-column="77" selection-end-line="80" selection-end-column="77" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/controllers/admin/Vendor.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-238">
-              <caret line="188" column="69" selection-start-line="188" selection-start-column="69" selection-end-line="188" selection-end-column="69" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/controllers/admin/Dashboard.php">
+        <entry file="file://$PROJECT_DIR$/app/views/admin/currency/manage_currency.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-865">
-              <caret line="111" column="87" selection-start-line="111" selection-start-column="87" selection-end-line="111" selection-end-column="87" />
+            <state relative-caret-position="221">
+              <caret line="64" column="68" selection-start-line="64" selection-start-column="68" selection-end-line="64" selection-end-column="68" />
             </state>
           </provider>
         </entry>
@@ -95,6 +53,8 @@
       <find>event</find>
       <find>app_services.type</find>
       <find>rounded-circle</find>
+      <find>manage_appointment</find>
+      <find>admin/manage-appointment</find>
     </findStrings>
     <replaceStrings>
       <replace>category_image</replace>
@@ -127,7 +87,6 @@
         <option value="$PROJECT_DIR$/app/controllers/admin/Location.php" />
         <option value="$PROJECT_DIR$/app/controllers/admin/Message.php" />
         <option value="$PROJECT_DIR$/app/controllers/staff/Dashboard.php" />
-        <option value="$PROJECT_DIR$/app/controllers/admin/Service.php" />
         <option value="$PROJECT_DIR$/app/views/admin/service/manage_service_category.php" />
         <option value="$PROJECT_DIR$/app/views/admin/service/add_update_service_addons.php" />
         <option value="$PROJECT_DIR$/app/views/admin/service/add_update_service_category.php" />
@@ -149,7 +108,15 @@
         <option value="$PROJECT_DIR$/app/views/admin/vendor/unverified_vendor.php" />
         <option value="$PROJECT_DIR$/app/views/admin/vendor/payout_request.php" />
         <option value="$PROJECT_DIR$/app/views/admin/vendor/manage_vendor.php" />
+        <option value="$PROJECT_DIR$/app/views/admin/profile/profile.php" />
         <option value="$PROJECT_DIR$/app/views/admin/header.php" />
+        <option value="$PROJECT_DIR$/app/views/admin/staff/add_update_staff.php" />
+        <option value="$PROJECT_DIR$/app/views/admin/staff/manage_staff.php" />
+        <option value="$PROJECT_DIR$/app/views/admin/staff/staff_details.php" />
+        <option value="$PROJECT_DIR$/app/controllers/admin/Service.php" />
+        <option value="$PROJECT_DIR$/app/views/admin/language/manage_language.php" />
+        <option value="$PROJECT_DIR$/app/views/admin/currency/add_update_currency.php" />
+        <option value="$PROJECT_DIR$/app/views/admin/currency/manage_currency.php" />
       </list>
     </option>
   </component>
@@ -198,13 +165,6 @@
               <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
               <item name="booksy" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="controllers" type="462c0819:PsiDirectoryNode" />
-              <item name="admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="booksy" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -213,6 +173,14 @@
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="booksy" type="b2602c69:ProjectViewProjectNode" />
+              <item name="booksy" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="admin" type="462c0819:PsiDirectoryNode" />
+              <item name="currency" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -258,12 +226,12 @@
       <workItem from="1583738491058" duration="594000" />
       <workItem from="1583739652551" duration="337000" />
       <workItem from="1584067319760" duration="5990000" />
-      <workItem from="1584165118310" duration="16360000" />
+      <workItem from="1584165118310" duration="18074000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30603000" />
+    <option name="totallyTimeSpent" value="32317000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -294,43 +262,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/assets/js/module/event_details.js" />
-    <entry file="file://$PROJECT_DIR$/app/views/admin/service/test.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="91" selection-start-line="91" selection-end-line="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/module/event.js" />
-    <entry file="file://$PROJECT_DIR$/assets/js/module/service.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2482">
-          <caret line="146" column="44" selection-start-line="146" selection-start-column="15" selection-end-line="146" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/js/jquery.accordion-wizard.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="14" selection-start-line="16" selection-start-column="12" selection-end-line="18" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/environment.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="19" selection-start-line="18" selection-start-column="19" selection-end-line="18" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/api/Auth.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="27" column="21" lean-forward="true" selection-start-line="24" selection-start-column="12" selection-end-line="27" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/admin/service/manage_service.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -482,13 +413,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Service.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2381">
-          <caret line="1423" column="82" selection-start-line="1423" selection-start-column="82" selection-end-line="1423" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/admin/service/add_update_service.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-8736">
@@ -523,13 +447,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1052">
           <caret line="5" column="6" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="288" column="73" selection-start-line="288" selection-start-column="73" selection-end-line="288" selection-end-column="73" />
         </state>
       </provider>
     </entry>
@@ -636,10 +553,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/views/admin/header.php">
+    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Dashboard.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="80" column="77" lean-forward="true" selection-start-line="80" selection-start-column="77" selection-end-line="80" selection-end-column="77" />
+        <state relative-caret-position="-865">
+          <caret line="111" column="87" selection-start-line="111" selection-start-column="87" selection-end-line="111" selection-end-column="87" />
         </state>
       </provider>
     </entry>
@@ -650,10 +567,84 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Dashboard.php">
+    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Content.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-865">
-          <caret line="111" column="87" selection-start-line="111" selection-start-column="87" selection-end-line="111" selection-end-column="87" />
+        <state relative-caret-position="396">
+          <caret line="288" column="73" selection-start-line="288" selection-start-column="73" selection-end-line="288" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/admin/header.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2">
+          <caret line="76" column="160" selection-start-line="76" selection-start-column="160" selection-end-line="76" selection-end-column="160" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/admin/profile/profile.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="174" column="106" selection-start-line="174" selection-start-column="106" selection-end-line="174" selection-end-column="106" />
+          <folding>
+            <element signature="n#style#0;n#img#0;n#div#0;n#div#7;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#div#1;n#div#7;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/admin/staff/add_update_staff.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="45" selection-start-line="11" selection-start-column="45" selection-end-line="11" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/admin/staff/staff_details.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="53" column="113" lean-forward="true" selection-start-line="53" selection-start-column="113" selection-end-line="53" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/config/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="374" column="70" selection-start-line="374" selection-start-column="52" selection-end-line="374" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/admin/language/manage_language.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="60" column="300" selection-start-line="60" selection-start-column="300" selection-end-line="60" selection-end-column="300" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/admin/currency/add_update_currency.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="77" column="121" selection-start-line="77" selection-start-column="121" selection-end-line="77" selection-end-column="121" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/admin/Service.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1615">
+          <caret line="1010" column="34" selection-start-line="1010" selection-start-column="34" selection-end-line="1010" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/admin/staff/manage_staff.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="56" column="242" lean-forward="true" selection-start-line="56" selection-start-column="242" selection-end-line="56" selection-end-column="242" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/views/admin/currency/manage_currency.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="64" column="68" selection-start-line="64" selection-start-column="68" selection-end-line="64" selection-end-column="68" />
         </state>
       </provider>
     </entry>

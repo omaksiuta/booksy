@@ -73,7 +73,8 @@ $login_user_details = get_login_admin();
                     </li>
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <span class="user-img"><img class="rounded-circle" src="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $login_user_details['profile_image']); ?>" width="31" alt="<?php echo $login_user_details['first_name'] . " " . $login_user_details['last_name']; ?>"></span>
+                            <span class="user-img">
+                                <img class="rounded-circle" src="<?php echo check_profile_image($login_user_details['profile_image']); ?>" width="50" height="50" alt="<?php echo $login_user_details['first_name'] . " " . $login_user_details['last_name']; ?>"></span>
                         </a>
                         <div class="dropdown-menu">
                             <div class="user-header">

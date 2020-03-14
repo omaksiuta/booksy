@@ -54,7 +54,7 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                                                 <td class="text-center"><?php echo $i; ?></td>
                                                 <td class="text-left">
                                                     <h2 class="table-avatar">
-                                                        <a href="<?php echo base_url($folder_name . '/staff-details/' . $row['id']); ?>" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="<?php echo check_profile_image(UPLOAD_PATH . "profiles/" . $row['profile_image']); ?>" alt="<?php echo $row['first_name'] . ' ' . $row['last_name']; ?>"></a>
+                                                        <a href="<?php echo base_url($folder_name . '/staff-details/' . $row['id']); ?>" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="<?php echo check_profile_image($row['profile_image']); ?>" alt="<?php echo $row['first_name'] . ' ' . $row['last_name']; ?>"></a>
                                                         <a href="<?php echo base_url($folder_name . '/staff-details/' . $row['id']); ?>"><?php echo $row['first_name'] . ' ' . $row['last_name']; ?><br/><small><?php echo $row['email']; ?></small></a>
                                                     </h2>
                                                 </td>
