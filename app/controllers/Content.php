@@ -606,7 +606,7 @@ class Content extends CI_Controller {
     public function appointment_payment_details($id = FALSE) {
         if ($id) {
             $fields = "";
-            $fields .= "app_service_appointment.staff_id,app_service_appointment.event_booked_seat,app_service_appointment.addons_id,app_service_appointment_payment.*,CONCAT(app_admin.first_name,' ',app_admin.last_name) as vendor_name,app_admin.company_name,app_services.type as event_type,app_services.title as event_name,CONCAT(app_customer.first_name,' ',app_customer.last_name) as customer_name";
+            $fields .= "app_service_appointment.staff_id,app_service_appointment.event_booked_seat,app_service_appointment.addons_id,app_service_appointment_payment.*,CONCAT(app_admin.first_name,' ',app_admin.last_name) as vendor_name,app_admin.company_name,app_services.title as event_name,CONCAT(app_customer.first_name,' ',app_customer.last_name) as customer_name";
             $join = array(
                 array(
                     "table" => "app_admin",
@@ -614,7 +614,7 @@ class Content extends CI_Controller {
                     "jointype" => "INNER"),
                 array(
                     "table" => "app_services",
-                    "condition" => "(app_services.id=app_service_appointment_payment.event_id AND app_services.type='S')",
+                    "condition" => "(app_services.id=app_service_appointment_payment.event_id)",
                     "jointype" => "INNER"),
                 array(
                     "table" => "app_customer",
@@ -637,7 +637,7 @@ class Content extends CI_Controller {
     public function event_payment_details($id = FALSE) {
         if ($id) {
             $fields = "";
-            $fields .= "app_service_appointment.staff_id,app_service_appointment.event_booked_seat,app_service_appointment.addons_id,app_service_appointment_payment.*,CONCAT(app_admin.first_name,' ',app_admin.last_name) as vendor_name,app_admin.company_name,app_services.type as event_type,app_services.title as event_name,CONCAT(app_customer.first_name,' ',app_customer.last_name) as customer_name";
+            $fields .= "app_service_appointment.staff_id,app_service_appointment.event_booked_seat,app_service_appointment.addons_id,app_service_appointment_payment.*,CONCAT(app_admin.first_name,' ',app_admin.last_name) as vendor_name,app_admin.company_name,app_services.title as event_name,CONCAT(app_customer.first_name,' ',app_customer.last_name) as customer_name";
             $join = array(
                 array(
                     "table" => "app_admin",
@@ -645,7 +645,7 @@ class Content extends CI_Controller {
                     "jointype" => "INNER"),
                 array(
                     "table" => "app_services",
-                    "condition" => "(app_services.id=app_service_appointment_payment.event_id AND app_services.type='E')",
+                    "condition" => "(app_services.id=app_service_appointment_payment.event_id)",
                     "jointype" => "INNER"),
                 array(
                     "table" => "app_customer",

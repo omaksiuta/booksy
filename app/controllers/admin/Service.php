@@ -874,7 +874,7 @@ class Service extends MY_Controller {
                 "jointype" => "INNER"),
             array(
                 "table" => "app_services",
-                "condition" => "(app_services.id=app_service_appointment_payment.service_id  AND app_services.type='S')",
+                "condition" => "(app_services.id=app_service_appointment_payment.service_id)",
                 "jointype" => "INNER"),
             array(
                 "table" => "app_customer",
@@ -1314,7 +1314,7 @@ class Service extends MY_Controller {
                 "jointype" => "INNER"),
             array(
                 "table" => "app_services",
-                "condition" => "(app_services.id=app_service_appointment_payment.service_id AND app_services.type='S')",
+                "condition" => "(app_services.id=app_service_appointment_payment.service_id)",
                 "jointype" => "INNER"),
             array(
                 "table" => "app_customer",
@@ -1360,7 +1360,7 @@ class Service extends MY_Controller {
                 ),
             );
             $select_value = "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_admin.company_name";
-            $service = $this->model_appointment->getData("app_services", $select_value, "app_services.id=" . $id . " AND app_services.type='S'", $join_data);
+            $service = $this->model_appointment->getData("app_services", $select_value, "app_services.id=".$id, $join_data);
             if (!isset($service) || isset($service) && count($service) == 0) {
                 $this->session->set_flashdata('msg_class', 'failure');
                 $this->session->set_flashdata('msg', translate('invalid_request'));

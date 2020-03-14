@@ -29,7 +29,7 @@ class Model_dashboard extends CI_Model {
     function vendor_total_appointment($vendor_id) {
         $this->db->select('app_service_appointment.id');
         $this->db->join('app_services', 'app_services.id=app_service_appointment.event_id', 'left');
-        $this->db->where("app_services.created_by=" . $vendor_id . " AND app_services.type='S'");
+        $this->db->where("app_services.created_by=" . $vendor_id);
         $res = $this->db->get('app_service_appointment')->result_array();
         return count($res);
     }

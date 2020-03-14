@@ -192,7 +192,7 @@ class Front extends CI_Controller {
                     'jointype' => 'left'
                 )
             );
-            $service = $this->model_front->getData("app_services", "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title", "app_services.id=" . $service_id . " AND app_services.type='S'", $join);
+            $service = $this->model_front->getData("app_services", "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title", "app_services.id=" . $service_id, $join);
 
             if (isset($service) && count($service) > 0) {
 
@@ -273,7 +273,7 @@ class Front extends CI_Controller {
             ),
         );
         $select_value = "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_admin.company_name";
-        $service = $this->model_front->getData("app_services", $select_value, "app_services.id=" . $id . " AND app_services.type='S'", $join_data);
+        $service = $this->model_front->getData("app_services", $select_value, "app_services.id=" . $id, $join_data);
         if (!isset($service) || isset($service) && count($service) == 0) {
             $this->session->set_flashdata('msg_class', 'failure');
             $this->session->set_flashdata('msg', translate('invalid_request'));
@@ -2196,8 +2196,8 @@ class Front extends CI_Controller {
                         'condition' => 'app_service_category.id=app_services.category_id',
                         'jointype' => 'INNER'
                 ));
-                $service_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='E' AND app_services.created_by='$admin_id'", $join);
-                $service_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A'AND app_services.type='S' AND app_services.created_by='$admin_id'", $join);
+                $service_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A' AND app_services.created_by='$admin_id'", $join);
+                $service_data = $this->model_front->getData("app_services", "app_admin.company_name,app_admin.profile_image,app_services.*,app_service_category.title as category_title,app_service_category.category_image, app_city.city_title,app_location.loc_title, app_admin.profile_image, app_admin.company_name", "app_services.status='A' AND app_services.created_by='$admin_id'", $join);
                 $category_data = $this->model_front->getData("app_service_category", "app_service_category.*", "app_services.status='A' AND app_services.created_by='$admin_id'", $cjoin, 'title', 'app_service_category.id');
                 /*
                  * list of top city
@@ -2627,7 +2627,7 @@ class Front extends CI_Controller {
             ),
         );
 
-        $cond = 'app_services.status="A" AND app_services.type="S"';
+        $cond = 'app_services.status="A"';
         if (get_site_setting('is_display_location') == 'Y') {
             $cond .= ' AND app_city.city_title="' . $is_search . '"';
         }
@@ -3008,7 +3008,7 @@ class Front extends CI_Controller {
             redirect('contact-us');
         }
     }
-    
+
     public function service_listing() {
         $data['title'] = translate('service');
 
@@ -3043,7 +3043,7 @@ class Front extends CI_Controller {
             ),
         );
 
-        $cond = 'app_services.status="A" AND app_services.type="S" AND app_city.city_id=' . $location_id;
+        $cond = 'app_services.status="A" AND app_city.city_id=' . $location_id;
         if (isset($category) && $category > 0) {
             $cond .= " AND app_service_category.id=" . $category;
         }
@@ -3132,7 +3132,7 @@ class Front extends CI_Controller {
             )
         );
 
-        $cond = "app_services.status='A' AND app_services.type='E' AND app_services.id= '$service_id'";
+        $cond = "app_services.status='A' AND app_services.id= '$service_id'";
         $field = 'app_services.*,app_services.id as service_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title,CONCAT(app_admin.first_name," " ,app_admin.last_name) as Creater_name';
         $service = $this->model_front->getData("app_services", $field, $cond, $join, '', 'app_services.id', '', $this->Per_Page, array(), '', array(), '', '', $sort_by = 'N');
 
@@ -3245,8 +3245,8 @@ class Front extends CI_Controller {
             }
 
             $field = "app_services.*,app_location.loc_title,app_city.city_title,app_admin.phone,app_admin.company_name,app_service_category.title as category_title";
-            $data['service'] = $this->model_front->getData("app_services", $field, "app_services.city='$city_id' AND app_services.type='E' AND app_services.status='A'", $service_join, "", "", "", "", array(), "", $like);
-            $data['service'] = $this->model_front->getData("app_services", $field, "app_services.city='$city_id' AND app_services.type='S' AND app_services.status='A'", $service_join, "", "", "", "", array(), "", $like);
+            $data['service'] = $this->model_front->getData("app_services", $field, "app_services.city='$city_id' AND app_services.status='A'", $service_join, "", "", "", "", array(), "", $like);
+            $data['service'] = $this->model_front->getData("app_services", $field, "app_services.city='$city_id' AND app_services.status='A'", $service_join, "", "", "", "", array(), "", $like);
             /* orgnizer */
             if (!empty($search_string)) {
                 $like_orgnizer = array(

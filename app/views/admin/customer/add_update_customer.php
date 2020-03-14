@@ -50,6 +50,7 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
             <div class="col-md-12 m-auto">
                 <?php $this->load->view('message'); ?>
                 <div class="card">
+
                     <div class="card-body resp_mx-0">
                         <?php
                         $attributes = array('id' => 'frmCustomer', 'name' => 'frmCustomer', 'method' => "post");
@@ -181,11 +182,13 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                             </div>
                         </div>
 
+                        <hr/>
+
                         <div class="row">
                             <div class="col-sm-6 b-r">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary"><?php echo translate('submit'); ?></button>
-                                    <a href="<?php echo base_url('admin/customer'); ?>" class="btn btn-info waves-effect"><?php echo translate('cancel'); ?></a>
+                                    <a href="<?php echo base_url('admin/customer'); ?>" class="btn btn-info"><?php echo translate('cancel'); ?></a>
                                 </div>
                             </div>
                         </div>

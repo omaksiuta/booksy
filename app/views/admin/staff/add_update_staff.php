@@ -148,12 +148,12 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                             </div>
 
                         </div>
-
+                        <hr/>
                         <div class="row">
                             <div class="col-sm-6 b-r">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary waves-effect" style="margin-top: 25px;"><?php echo translate('submit'); ?></button>
-                                    <a href="<?php echo base_url($folder_name . '/staff'); ?>" class="btn btn-info waves-effect" style="margin-top: 25px;"><?php echo translate('cancel'); ?></a>
+                                    <button type="submit" class="btn btn-primary waves-effect" ><?php echo translate('submit'); ?></button>
+                                    <a href="<?php echo base_url($folder_name . '/staff'); ?>" class="btn btn-info waves-effect"><?php echo translate('cancel'); ?></a>
                                 </div>
                             </div>
                         </div>

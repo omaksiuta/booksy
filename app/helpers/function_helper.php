@@ -955,7 +955,7 @@ function get_full_service_service_data_by_booking_id($id) {
     $CI = & get_instance();
 
     $select_field = "app_customer.id as customer_id,app_customer.first_name as customer_first_name,app_customer.email as customer_email,app_customer.last_name as customer_last_name,";
-    $select_field .= "app_services.id as service_id,app_services.start_date as service_start_date,app_services.end_date as service_end_date,app_services.type,app_services.address,app_services.title,app_services.type,app_services.payment_type,app_services.type,app_city.city_title,app_location.loc_title,";
+    $select_field .= "app_services.id as service_id,app_services.start_date as service_start_date,app_services.end_date as service_end_date,app_services.address,app_services.title,app_services.payment_type,app_city.city_title,app_location.loc_title,";
     $select_field .= "app_service_category.title as category_title,";
     $select_field .= "app_admin.profile_image,app_admin.first_name,app_admin.address as vendor_address,app_admin.last_name,app_admin.email,app_admin.phone,app_admin.address as vendor_address,app_admin.company_name,";
     $select_field .= "app_service_appointment.id as booking_id,app_service_appointment.staff_id,app_service_appointment.addons_id,app_service_appointment.service_booked_seat,app_service_appointment.description,app_service_appointment.start_date,app_service_appointment.start_time,app_service_appointment.slot_time,app_service_appointment.price,app_service_appointment.status,app_service_appointment.payment_status,app_service_appointment.created_on";
