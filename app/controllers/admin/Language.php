@@ -7,14 +7,14 @@ class Language extends MY_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model('model_event');
+        $this->load->model('model_service');
         set_time_zone();
     }
 
     //show language page
     public function index() {
 
-        $language_data = $this->model_event->getData('app_language', '*');
+        $language_data = $this->model_service->getData('app_language', '*');
         $data['language_data'] = $language_data;
         $data['title'] = translate('manage') . " " . translate('language');
         $this->load->view('admin/language/manage_language', $data);
@@ -36,7 +36,7 @@ class Language extends MY_Controller {
     //show edit language form
     public function update_language($id) {
         if (is_writeable(FCPATH . "app/language")) {
-            $language_data = $this->model_event->getData("app_language", "*", "id='$id'");
+            $language_data = $this->model_service->getData("app_language", "*", "id='$id'");
             if (count($language_data) > 0) {
                 $data['language_data'] = $language_data[0];
                 $data['title'] = translate('update') . " " . translate('language');
@@ -54,10 +54,10 @@ class Language extends MY_Controller {
     //Set Language Translation
     public function language_translate($id) {
 
-        $act_language_data = $this->model_event->getData('app_language', '*', 'status="A"');
+        $act_language_data = $this->model_service->getData('app_language', '*', 'status="A"');
 
         if (is_writeable(FCPATH . "app/language")) {
-            $language_data = $this->model_event->getData("app_language", "*", "id='$id'");
+            $language_data = $this->model_service->getData("app_language", "*", "id='$id'");
             if (count($language_data) > 0) {
 
                 $this->db->order_by('id', 'asc');
@@ -124,7 +124,7 @@ class Language extends MY_Controller {
                 } else {
                     $data['created_date'] = date('Y-m-d H:i:s');
                     $data['db_field'] = strtolower(str_replace(' ', '_', $this->input->post('title', true)));
-                    $id = $this->model_event->insert('app_language', $data);
+                    $id = $this->model_service->insert('app_language', $data);
 
                     $this->add_language_field(strtolower($this->input->post('title', true)));
                     $this->session->set_flashdata('msg', translate('record_insert'));
@@ -142,8 +142,8 @@ class Language extends MY_Controller {
     //delete an language
     public function delete_language($id) {
         $id = (int) $id;
-        $app_site_setting = $this->model_event->getData('app_site_setting', 'language', "id=1");
-        $get_lang_data = $this->model_event->getData('app_language', 'title,db_field', "id=" . $id);
+        $app_site_setting = $this->model_service->getData('app_site_setting', 'language', "id=1");
+        $get_lang_data = $this->model_service->getData('app_language', 'title,db_field', "id=" . $id);
         if ($id > 1) {
             if (isset($get_lang_data[0]['title'])) {
                 if ($app_site_setting[0]['language'] == $get_lang_data[0]['db_field']) {
@@ -162,7 +162,7 @@ class Language extends MY_Controller {
                     @unlink(FCPATH . "app/language/" . $unlink_lang . "/basic_lang.php");
                     @rmdir(FCPATH . "app/language/" . $unlink_lang);
 
-                    $this->model_event->delete('app_language', 'id=' . $id);
+                    $this->model_service->delete('app_language', 'id=' . $id);
                     $this->session->set_flashdata('msg', translate('record_delete'));
                     $this->session->set_flashdata('msg_class', 'success');
                     echo 'true';
@@ -187,13 +187,13 @@ class Language extends MY_Controller {
         $text_value = $this->input->post('text_value', true);
 
         $data[$field] = ($text_value);
-        $up_status = $this->model_event->update('app_language_data', $data, 'id=' . $id);
+        $up_status = $this->model_service->update('app_language_data', $data, 'id=' . $id);
 
         //Update language file
         $file_loc = APPPATH . 'language/' . $field . '/basic_lang.php';
         $myfile = fopen($file_loc, "w");
 
-        $app_language_data = $this->model_event->getData('app_language_data', '*');
+        $app_language_data = $this->model_service->getData('app_language_data', '*');
 
         $string_data = "<?php ";
         foreach ($app_language_data as $val):

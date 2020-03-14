@@ -7,7 +7,7 @@ class Service extends MY_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model('model_event');
+        $this->load->model('model_service');
         $this->load->model('model_appointment');
         set_time_zone();
 
@@ -49,21 +49,20 @@ class Service extends MY_Controller {
 
         $vendor = (int) $this->input->get('vendor');
 
+        $service_condition="";
         if ($this->login_type == 'A') {
             if (isset($vendor) && $vendor != "" && $vendor > 0) {
-                $service_condition = "app_services.type ='S' AND app_services.created_by=" . $vendor;
-            } else {
-                $service_condition = "app_services.type ='S'=" . $this->login_id;
+                $service_condition = "app_services.created_by=" . $vendor;
             }
         } else {
-            $service_condition = "app_services.type ='S' AND app_services.created_by=" . $this->login_id;
+            $service_condition = "app_services.created_by=" . $this->login_id;
         }
 
 
-        $event = $this->model_event->getData('', 'app_services.*,app_service_category.title as category_title,app_admin.company_name, app_admin.first_name, app_admin.last_name,app_city.city_title,app_location.loc_title', $service_condition, $join);
+        $service = $this->model_service->getData('', 'app_services.*,app_service_category.title as category_title,app_admin.company_name, app_admin.first_name, app_admin.last_name,app_city.city_title,app_location.loc_title', $service_condition, $join);
 
-        $vendor_list = $this->model_event->getData('app_admin', 'id,first_name,last_name,company_name', "status='A' AND type='V' AND profile_status='V'", "", "company_name ASC");
-        $data['event_data'] = $event;
+        $vendor_list = $this->model_service->getData('app_admin', 'id,first_name,last_name,company_name', "status='A' AND type='V' AND profile_status='V'", "", "company_name ASC");
+        $data['service_data'] = $service;
         $data['vendor_list'] = $vendor_list;
         $data['title'] = translate('manage') . " " . translate('service');
         $this->load->view('admin/service/manage_service', $data);
@@ -77,8 +76,8 @@ class Service extends MY_Controller {
         $staff_data = get_staff_by_vendor_id($this->login_id);
         $data['staff_data'] = $staff_data;
         $where = "status='A' AND type ='S'";
-        $data['category_data'] = $this->model_event->getData('app_service_category', '*', $where);
-        $data['city_data'] = $this->model_event->getData('app_city', '*', "city_status='A'");
+        $data['category_data'] = $this->model_service->getData('app_service_category', '*', $where);
+        $data['city_data'] = $this->model_service->getData('app_city', '*', "city_status='A'");
         $data['title'] = translate('add') . " " . translate('service');
         $this->load->view('admin/service/add_update_service', $data);
     }
@@ -86,15 +85,15 @@ class Service extends MY_Controller {
     //show edit service form
     public function update_service($id) {
 
-        $service = $this->model_event->getData("app_services", "*", "id='$id'");
+        $service = $this->model_service->getData("app_services", "*", "id='$id'");
         if (isset($service[0]) && !empty($service[0])) {
-            $data['event_data'] = $service[0];
+            $data['service_data'] = $service[0];
             $where = " status='A' AND type ='S'";
-            $data['category_data'] = $this->model_event->getData('app_service_category', '*', $where);
-            $data['city_data'] = $this->model_event->getData('app_city', '*', "city_status='A'");
+            $data['category_data'] = $this->model_service->getData('app_service_category', '*', $where);
+            $data['city_data'] = $this->model_service->getData('app_city', '*', "city_status='A'");
             $loc_city_id = $service[0]['city'];
-            $data['location_data'] = $this->model_event->getData('app_location', '*', "loc_city_id='$loc_city_id' AND loc_status='A'");
-            $data['app_service_addons'] = $this->model_event->getData("app_service_addons", "*", 'event_id=' . $id);
+            $data['location_data'] = $this->model_service->getData('app_location', '*', "loc_city_id='$loc_city_id' AND loc_status='A'");
+            $data['app_service_addons'] = $this->model_service->getData("app_service_addons", "*", 'service_id=' . $id);
 
             if ($this->login_type == 'A' && $service[0]['created_by'] != $this->login_id) {
                 $staff_data = get_staff_by_vendor_id($service[0]['created_by']);
@@ -114,7 +113,7 @@ class Service extends MY_Controller {
     public function service_booking_update() {
         $book_id = (int) $this->input->post('book_id', true);
         $customer_id = (int) $this->input->post('customer_id', true);
-        $event_id = (int) $this->input->post('event_id', true);
+        $service_id = (int) $this->input->post('service_id', true);
         $staff_member_id = (int) $this->input->post('staff_member_id', true);
         $user_datetime = $this->input->post('user_datetime', true);
 
@@ -124,7 +123,7 @@ class Service extends MY_Controller {
         $data['staff_id'] = $staff_member_id;
 
         //check booking
-        $app_service_appointment = $this->model_event->getData("app_service_appointment", '*', "event_id=" . $event_id . " AND customer_id=" . $customer_id . " AND id=" . $book_id);
+        $app_service_appointment = $this->model_service->getData("app_service_appointment", '*', "service_id=" . $service_id . " AND customer_id=" . $customer_id . " AND id=" . $book_id);
         if (count($app_service_appointment) == 0) {
             $this->session->set_flashdata('msg_class', 'failure');
             $this->session->set_flashdata('msg', translate('invalid_request'));
@@ -134,8 +133,8 @@ class Service extends MY_Controller {
                 redirect(base_url('admin/manage-appointment'));
             }
         }
-        $id = $this->model_event->update('app_service_appointment', $data, "event_id=" . $event_id . " AND customer_id=" . $customer_id . " AND id=" . $book_id);
-        $get_service_event_by_id = get_service_event_by_id($event_id);
+        $id = $this->model_service->update('app_service_appointment', $data, "service_id=" . $service_id . " AND customer_id=" . $customer_id . " AND id=" . $book_id);
+        $get_service_service_by_id = get_service_service_by_id($service_id);
         if ($id) {
             $this->session->set_flashdata('msg_class', 'success');
             $this->session->set_flashdata('msg', translate('update_booking_time'));
@@ -145,7 +144,7 @@ class Service extends MY_Controller {
 
             if (isset($customer_data['email']) && $customer_data['email'] != ""):
                 //set email template data
-                $parameter['service_data'] = $get_service_event_by_id;
+                $parameter['service_data'] = $get_service_service_by_id;
                 $parameter['SERVICE_TIME'] = get_formated_date($user_datetime[0] . " " . $user_datetime[1]);
                 $parameter['name'] = $customer_data['first_name'] . " " . $customer_data['last_name'];
 
@@ -236,12 +235,11 @@ class Service extends MY_Controller {
             $data['seo_keyword'] = $this->input->post('seo_keyword', true);
             $data['address'] = $this->input->post('address', true);
             $data['address_map_link'] = $this->input->post('address_map_link', true);
-            $data['latitude'] = $this->input->post('event_latitude', true);
-            $data['longitude'] = $this->input->post('event_longitude', true);
+            $data['latitude'] = $this->input->post('service_latitude', true);
+            $data['longitude'] = $this->input->post('service_longitude', true);
             $data['padding_time'] = $this->input->post('padding_time', true);
             $data['multiple_slotbooking_allow'] = $this->input->post('multiple_slotbooking_allow', true);
             $data['multiple_slotbooking_limit'] = $this->input->post('multiple_slotbooking_limit', true);
-            $data['type'] = "S";
 
             $faq_title = $this->input->post('faq_title', true);
             $faq_description = $this->input->post('faq_description', true);
@@ -257,7 +255,11 @@ class Service extends MY_Controller {
 
             $data['faq'] = json_encode($faq_data_array);
 
-            $is_Files = $this->check_upload_images($_FILES['image']['name']);
+            $is_Files=false;
+            if(isset($_FILES['image']['name'])){
+                $is_Files = $this->check_upload_images($_FILES['image']['name']);
+            }
+
 
             if (isset($_FILES['image']) && $is_Files) {
                 $filesCount = count($_FILES['image']['name']);
@@ -278,7 +280,7 @@ class Service extends MY_Controller {
                         $_FILES['userFile']['error'] = $_FILES['image']['error'][$i];
                         $_FILES['userFile']['size'] = $_FILES['image']['size'][$i];
 
-                        $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/event';
+                        $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/service';
                         $config['upload_path'] = $uploadPath;
                         $config['allowed_types'] = 'gif|jpg|png|jpeg';
                         $temp = explode(".", $_FILES["userFile"]["name"]);
@@ -323,7 +325,7 @@ class Service extends MY_Controller {
                 }
             }
             if (isset($_FILES['seo_og_image']) && $_FILES['seo_og_image']['name'] != '') {
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/event';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/service';
                 $banner_tmp_name = $_FILES["seo_og_image"]["tmp_name"];
                 $banner_temp = explode(".", $_FILES["seo_og_image"]["name"]);
                 $nanner_name = uniqid();
@@ -332,14 +334,14 @@ class Service extends MY_Controller {
                 move_uploaded_file($banner_tmp_name, "$uploadPath/$new_banner_name");
             }
             if ($service_id > 0) {
-                $id = $this->model_event->update('app_services', $data, "id=$service_id");
+                $id = $this->model_service->update('app_services', $data, "id=$service_id");
 
                 $this->session->set_flashdata('msg', translate('record_update'));
                 $this->session->set_flashdata('msg_class', 'success');
             } else {
                 $data['created_by'] = $this->login_id;
                 $data['created_on'] = date('Y-m-d H:i:s');
-                $id = $this->model_event->insert('app_services', $data);
+                $id = $this->model_service->insert('app_services', $data);
 
                 $this->session->set_flashdata('msg', translate('record_insert'));
                 $this->session->set_flashdata('msg_class', 'success');
@@ -351,14 +353,14 @@ class Service extends MY_Controller {
 
     //delete an service
     public function delete_service($id) {
-        $appointment = $this->model_event->getData('app_service_appointment', 'id', "event_id='$id'");
+        $appointment = $this->model_service->getData('app_service_appointment', 'id', "service_id='$id'");
         if (isset($appointment) && count($appointment) > 0) {
-            $this->session->set_flashdata('msg', translate('event_book_appointment'));
+            $this->session->set_flashdata('msg', translate('service_book_appointment'));
             $this->session->set_flashdata('msg_class', 'failure');
             echo 'false';
             exit;
         }
-        $this->model_event->delete('app_services', 'id=' . $id);
+        $this->model_service->delete('app_services', 'id=' . $id);
         $this->session->set_flashdata('msg', translate('record_delete'));
         $this->session->set_flashdata('msg_class', 'success');
         echo 'true';
@@ -367,7 +369,7 @@ class Service extends MY_Controller {
 
     //get location
     public function get_location($city_id) {
-        $location_data = $this->model_event->getData('app_location', '*', "loc_city_id='$city_id' AND loc_status='A'");
+        $location_data = $this->model_service->getData('app_location', '*', "loc_city_id='$city_id' AND loc_status='A'");
         $html = '<option value="">' . translate('select_location') . '</option>';
         if (isset($location_data) && count($location_data) > 0) {
             foreach ($location_data as $value) {
@@ -377,10 +379,10 @@ class Service extends MY_Controller {
         echo $html;
     }
 
-    //delete event image
-    public function delete_event_image() {
+    //delete service image
+    public function delete_service_image() {
         $image = $this->input->post('i', TRUE);
-        $event_id = $this->input->post('id', TRUE);
+        $service_id = $this->input->post('id', TRUE);
         $hidden_image = json_decode($this->input->post('h', TRUE));
 
         if (file_exists(dirname(FCPATH) . "/" . $image)) {
@@ -389,7 +391,7 @@ class Service extends MY_Controller {
                 unset($hidden_image[$key]);
                 $new_array = array_values($hidden_image);
                 $data['image'] = json_encode($new_array);
-                $id = $this->model_event->update('app_services', $data, "id=$event_id");
+                $id = $this->model_service->update('app_services', $data, "id=$service_id");
                 if ($id) {
                     echo json_encode($new_array);
                 } else {
@@ -403,7 +405,7 @@ class Service extends MY_Controller {
             unset($hidden_image[$key]);
             $new_array = array_values($hidden_image);
             $data['image'] = json_encode($new_array);
-            $id = $this->model_event->update('app_services', $data, "id=$event_id");
+            $id = $this->model_service->update('app_services', $data, "id=$service_id");
             if ($id) {
                 echo json_encode($new_array);
             } else {
@@ -422,8 +424,8 @@ class Service extends MY_Controller {
             endif;
         }
         $where = "type ='S'";
-        $event = $this->model_event->getData('app_service_category', '*', $where);
-        $data['category_data'] = $event;
+        $service = $this->model_service->getData('app_service_category', '*', $where);
+        $data['category_data'] = $service;
         $data['title'] = translate('manage_service_category');
         $this->load->view('admin/service/manage_service_category', $data);
     }
@@ -452,7 +454,7 @@ class Service extends MY_Controller {
         if ($this->session->userdata('Type_Admin') != "A") {
             $cond .= ' AND created_by=' . $this->login_id;
         }
-        $category = $this->model_event->getData("app_service_category", "*", $cond);
+        $category = $this->model_service->getData("app_service_category", "*", $cond);
         if (isset($category) && count($category) > 0) {
             $data['category_data'] = $category[0];
             $data['title'] = translate('update') . " " . translate('service');
@@ -551,12 +553,12 @@ class Service extends MY_Controller {
 
             if ($id > 0) {
                 $data['updated_on'] = date("Y-m-d H:i:s");
-                $this->model_event->update('app_service_category', $data, "id=$id");
+                $this->model_service->update('app_service_category', $data, "id=$id");
                 $this->session->set_flashdata('msg', translate('record_update'));
                 $this->session->set_flashdata('msg_class', 'success');
             } else {
                 $data['created_on'] = date("Y-m-d H:i:s");
-                $id = $this->model_event->insert('app_service_category', $data);
+                $id = $this->model_service->insert('app_service_category', $data);
                 $this->session->set_flashdata('msg', translate('record_insert'));
                 $this->session->set_flashdata('msg_class', 'success');
             }
@@ -567,14 +569,14 @@ class Service extends MY_Controller {
 
     //delete an service category
     public function delete_service_category($id) {
-        $event_data = $this->model_event->getData('app_services', 'id', "category_id='$id'");
-        if (isset($event_data) && count($event_data) > 0) {
+        $service_data = $this->model_service->getData('app_services', 'id', "category_id='$id'");
+        if (isset($service_data) && count($service_data) > 0) {
             $this->session->set_flashdata('msg', translate('record_not_allowed_to_delete'));
             $this->session->set_flashdata('msg_class', 'failure');
             echo 'false';
             exit(0);
         } else {
-            $this->model_event->delete('app_service_category', "id='$id' AND created_by='$this->login_id'");
+            $this->model_service->delete('app_service_category', "id='$id' AND created_by='$this->login_id'");
             $this->session->set_flashdata('msg', translate('record_delete'));
             $this->session->set_flashdata('msg_class', 'success');
             echo 'true';
@@ -588,12 +590,12 @@ class Service extends MY_Controller {
         $title = trim($this->input->post('title', TRUE));
 
         if (isset($id) && $id > 0) {
-            $where = "title='$title' AND id!='$id' AND type='S'";
+            $where = "title='$title' AND id!='$id'";
         } else {
-            $where = "title='$title' AND type='S'";
+            $where = "title='$title'";
         }
 
-        $check_title = $this->model_event->getData("app_service_category", "title", $where);
+        $check_title = $this->model_service->getData("app_service_category", "title", $where);
         if (isset($check_title) && count($check_title) > 0) {
             $this->form_validation->set_message('check_service_category_title', translate('title_already_exist'));
             return false;
@@ -603,13 +605,13 @@ class Service extends MY_Controller {
     }
 
     //delete service seo image
-    public function delete_event_seo_image() {
+    public function delete_service_seo_image() {
         $image = $this->input->post('i', TRUE);
-        $event_id = $this->input->post('id', TRUE);
+        $service_id = $this->input->post('id', TRUE);
         if (file_exists((FCPATH) . "/" . $image)) {
             if (unlink((FCPATH) . "/" . $image)) {
                 $data['seo_og_image'] = "";
-                $id = $this->model_event->update('app_services', $data, "id=$event_id");
+                $id = $this->model_service->update('app_services', $data, "id=$service_id");
                 echo 'success';
             } else {
                 echo 'false';
@@ -643,16 +645,16 @@ class Service extends MY_Controller {
         $service_id = (int) $service_id;
         if ($service_id > 0) {
             if ($this->login_type == 'V') {
-                $service_data = $this->model_event->getData('app_services', '*', "id=" . $service_id . " AND payment_type='P' AND created_by=" . $this->login_id);
+                $service_data = $this->model_service->getData('app_services', '*', "id=" . $service_id . " AND payment_type='P' AND created_by=" . $this->login_id);
             } else {
-                $service_data = $this->model_event->getData('app_services', '*', "id=" . $service_id . " AND payment_type='P'");
+                $service_data = $this->model_service->getData('app_services', '*', "id=" . $service_id . " AND payment_type='P'");
             }
             if (count($service_data) > 0) {
 
                 if ($this->login_type == 'V') {
-                    $app_service_addons = $this->model_event->getData('app_service_addons', '*', "user_id=" . $this->login_id . " AND event_id=" . $service_id);
+                    $app_service_addons = $this->model_service->getData('app_service_addons', '*', "user_id=" . $this->login_id . " AND service_id=" . $service_id);
                 } else {
-                    $app_service_addons = $this->model_event->getData('app_service_addons', '*', "event_id=" . $service_id);
+                    $app_service_addons = $this->model_service->getData('app_service_addons', '*', "service_id=" . $service_id);
                 }
 
                 $data['app_service_addons'] = $app_service_addons;
@@ -678,9 +680,9 @@ class Service extends MY_Controller {
 
     public function add_service_addons($service_id) {
         if ($this->login_type == 'V'):
-            $service = $this->model_event->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P'  AND created_by=" . $this->login_id);
+            $service = $this->model_service->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P'  AND created_by=" . $this->login_id);
         else:
-            $service = $this->model_event->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' ");
+            $service = $this->model_service->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' ");
         endif;
 
         if (count($service) > 0) {
@@ -699,13 +701,13 @@ class Service extends MY_Controller {
     public function update_addons_service($service_id, $add_on_id) {
 
         if ($this->login_type == 'V'):
-            $service = $this->model_event->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' AND created_by=" . $this->login_id);
+            $service = $this->model_service->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' AND created_by=" . $this->login_id);
         else:
-            $service = $this->model_event->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' ");
+            $service = $this->model_service->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' ");
         endif;
 
         if (count($service) > 0) {
-            $app_service_addons = $this->model_event->getData("app_service_addons", "*", "add_on_id='$add_on_id'");
+            $app_service_addons = $this->model_service->getData("app_service_addons", "*", "add_on_id='$add_on_id'");
             if (count($app_service_addons) > 0) {
                 $data['app_service_addons'] = $app_service_addons[0];
                 $data['service_id'] = $service_id;
@@ -732,9 +734,9 @@ class Service extends MY_Controller {
         $hidden_main_image = $this->input->post('hidden_add_on_image', true);
         $service_id = $this->input->post('service_id', true);
         if ($this->login_type == 'V'):
-            $service = $this->model_event->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' AND created_by=" . $this->login_id);
+            $service = $this->model_service->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' AND created_by=" . $this->login_id);
         else:
-            $service = $this->model_event->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' ");
+            $service = $this->model_service->getData("app_services", "*", "id=" . $service_id . " AND payment_type='P' ");
         endif;
 
         if (count($service) > 0) {
@@ -754,14 +756,14 @@ class Service extends MY_Controller {
                 $data['title'] = $this->input->post('title', true);
                 $data['price'] = $this->input->post('price', true);
                 $data['details'] = $this->input->post('details', true);
-                $data['event_id'] = $this->input->post('service_id', true);
+                $data['service_id'] = $this->input->post('service_id', true);
                 $data['user_id'] = $this->login_id;
 
-                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/event';
+                $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/service';
 
-                if (isset($_FILES['event_add_on_image']["name"]) && $_FILES['event_add_on_image']["name"] != "") {
-                    $tmp_name = $_FILES["event_add_on_image"]["tmp_name"];
-                    $temp = explode(".", $_FILES["event_add_on_image"]["name"]);
+                if (isset($_FILES['service_add_on_image']["name"]) && $_FILES['service_add_on_image']["name"] != "") {
+                    $tmp_name = $_FILES["service_add_on_image"]["tmp_name"];
+                    $temp = explode(".", $_FILES["service_add_on_image"]["name"]);
                     $newfilename = (uniqid()) . '.' . end($temp);
                     move_uploaded_file($tmp_name, "$uploadPath/$newfilename");
                     $data['image'] = $newfilename;
@@ -773,12 +775,12 @@ class Service extends MY_Controller {
 
                 if ($id > 0) {
                     $data['updated_date'] = date("Y-m-d H:i:s");
-                    $this->model_event->update('app_service_addons', $data, "add_on_id=$id");
+                    $this->model_service->update('app_service_addons', $data, "add_on_id=$id");
                     $this->session->set_flashdata('msg', translate('service_add_ons_update'));
                     $this->session->set_flashdata('msg_class', 'success');
                 } else {
                     $data['created_date'] = date("Y-m-d H:i:s");
-                    $id = $this->model_event->insert('app_service_addons', $data);
+                    $id = $this->model_service->insert('app_service_addons', $data);
                     $this->session->set_flashdata('msg', translate('service_add_ons_insert'));
                     $this->session->set_flashdata('msg_class', 'success');
                 }
@@ -795,11 +797,11 @@ class Service extends MY_Controller {
     }
 
     public function delete_service_addons($id) {
-        $app_service_addons = $this->model_event->getData('app_service_addons', '*', "add_on_id=" . $id);
+        $app_service_addons = $this->model_service->getData('app_service_addons', '*', "add_on_id=" . $id);
         if (count($app_service_addons) > 0) {
-            $this->model_event->delete('app_service_addons', "add_on_id='$id' AND user_id='$this->login_id'");
+            $this->model_service->delete('app_service_addons', "add_on_id='$id' AND user_id='$this->login_id'");
 
-            $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/event';
+            $uploadPath = dirname(BASEPATH) . "/" . uploads_path . '/service';
 
             if (isset($app_service_addons[0]['image']) && $app_service_addons[0]['image'] != "") {
                 unlink($uploadPath . "/" . $app_service_addons[0]['image']);
@@ -810,7 +812,7 @@ class Service extends MY_Controller {
             echo 'true';
             exit;
         } else {
-            $this->model_event->delete('app_service_category', "id='$id' AND user_id='$this->login_id'");
+            $this->model_service->delete('app_service_category', "id='$id' AND user_id='$this->login_id'");
             $this->session->set_flashdata('msg', translate('service_add_ons_delete'));
             $this->session->set_flashdata('msg_class', 'success');
             echo 'true';
@@ -823,7 +825,7 @@ class Service extends MY_Controller {
         $join = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'left'
             ),
             array(
@@ -854,9 +856,9 @@ class Service extends MY_Controller {
         );
 
         $e_condition = "app_service_appointment.id=" . $id;
-        $event_data = $this->model_event->getData("app_service_appointment", "app_service_appointment.* ,app_service_appointment.price as final_price,app_services.title as Event_title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,CONCAT(app_customer.first_name,' ',app_customer.last_name) as Customer_name,app_customer.phone as Customer_phone,app_customer.email as Customer_email,app_service_appointment.addons_id,app_services.price,app_admin.company_name,app_services.description as Event_description, app_services.payment_type", $e_condition, $join);
+        $service_data = $this->model_service->getData("app_service_appointment", "app_service_appointment.* ,app_service_appointment.price as final_price,app_services.title as service_title,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,CONCAT(app_customer.first_name,' ',app_customer.last_name) as Customer_name,app_customer.phone as Customer_phone,app_customer.email as Customer_email,app_service_appointment.addons_id,app_services.price,app_admin.company_name,app_services.description as service_description, app_services.payment_type", $e_condition, $join);
 
-        $data['event_data'] = $event_data;
+        $data['service_data'] = $service_data;
         $this->load->view('admin/service/view_booking_details', $data);
     }
 
@@ -864,7 +866,7 @@ class Service extends MY_Controller {
 
         $Vendor_ID = $this->session->userdata('Vendor_ID');
         $fields = "";
-        $fields .= "app_service_appointment_payment.*,CONCAT(app_admin.first_name,' ',app_admin.last_name) as vendor_name,app_services.title as event_name,CONCAT(app_customer.first_name,' ',app_customer.last_name) as customer_name";
+        $fields .= "app_service_appointment_payment.*,CONCAT(app_admin.first_name,' ',app_admin.last_name) as vendor_name,app_services.title as service_name,CONCAT(app_customer.first_name,' ',app_customer.last_name) as customer_name";
         $join = array(
             array(
                 "table" => "app_admin",
@@ -872,7 +874,7 @@ class Service extends MY_Controller {
                 "jointype" => "INNER"),
             array(
                 "table" => "app_services",
-                "condition" => "(app_services.id=app_service_appointment_payment.event_id  AND app_services.type='S')",
+                "condition" => "(app_services.id=app_service_appointment_payment.service_id  AND app_services.type='S')",
                 "jointype" => "INNER"),
             array(
                 "table" => "app_customer",
@@ -880,7 +882,7 @@ class Service extends MY_Controller {
                 "jointype" => "INNER")
         );
 
-        $payment_data = $this->model_event->getData("app_service_appointment_payment", $fields, "app_service_appointment_payment.vendor_id=" . $Vendor_ID, $join, "id DESC");
+        $payment_data = $this->model_service->getData("app_service_appointment_payment", $fields, "app_service_appointment_payment.vendor_id=" . $Vendor_ID, $join, "id DESC");
 
         $data['title'] = translate('payment_history');
         $data['payment_data'] = $payment_data;
@@ -890,7 +892,7 @@ class Service extends MY_Controller {
     /* Holiday Module 07-11-2019 */
 
     public function holiday() {
-        $holiday = $this->model_event->getData('app_holidays', '*', "created_by=" . $this->login_id);
+        $holiday = $this->model_service->getData('app_holidays', '*', "created_by=" . $this->login_id);
         $data['title'] = translate('manage') . " " . translate('holiday');
         $data['holiday'] = $holiday;
         $this->load->view('admin/service/manage_holidays', $data);
@@ -908,7 +910,7 @@ class Service extends MY_Controller {
 
         if ($id > 0) {
 
-            $app_holidays = $this->model_event->getData("app_holidays", "*", "id='$id'");
+            $app_holidays = $this->model_service->getData("app_holidays", "*", "id='$id'");
             if (isset($app_holidays[0]) && !empty($app_holidays[0])) {
                 $data['title'] = translate('update') . " " . translate('holiday');
                 $data['holiday'] = $app_holidays[0];
@@ -947,12 +949,12 @@ class Service extends MY_Controller {
             $data['created_by'] = $this->login_id;
 
             if ($id > 0) {
-                $this->model_event->update('app_holidays', $data, "id=" . $id);
+                $this->model_service->update('app_holidays', $data, "id=" . $id);
                 $this->session->set_flashdata('msg', translate('record_update'));
                 $this->session->set_flashdata('msg_class', 'success');
             } else {
                 $data['created_date'] = date("Y-m-d H:i:s");
-                $id = $this->model_event->insert('app_holidays', $data);
+                $id = $this->model_service->insert('app_holidays', $data);
                 $this->session->set_flashdata('msg', translate('record_insert'));
                 $this->session->set_flashdata('msg_class', 'success');
             }
@@ -962,7 +964,7 @@ class Service extends MY_Controller {
     }
 
     public function delete_holiday($id) {
-        $this->model_event->delete('app_holidays', 'id=' . $id . " AND created_by=" . $this->login_id);
+        $this->model_service->delete('app_holidays', 'id=' . $id . " AND created_by=" . $this->login_id);
         $this->session->set_flashdata('msg', translate('record_delete'));
         $this->session->set_flashdata('msg_class', 'success');
         echo 'true';
@@ -976,9 +978,9 @@ class Service extends MY_Controller {
         $created_by = $this->login_id;
 
         if ($id > 0) {
-            $app_holidays = $this->model_event->getData("app_holidays", "*", "created_by=" . $created_by . " AND holiday_date='" . $holiday_date . "' AND id!=" . $id);
+            $app_holidays = $this->model_service->getData("app_holidays", "*", "created_by=" . $created_by . " AND holiday_date='" . $holiday_date . "' AND id!=" . $id);
         } else {
-            $app_holidays = $this->model_event->getData("app_holidays", "*", "created_by=" . $created_by . " AND holiday_date='" . $holiday_date . "'");
+            $app_holidays = $this->model_service->getData("app_holidays", "*", "created_by=" . $created_by . " AND holiday_date='" . $holiday_date . "'");
         }
 
         if (count($app_holidays) > 0) {
@@ -992,13 +994,13 @@ class Service extends MY_Controller {
     //show appointment page
     public function manage_appointment($id = '0') {
 
-        $event = isset($_REQUEST['event']) ? $_REQUEST['event'] : "";
+        $service = isset($_REQUEST['service']) ? $_REQUEST['service'] : "";
         $vendor = isset($_REQUEST['vendor']) ? $_REQUEST['vendor'] : "";
         $status = isset($_REQUEST['status']) ? $_REQUEST['status'] : "";
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
         $appointment_type = isset($_REQUEST['appointment_type']) ? $_REQUEST['appointment_type'] : "U";
 
-        $cond = " app_service_appointment.event_id >0 AND app_service_appointment.type='S' AND app_service_appointment.payment_status!='IN'";
+        $cond = " app_service_appointment.service_id >0 AND app_service_appointment.type='S' AND app_service_appointment.payment_status!='IN'";
 
         $vendor_condition = " ";
 
@@ -1010,11 +1012,11 @@ class Service extends MY_Controller {
             $cond .= '';
         }
         if ((int) $id > 0) {
-            $cond .= " AND app_service_appointment.event_id = '$id'";
+            $cond .= " AND app_service_appointment.service_id = '$id'";
         }
 
-        if (isset($event) && $event > 0) {
-            $cond .= " AND app_service_appointment.event_id=" . $event;
+        if (isset($service) && $service > 0) {
+            $cond .= " AND app_service_appointment.service_id=" . $service;
         }
 
         if (isset($vendor) && $vendor > 0) {
@@ -1043,7 +1045,7 @@ class Service extends MY_Controller {
                 "jointype" => "LEFT"),
             array(
                 "table" => "app_services",
-                "condition" => "app_services.id=app_service_appointment.event_id",
+                "condition" => "app_services.id=app_service_appointment.service_id",
                 "jointype" => "LEFT"),
             array(
                 "table" => "app_admin",
@@ -1057,7 +1059,7 @@ class Service extends MY_Controller {
         $join_one = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'INNER'
             )
         );
@@ -1066,7 +1068,7 @@ class Service extends MY_Controller {
         $join_two = array(
             array(
                 'table' => 'app_services',
-                'condition' => 'app_services.id=app_service_appointment.event_id',
+                'condition' => 'app_services.id=app_service_appointment.service_id',
                 'jointype' => 'inner'
             ), array(
                 'table' => 'app_admin',
@@ -1075,7 +1077,7 @@ class Service extends MY_Controller {
             )
         );
 
-        $appointment_event = $this->model_appointment->getData("app_service_appointment", "app_service_appointment.event_id,app_services.id as event_id,app_services.title as title", $vendor_condition, $join_one, "", "app_services.id");
+        $appointment_service = $this->model_appointment->getData("app_service_appointment", "app_service_appointment.service_id,app_services.id as service_id,app_services.title as title", $vendor_condition, $join_one, "", "app_services.id");
         $appointment_vendor = $this->model_appointment->getData("app_service_appointment", "app_admin.company_name,app_admin.first_name,app_admin.last_name,app_admin.id", "", $join_two, "", "app_admin.id");
 
         $city_join = array(
@@ -1090,7 +1092,7 @@ class Service extends MY_Controller {
         $data['appointment_data'] = $appointment;
         $data['appointment_vendor'] = $appointment_vendor;
         $data['topCity_List'] = $top_cities;
-        $data['appointment_event'] = $appointment_event;
+        $data['appointment_service'] = $appointment_service;
 
         $data['title'] = translate('manage') . " " . translate('appointment');
         $this->load->view('admin/service/manage_appointment', $data);
@@ -1099,15 +1101,15 @@ class Service extends MY_Controller {
     public function change_appointment_status($id, $status) {
         if ((int) $id > 0) {
             //Get Booking Details
-            $result_data = get_full_event_service_data_by_booking_id($id);
+            $result_data = get_full_service_service_data_by_booking_id($id);
 
             $start_date = $result_data['start_date'];
             $start_time = $result_data['start_time'];
-            $event_id = $result_data['event_id'];
+            $service_id = $result_data['service_id'];
             $customer_id = $result_data['customer_id'];
             $staff_id = (int) $result_data['staff_id'];
             $customer_data = get_customer_data($customer_id);
-            $service_data = get_full_event_service_data($event_id);
+            $service_data = get_full_service_service_data($service_id);
 
             $multiple_slotbooking_allow = $service_data['multiple_slotbooking_allow'];
             $multiple_slotbooking_limit = $service_data['multiple_slotbooking_limit'];
@@ -1115,9 +1117,9 @@ class Service extends MY_Controller {
             if ($status == 'A'):
 
                 if ($staff_id > 0):
-                    $get_data = $this->db->query("SELECT * FROM app_service_appointment WHERE id!=" . $id . " AND staff_id=" . $staff_id . " AND event_id=" . $event_id . " AND start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND type='S' AND status IN ('A')")->result_array();
+                    $get_data = $this->db->query("SELECT * FROM app_service_appointment WHERE id!=" . $id . " AND staff_id=" . $staff_id . " AND service_id=" . $service_id . " AND start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND type='S' AND status IN ('A')")->result_array();
                 else:
-                    $get_data = $this->db->query("SELECT * FROM app_service_appointment WHERE id!=" . $id . " AND event_id=" . $event_id . " AND start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND type='S' AND status IN ('A')")->result_array();
+                    $get_data = $this->db->query("SELECT * FROM app_service_appointment WHERE id!=" . $id . " AND service_id=" . $service_id . " AND start_date='" . $start_date . "' AND start_time='" . $start_time . "' AND type='S' AND status IN ('A')")->result_array();
                 endif;
 
                 //Check if multiple booking allowed
@@ -1259,18 +1261,18 @@ class Service extends MY_Controller {
                 "jointype" => "LEFT"),
             array(
                 "table" => "app_services",
-                "condition" => "app_services.id=app_service_appointment.event_id",
+                "condition" => "app_services.id=app_service_appointment.service_id",
                 "jointype" => "LEFT")
         );
-        $id = $this->input->post('event_book_id', true);
+        $id = $this->input->post('service_book_id', true);
         if ((int) $id > 0) {
             $cond = "app_service_appointment.id = '$id'";
             $res = $this->model_appointment->getData('', 'app_service_appointment.*,app_customer.first_name,app_customer.last_name,app_customer.email, app_services.title,app_services.description, app_services.created_by', $cond, $join)[0];
 
-            $service_data = get_full_event_service_data($res['event_id']);
+            $service_data = get_full_service_service_data($res['service_id']);
 
             $staff_id = $res['staff_id'];
-            $event_title = $res['title'];
+            $service_title = $res['title'];
             $name = ($res['first_name']) . " " . ($res['last_name']);
             $email = $res['email'];
             $description = $res['description'];
@@ -1304,7 +1306,7 @@ class Service extends MY_Controller {
 
     public function payment_history() {
         $fields = "";
-        $fields .= "app_service_appointment_payment.*,CONCAT(app_admin.first_name,' ',app_admin.last_name) as vendor_name,app_admin.company_name,app_services.title as event_name,CONCAT(app_customer.first_name,' ',app_customer.last_name) as customer_name";
+        $fields .= "app_service_appointment_payment.*,CONCAT(app_admin.first_name,' ',app_admin.last_name) as vendor_name,app_admin.company_name,app_services.title as service_name,CONCAT(app_customer.first_name,' ',app_customer.last_name) as customer_name";
         $join = array(
             array(
                 "table" => "app_admin",
@@ -1312,7 +1314,7 @@ class Service extends MY_Controller {
                 "jointype" => "INNER"),
             array(
                 "table" => "app_services",
-                "condition" => "(app_services.id=app_service_appointment_payment.event_id AND app_services.type='S')",
+                "condition" => "(app_services.id=app_service_appointment_payment.service_id AND app_services.type='S')",
                 "jointype" => "INNER"),
             array(
                 "table" => "app_customer",
@@ -1327,14 +1329,14 @@ class Service extends MY_Controller {
         $this->load->view('admin/service/payment_history', $data);
     }
 
-    public function change_booking_slot($book_id, $event_id, $staff_id = null) {
+    public function change_booking_slot($book_id, $service_id, $staff_id = null) {
         $folder_name = "admin";
         if ($this->login_type == 'V'):
             $folder_name = "vendor";
         endif;
         //show days page
-        if ($book_id && $event_id) {
-            $id = (int) $event_id;
+        if ($book_id && $service_id) {
+            $id = (int) $service_id;
             $join_data = array(
                 array(
                     'table' => 'app_city',
@@ -1358,8 +1360,8 @@ class Service extends MY_Controller {
                 ),
             );
             $select_value = "app_services.*,app_location.loc_title,app_city.city_title,app_service_category.title as category_title,app_admin.company_name";
-            $event = $this->model_appointment->getData("app_services", $select_value, "app_services.id=" . $id . " AND app_services.type='S'", $join_data);
-            if (!isset($event) || isset($event) && count($event) == 0) {
+            $service = $this->model_appointment->getData("app_services", $select_value, "app_services.id=" . $id . " AND app_services.type='S'", $join_data);
+            if (!isset($service) || isset($service) && count($service) == 0) {
                 $this->session->set_flashdata('msg_class', 'failure');
                 $this->session->set_flashdata('msg', translate('invalid_request'));
                 redirect(base_url($folder_name . '/manage-appointment'));
@@ -1377,8 +1379,8 @@ class Service extends MY_Controller {
             //Get Staff
             $staff_member_value = 0;
 
-            if (isset($event[0]['staff']) && $event[0]['staff'] != ""):
-                $staff = get_staff_by_id($event[0]['staff']);
+            if (isset($service[0]['staff']) && $service[0]['staff'] != ""):
+                $staff = get_staff_by_id($service[0]['staff']);
                 if ($staff_id > 0):
                     $staff_member_value = $staff_id;
                 else:
@@ -1395,14 +1397,14 @@ class Service extends MY_Controller {
             if ($staff_member_value > 0) {
                 $current_selected_staff = get_staff_by_id($id);
             } else {
-                $current_selected_staff = get_VendorDetails($event[0]['created_by']);
+                $current_selected_staff = get_VendorDetails($service[0]['created_by']);
             }
 
             $data['staff_member_value'] = $staff_member_value;
             $data['current_selected_staff'] = $current_selected_staff;
 
-            $min = $event[0]['slot_time'];
-            $allow_day = explode(",", $event[0]['days']);
+            $min = $service[0]['slot_time'];
+            $allow_day = explode(",", $service[0]['days']);
             $date = date('d-m-Y');
 
             $month_ch = date("M", strtotime($date));
@@ -1410,7 +1412,7 @@ class Service extends MY_Controller {
             $day = date("d", strtotime($date));
 
             //Get Holiday List
-            $get_holiday_list = get_holiday_list_by_vendor($event[0]['created_by']);
+            $get_holiday_list = get_holiday_list_by_vendor($service[0]['created_by']);
 
             //Display Current date data
             if (isset($date) && $date != "") {
@@ -1461,15 +1463,15 @@ class Service extends MY_Controller {
             }
 
 
-            $data['event_payment_price'] = number_format($event[0]['price'], 0);
-            $data['event_payment_type'] = $event[0]['payment_type'];
+            $data['service_payment_price'] = number_format($service[0]['price'], 0);
+            $data['service_payment_type'] = $service[0]['payment_type'];
             $data['booking_data'] = $app_service_appointment[0];
-            $data['slot_time'] = $event[0]['slot_time'];
-            $data['event_title'] = $event[0]['title'];
-            $data['event_id'] = $event[0]['id'];
+            $data['slot_time'] = $service[0]['slot_time'];
+            $data['service_title'] = $service[0]['title'];
+            $data['service_id'] = $service[0]['id'];
             $data['current_date'] = $date;
             $data['day_data'] = $day_data;
-            $data['event_data'] = isset($event[0]) ? $event[0] : array();
+            $data['service_data'] = isset($service[0]) ? $service[0] : array();
             $data['book_id'] = $book_id;
             $data['title'] = translate('change') . " " . translate('booking') . " " . translate('time');
             $this->load->view('admin/service/days', $data);
@@ -1477,27 +1479,27 @@ class Service extends MY_Controller {
     }
 
     //check days available or not
-    private function _day_slots_check($k, $min, $cur_event_id, $staff_member_id) {
-        $event = $this->model_appointment->getData("app_services", "*", "status='A' AND slot_time='" . $min . "' AND id=" . $cur_event_id);
+    private function _day_slots_check($k, $min, $cur_service_id, $staff_member_id) {
+        $service = $this->model_appointment->getData("app_services", "*", "status='A' AND slot_time='" . $min . "' AND id=" . $cur_service_id);
 
-        $slot_time = $event[0]['slot_time'];
-        $multiple_slotbooking_allow = $event[0]['multiple_slotbooking_allow'];
-        $multiple_slotbooking_limit = $event[0]['multiple_slotbooking_limit'];
+        $slot_time = $service[0]['slot_time'];
+        $multiple_slotbooking_allow = $service[0]['multiple_slotbooking_allow'];
+        $multiple_slotbooking_limit = $service[0]['multiple_slotbooking_limit'];
 
-        $j = get_formated_time(strtotime("-" . $slot_time . "minute", strtotime($event[0]['end_time'])));
-        $datetime1 = new DateTime($event[0]['start_time']);
-        $datetime2 = new DateTime($event[0]['end_time']);
+        $j = get_formated_time(strtotime("-" . $slot_time . "minute", strtotime($service[0]['end_time'])));
+        $datetime1 = new DateTime($service[0]['start_time']);
+        $datetime2 = new DateTime($service[0]['end_time']);
         $interval = $datetime1->diff($datetime2);
         $minute = $interval->format('%h') * 60;
         $time_array = array();
         for ($i = 1; $i <= $minute / $slot_time; $i++) {
             if ($i == 1) {
-                $time_array[] = get_formated_time(strtotime($event[0]['start_time']));
+                $time_array[] = get_formated_time(strtotime($service[0]['start_time']));
             } else {
-                $time_array[] = get_formated_time(strtotime("+" . $slot_time * ($i - 1) . " minute", strtotime($event[0]['start_time'])));
+                $time_array[] = get_formated_time(strtotime("+" . $slot_time * ($i - 1) . " minute", strtotime($service[0]['start_time'])));
             }
         }
-        if (($key = array_search(get_formated_time(strtotime($event[0]['end_time'])), $time_array)) !== false) {
+        if (($key = array_search(get_formated_time(strtotime($service[0]['end_time'])), $time_array)) !== false) {
             unset($time_array[$key]);
         }
         $start_date = date("Y-m-d", strtotime($k));
@@ -1516,7 +1518,7 @@ class Service extends MY_Controller {
         if ($staff_member_id > 0):
             $result = $this->model_appointment->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $start_date . "' AND staff_id=" . $staff_member_id);
         else:
-            $result = $this->model_appointment->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $start_date . "' AND event_id=" . $cur_event_id);
+            $result = $this->model_appointment->getData("app_service_appointment", "start_time,slot_time", "start_date = '" . $start_date . "' AND service_id=" . $cur_service_id);
         endif;
 
 
@@ -1525,9 +1527,9 @@ class Service extends MY_Controller {
                 if ($min == $value['slot_time']) {
 
                     if ($staff_member_id > 0):
-                        $multiple_boook_result = $this->model_appointment->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $start_date . "' AND event_id=" . $cur_event_id . " AND staff_id=" . $staff_member_id . " AND status IN ('A')");
+                        $multiple_boook_result = $this->model_appointment->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $start_date . "' AND service_id=" . $cur_service_id . " AND staff_id=" . $staff_member_id . " AND status IN ('A')");
                     else:
-                        $multiple_boook_result = $this->model_appointment->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $start_date . "' AND event_id=" . $cur_event_id . " AND status IN ('A')");
+                        $multiple_boook_result = $this->model_appointment->getData("app_service_appointment", "start_time,slot_time", "start_time='" . $value['start_time'] . "' AND start_date = '" . $start_date . "' AND service_id=" . $cur_service_id . " AND status IN ('A')");
                     endif;
 
                     if (isset($multiple_slotbooking_allow) && $multiple_slotbooking_allow == 'Y') {

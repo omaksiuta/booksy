@@ -108,32 +108,7 @@ class Front extends CI_Controller {
                 'jointype' => 'inner'
             )
         );
-        $book_cond = 'app_services.status="A" AND app_services.type="E"';
 
-        $recent_events = $this->model_front->getData("app_services", 'app_services.*', $book_cond, $join, '', 'RAND()', '', 10);
-
-
-        $event_join = array(
-            array(
-                'table' => 'app_service_category',
-                'condition' => '(app_service_category.id=app_services.category_id AND app_service_category.type="E")',
-                'jointype' => 'INNER'
-            ),
-            array(
-                'table' => 'app_city',
-                'condition' => 'app_city.city_id=app_services.city',
-                'jointype' => 'INNER'
-            ),
-            array(
-                'table' => 'app_location',
-                'condition' => 'app_location.loc_id=app_services.location',
-                'jointype' => 'INNER'
-            ), array(
-                'table' => 'app_admin',
-                'condition' => 'app_admin.id=app_services.created_by',
-                'jointype' => 'INNER'
-            )
-        );
 
         $service_join = array(
             array(
@@ -157,41 +132,19 @@ class Front extends CI_Controller {
             )
         );
 
-        $service_cond = 'app_services.status="A" AND app_services.type="S"';
+        $service_cond = 'app_services.status="A"';
         if (isset($city_Res) && !empty($city_Res)) {
             $service_cond .= ' AND app_services.city = ' . $city_Res['city_id'];
-        }
-        $cond = 'app_services.status="A" AND app_services.type="E"';
-        if (isset($city_Res) && !empty($city_Res)) {
-            $cond .= ' AND app_services.city = ' . $city_Res['city_id'];
         }
 
         $display_record_per_page = get_site_setting('display_record_per_page');
 
-        if (get_site_setting('enable_event') == 'Y'):
-            $total_event = $this->model_front->getData("app_services", 'app_admin.company_name,app_admin.profile_image,app_services.*,app_services.id as event_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title', $cond, $event_join, 'RAND()', 'app_services.id', '', $display_record_per_page);
-            $data['total_Event'] = $total_event;
-        endif;
-
         $total_service = $this->model_front->getData("app_services", 'app_admin.company_name,app_admin.profile_image,app_services.*,app_services.id as event_id,app_service_category.title as category_title,app_city.city_title, app_location.loc_title', $service_cond, $service_join, 'app_services.id desc', 'app_services.id', '', $display_record_per_page);
-
-
-        $event_cat_join = array(
-            array(
-                'table' => 'app_services',
-                'condition' => '(app_service_category.id=app_services.category_id AND app_service_category.type="E")',
-                'jointype' => 'INNER'
-            )
-        );
-        $events_category = $this->model_front->getData("app_service_category", 'app_service_category.title,app_service_category.id,app_service_category.category_image', 'app_service_category.type="E" AND app_services.status="A"', $event_cat_join, '', 'app_service_category.title', '', 8);
-
 
         $data['total_service'] = $total_service;
         $data['title'] = translate('home');
         $data['topCity_List'] = $top_cities;
         $data['Service_Category'] = $service_category;
-        $data['events_category'] = $events_category;
-        $data['Recent_events'] = $recent_events;
         $this->load->view('front/home', $data);
     }
 

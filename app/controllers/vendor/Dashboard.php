@@ -15,7 +15,7 @@ class Dashboard extends MY_Controller {
             redirect('front');
         }
         $this->load->model('model_dashboard');
-        $this->load->model('model_event');
+        $this->load->model('model_service');
         set_time_zone();
     }
 
@@ -24,7 +24,7 @@ class Dashboard extends MY_Controller {
 
         $vendor_id = (int) $this->session->userdata('Vendor_ID');
         $commission_percentage = get_site_setting('commission_percentage');
-        $package_id = $this->model_event->get_current_membership($vendor_id);
+        $package_id = $this->model_service->get_current_membership($vendor_id);
         $data['total_event'] = $this->model_dashboard->Totalcount('app_services', "created_by='$vendor_id' AND type='E'");
         $data['vendor_staff'] = $this->model_dashboard->Totalcount('app_admin', "created_by='$vendor_id' AND type='S'");
         $data['total_service'] = $this->model_dashboard->Totalcount('app_services', "created_by='$vendor_id' AND type='S'");

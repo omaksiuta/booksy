@@ -176,8 +176,6 @@ function update_event_status() {
             endforeach;
         }
     }
-
-    $CI->db->query("UPDATE app_services SET status='E' WHERE end_date<'" . date('Y-m-d H:i:s') . "' AND type='E'");
     $CI->db->query("DELETE FROM app_service_appointment WHERE created_on + INTERVAL 5 MINUTE<'" . date('Y-m-d H:i:s') . "' AND payment_status='IN'");
 }
 

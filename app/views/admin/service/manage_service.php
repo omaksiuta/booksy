@@ -68,8 +68,8 @@ if ($this->session->userdata('Type_' . ucfirst($this->uri->segment(1))) == 'V') 
                                 </thead>
                                 <tbody>
                                 <?php
-                                if (isset($event_data) && count($event_data) > 0) {
-                                    foreach ($event_data as $key => $row) {
+                                if (isset($service_data) && count($service_data) > 0) {
+                                    foreach ($service_data as $key => $row) {
                                         if (isset($row['id']) && $row['id'] != NULL) {
                                             if ($row['status'] == "A") {
                                                 $status_string = '<span class="badge badge-success">' . translate('active') . '</span>';

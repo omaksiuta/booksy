@@ -1,6 +1,6 @@
 <?php
 
-class Model_event extends CI_Model {
+class Model_service extends CI_Model {
 
     private $primary_key;
     private $main_table;

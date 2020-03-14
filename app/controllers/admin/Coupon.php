@@ -7,13 +7,13 @@ class Coupon extends MY_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model('model_event');
+        $this->load->model('model_service');
         set_time_zone();
     }
 
     //show event page
     public function index() {
-        $coupon_data = $this->model_event->getData('app_service_coupon', '*', "created_by=" . $this->login_id);
+        $coupon_data = $this->model_service->getData('app_service_coupon', '*', "created_by=" . $this->login_id);
         $data['coupon_data'] = $coupon_data;
         $data['title'] = translate('manage') . " " . translate('coupon');
         $this->load->view('admin/coupon/manage_coupon', $data);
@@ -21,17 +21,17 @@ class Coupon extends MY_Controller {
 
     //show add event form
     public function add_coupon() {
-        $data['event_data'] = $this->model_event->getData('app_services', '*', "status='A' AND type='S' AND created_by=" . $this->login_id);
+        $data['event_data'] = $this->model_service->getData('app_services', '*', "status='A' AND type='S' AND created_by=" . $this->login_id);
         $data['title'] = translate('add') . " " . translate('coupon');
         $this->load->view('admin/coupon/add_update_coupon', $data);
     }
 
     //show edit event form
     public function update_coupon($id) {
-        $coupon = $this->model_event->getData("app_service_coupon", "*", "id='$id'");
+        $coupon = $this->model_service->getData("app_service_coupon", "*", "id='$id'");
         if (isset($coupon[0]) && !empty($coupon[0])) {
             $data['coupon_data'] = $coupon[0];
-            $data['event_data'] = $this->model_event->getData('app_services', '*', "status='A' AND type='S' AND created_by=" . $this->login_id);
+            $data['event_data'] = $this->model_service->getData('app_services', '*', "status='A' AND type='S' AND created_by=" . $this->login_id);
             $data['title'] = translate('update') . " " . translate('coupon');
             $this->load->view('admin/coupon/add_update_coupon', $data);
         } else {
@@ -69,13 +69,13 @@ class Coupon extends MY_Controller {
             $data['status'] = $this->input->post('status', true);
 
             if ($id > 0) {
-                $id = $this->model_event->update('app_service_coupon', $data, "id=$id");
+                $id = $this->model_service->update('app_service_coupon', $data, "id=$id");
                 $this->session->set_flashdata('msg', translate('record_update'));
                 $this->session->set_flashdata('msg_class', 'success');
             } else {
                 $data['created_by'] = $this->login_id;
                 $data['created_date'] = date('Y-m-d H:i:s');
-                $id = $this->model_event->insert('app_service_coupon', $data);
+                $id = $this->model_service->insert('app_service_coupon', $data);
                 $this->session->set_flashdata('msg', translate('record_insert'));
                 $this->session->set_flashdata('msg_class', 'success');
             }
@@ -86,7 +86,7 @@ class Coupon extends MY_Controller {
 
     //delete an event
     public function delete_coupon($id) {
-        $this->model_event->delete('app_service_coupon', 'id=' . $id . " AND created_by=" . $this->login_id);
+        $this->model_service->delete('app_service_coupon', 'id=' . $id . " AND created_by=" . $this->login_id);
         $this->session->set_flashdata('msg', translate('record_delete'));
         $this->session->set_flashdata('msg_class', 'success');
         echo 'true';

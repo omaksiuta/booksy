@@ -38,18 +38,14 @@ class Dashboard extends MY_Controller {
         $current_date = date('Y-m-d');
         $up_date = date('Y-m-d', strtotime(date('Y-m-d') . ' + 10 days'));
         $current_time = date('H:i:s');
-        $cond = "app_service_appointment.status='A' AND app_services.type='S' AND app_service_appointment.start_date >= '$current_date' AND app_service_appointment.start_date <= '$up_date' AND app_services.created_by='$this->login_id'";
+        $cond = "app_service_appointment.status='A' AND app_service_appointment.start_date >= '$current_date' AND app_service_appointment.start_date <= '$up_date' AND app_services.created_by='$this->login_id'";
 
         $appointment = $this->model_dashboard->getData('app_service_appointment', 'app_service_appointment.*,app_customer.first_name,app_customer.last_name,app_services.title,app_services.payment_type,app_services.created_by', $cond, $join);
-        $cond_pending = "app_service_appointment.status='P' AND app_services.type='S' AND app_service_appointment.start_date >= '$current_date' AND app_services.created_by=" . $this->login_id;
+        $cond_pending = "app_service_appointment.status='P' AND app_service_appointment.start_date >= '$current_date' AND app_services.created_by=" . $this->login_id;
 
         $pending_appointment = $this->model_dashboard->getData('app_service_appointment', 'app_service_appointment.*,app_customer.first_name,app_customer.last_name,app_services.title,app_services.payment_type,app_services.created_by', $cond_pending, $join);
         $data['appointment_data'] = $appointment;
         $data['pending_appointment'] = $pending_appointment;
-
-        $event_cond_pending = "app_service_appointment.status='P' AND app_services.type='E' AND app_service_appointment.start_date >= '$current_date' AND app_services.created_by=" . $this->login_id;
-        $pending_event = $this->model_dashboard->getData('app_service_appointment', 'app_service_appointment.*,app_customer.first_name,app_customer.last_name,app_services.title,app_services.payment_type,app_services.created_by', $event_cond_pending, $join);
-        $data['pending_event'] = $pending_event;
 
         //Get list of unverified vendor
         $unverified_vendor = $this->model_dashboard->getData('app_admin', '*', 'profile_status="N" AND type="V"');
